@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="shortcut icon" type="image/png" href="http://wiki.guildwars2.com/images/5/51/Mini_Skritt_Forager.png" />
+  <title>Le fouineur de GW2</title>
+  <style type="text/css">
+@font-face {
+    font-family: gw2based;
+    src: url(GWTwoFontVersion1.1b.ttf);
+}
+.characters {
+    display: flex;
+}
+.character {
+    min-width: 210px;
+    width: 210px;
+}
+.banktabs,
+.matstabs {
+    width: 360px;
+}
+#content {
+    height: 100%;
+    display: flex;
+}
+* {
+    text-align: center;
+    font-family: gw2based;
+}
+body {
+    background-color: #555;
+    color: #CACACA;
+}
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-top: 4px;
+    height: 28px;
+    box-shadow: 0 1.5px 3px rgba(0, 0, 0, .25);
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABGdBTUEAALGPC/xhBQAAAwBQTFRFMBEEKR8oKioUMzMzPRV0MzFMNDBmPU05PkZAURkGRjA0YB0DezMLaDEyazdDfDhLV0AIUVsmZk8tdGg2VFNsQmdIVm1ccEVgOBaNGAbJCAb+KxLkKzL7PUyBG0HcIFHTM0bvKWnGSxnUVBviWCPQTliXRF/cUFn/S3LTSHnsd2/fenvOaHLjTo42WKwyT5hBXptXRZB7W6FIU7V4coVnZ6RrX8UxZNQxcf0wWc1dWtVwVf5MWv5yedB7YPp1AYf+Lq3qfKyJVIb+ULHYdJ/IeIX5U9OBXtOpXeGMZdmFcMOOftyXbtmwZOiMZuqRYP+HZvybcemOe/+KcviWZf+gfuSkf+C7VtjWW+DTft/eY+zQbvfLe+nXdf7GhCsdijtCsztwmEcQmmklolYTp2AVrGYtkkFMgU5klFN6gG1gt0Zq/gAA1DxEwTd50TVr1Tl6/gh2/j5J/iJn1Gk46XI7zU5/2GFNzWt5/1NT5Edx/kJh/2lJ/nZE9nVW7m5j7nNn8G9gkCqHjSirtVqUpWCHr2KsmUv+mVP9j2rYhnjklGv9lnvrkXf5plPos2nPsHbizye24hqd/z+c9D6v9j7L/j/k3FWV2l2szmid0GOb23+ez3Ot1Wmu9E2U/lSv73Kd93OuxEXIy2vR33v0/W/KuI45jY1QmNNUj852jP96s9VxrettpP9g2Y8h3IZ9/pJQ6YBn5YV365B38IRz+KtV/L9i2/5k/cpd+89q+v17k4K5lrqLtZGHpoqltKSNs6ytioDuj4v/jpn8koDukYj/kbnbhqvijaH/i7L+kaT+krLwrJDVqafHvaXArbnmi8uLic6jhOyIgOiUivuJi/6Rk/+ck/muuNKZvcGqsPWNse2umtHOlNjZhsjvh8H/gdXkhObHjuDVsMHWp8DjudLjrvvF0YuSypWow7Ga1ai35YqX8ZCX+YS38baa9aem0ZfHypX02IL+z6/EzKHXzrDExan+wbj1/4PB7rnO0NuJ2OOdx+ik/teM8fHvAAAAAAAAPX90kwAAAQB0Uk5T////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AFP3ByUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My4zNqnn4iUAAAS+SURBVFhH7ZRtUFRVGIBvXrGwrKiMxGrKatJS+6ASYREHoqJJWeX2NbTUpPZhWruIgbiWWt41oiWVmprgcM0btkhcNV3ZIDYcGFiwsHbZXKdZytol2R2Nau1rmel9zzm7+KN//mv2uXd/Ps95z95zryCeI4lAIoAkAokAkggkAkgi8P8IvHCOCHpJnz5VFEc5PxgoT9xqkSlvmRkjEcpnYiXn4ncYEJCk9Nvv4v7oj6gP9QJdNPE+DzA/EnmW+5VPxQLgu5uBb1ngK/AfR7+3txMDG5j/Kfcjr3O/cnUs8CDzY4XvIAByH1y9VTDDKyywn/uRI9yvvCQWqNMzv7n5N/B/wf2jjJFqmAADmqZtAPcMBgJB5r+UtIMHPijifvOx0dFdJ2iA0yVb5I3mAw6gNUz1yJlAYK0J/embTLRQKxxdyv3mn3ep5EsIjG8BJth4EH0onOZ+4LobNm+ekZa22lRRumP7dpNwNL6FEUJUpRgCQ2wLLnwMrzLf4dAOnPgJ9EDg6jTKiyZTRYXJBAHJxvwm9Q/gVxzBH/ct+7jvOPRJG/UDM1lgE8jQWAUBPS3sCYcxgAWv1zB0GB8B3CPcdxy67AIvDVzBApNweZNpivCNJBUV2WxLFaoDPrvd7vC9CcvLVdWW97jv0ETx7sFBr/dKMemO+fPTJ4mTV6EvCm44SYA+Fjhld0DB7pPlrl6/39/fGgs8ne3xuD1fp4j3ZCDnx14mjyS1tRVJEg+E0QYc1i7QgSOsoGlN4A96PNlzqJ8xVxRTUzHgbi8FymOBUzxgd+L6yH6t9aBmXq/5PIDb42YDZGQ8p6iq+poodKBvLC2vow9hPHCM+/5hdpg1WJ0yj/lNoGNBQB9RCC2E6T8AOLnvd/JA0yDuwJM9lwWYr6qxgLGeEJhJIX/xQCf3/S088JGbDtDopP5u7scDpRCoJYC6h/qGNw4zv5v55rLlKz52e2wpzrFLG3dnzHue+2cFVAIXNAxen89rMFTJPej37aV6S8ua5cuWlVxUkjwWrCf1ZGUJ91WhnPnrFBigllit6vd4mA3H+y1yVWdXNf0iDbtcrp7PVyxZtGRRwZ8E/Hqydgvz64QCLBjXLVZh/K05wELUo8BJCxzlcvCD4EOhu3HiVVMuB1uBX/0XH6KvTBYK9APt7W16PUxAfSxQHwr4OkOA+q6eHnwPb8Tl8bbm5tfUdOYmCQWSVFgIX1aYgPk5OY8xPxqtkS2VFeZ9LODquRkCM+gGYAhrLuUaIbMwC9Dp64iV+zl5TI9GT79tBN5lfp9rFr6FsDxugWyNB9CHgvofAYK+cRsLuFz0U7KFTkAU5ucmCczPymontdzPeZTp0Sj1jcY65uejf/2CIP4FDfcyf6YQDwwQMpv5C4v/YX6IB4z91J+OAZ1OZ+voGNA9kEf988YDbXAIZ9FAcbHhbxrYyX1j6d7h4SD1r4UAZc7i+/NuSp0w4b54oANP8s7Zt1jpQfIe/90qy9w3VsCzLHv57MCC24RnQmGl4eRUQccDTjjJeJNHMGAwVMMxog8BwNNoLrtw4rRp+TygS3lSURoaQspKIZMWdPqH8STj9RALdONHcRv119PAGkFITh67k/mZySCHlIaQ8i/NEoV86MWhSQAAAABJRU5ErkJggg==);
+}
+input[type=text] {
+    border: none;
+    background-color: #CCC;
+    border-radius: 9px 0 0 9px;
+    padding: 2px 4px;
+}
+input[type=button] {
+    border: none;
+    background-color: #8E8E8E;
+    border-radius: 0 9px 9px 0;
+    padding: 1px 3px;
+}
+#filterbutton {
+    float: right;
+    width: 24px;
+    height: 24px;
+}
+#filterdiv {
+    background-color: #333;
+    margin-top: -13px;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
+    border-radius: 8px;
+    width: auto;
+    text-align: center;
+    float: right;
+    display: none;
+}
+.filters {
+    position: absolute;
+    right: 0;
+}
+label {
+    float: left;
+    padding-right: 16px;
+    background-repeat: no-repeat;
+    color: rgba(0, 0, 0, 0);
+}
+:not(.rarity) + label {
+    width: 80%;
+}
+#levmin,
+#levmax {
+    border: none;
+    background-color: #CCC;
+    border-radius: 9px;
+    padding: 2px 4px;
+    width: 30px;
+}
+.account {
+    border-right: 1px dotted #888;
+}
+.icon {
+    box-sizing: border-box;
+    margin-bottom: -3px;
+    width: 20px;
+    height: 20px;
+    padding-left: 20px;
+}
+.Female {
+    background: url("https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png") no-repeat center;
+}
+.Male {
+    background: url("https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png") no-repeat center;
+}
+.Asura {
+    background: url("https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png") no-repeat center;
+}
+.Charr {
+    background: url("https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png") no-repeat center;
+}
+.Human {
+    background: url("https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png") no-repeat center;
+}
+.Norn {
+    background: url("https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png") no-repeat center;
+}
+.Sylvari {
+    background: url("https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_20px.png") no-repeat center;
+}
+.Elementalist {
+    background: url("https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png") no-repeat center;
+}
+.Engineer {
+    background: url("https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png") no-repeat center;
+}
+.Guardian {
+    background: url("https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png") no-repeat center;
+}
+.Mesmer {
+    background: url("https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png") no-repeat center;
+}
+.Necromancer {
+    background: url("https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png") no-repeat center;
+}
+.Ranger {
+    background: url("https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png") no-repeat center;
+}
+.Revenant {
+    background: url("https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png") no-repeat center;
+}
+.Thief {
+    background: url("https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png") no-repeat center;
+}
+.Warrior {
+    background: url("https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png") no-repeat center;
+}
+.stuff,
+.bag,
+.banktabs,
+.matstabs {
+    margin: 0 auto 10px auto;
+}
+.stuff {
+    box-shadow: 0px 20px 2px -19px #CCC;
+}
+.item {
+    display: inline-block;
+    margin: 1px;
+    padding: 0;
+    border: 2px solid #fff;
+    border-width: 2px 0 0 2px;
+    border-radius: 3px;
+    overflow: hidden;
+    height: 32px;
+    width: 32px;
+}
+.item img {
+    height: 32px;
+    width: 32px;
+}
+.r_Empty {
+    border: none;
+}
+.r_Basic {
+    border-color: #FFF;
+}
+.r_Junk {
+    border-color: #AAA;
+}
+.r_Fine {
+    border-color: #62A4DA;
+}
+.r_Masterwork {
+    border-color: #1A9306;
+}
+.r_Rare {
+    border-color: #FCD00B;
+}
+.r_Exotic {
+    border-color: #FFA405;
+}
+.r_Ascended {
+    border-color: #FB3E8D;
+}
+.r_Legendary {
+    border-color: #4C139D;
+}
+.r_Unknown {
+    border-color: red;
+    background-color: #eee;
+    background-image: linear-gradient(45deg, red 25%, transparent 25%, transparent 75%, red 75%, red), linear-gradient(45deg, red 25%, transparent 25%, transparent 75%, red 75%, red);
+    background-size: 8px 8px;
+    background-position: 0 0, 4px 4px;
+}
+.Empty {
+    color: black;
+}
+.Junk {
+    color: #AAA;
+}
+.Basic {
+    color: #FFF;
+}
+.Fine {
+    color: #62A4DA;
+}
+.Masterwork {
+    color: #1A9306;
+}
+.Rare {
+    color: #FCD00B;
+}
+.Exotic {
+    color: #FFA405;
+}
+.Ascended {
+    color: #FB3E8D;
+}
+.Legendary {
+    color: #4C139D;
+}
+.Unknown {
+    color: red;
+}
+.count {
+    color: #fff;
+    margin-left: -34px;
+    width: 32px;
+    padding: 1px;
+    font-size: 85%;
+    text-align: right;
+    display: inline-block;
+    text-shadow: 1px 1px black;
+}
+.item:hover .count {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+#footer {
+    background: #333;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: right;
+    box-shadow: 0 1.5px 3px rgba(0, 0, 0, .25);
+}
+a {
+    text-decoration: none;
+    color: #FFA405;
+}
+a:hover {
+    color: #FFBD68;
+}
+h2 {
+    margin-bottom: 0;
+}
+h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+  </style>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.js"></script>
+  <script type="text/javascript">
+/*!
+ * listAttributes jQuery Plugin v1.1.0
+ *
+ * Copyright 2010, Michael Riddle
+ * Licensed under the MIT
+ * http://jquery.org/license
+ *
+ * Date: Sun Mar 28 05:49:39 2010 -0900
+ *
+ *https://jquery-list-attributes.googlecode.com/files/jquery.listAttributes.js
+ */
+if (jQuery) {
+    jQuery(document).ready(function() {
+        jQuery.fn.listAttributes = function(prefix) {
+            var list = [];
+            $(this).each(function() {
+                //console.info(this);
+                var attributes = [];
+                for (var key in this.attributes) {
+                    if (!isNaN(key)) {
+                        if (!prefix || this.attributes[key].name.substr(0, prefix.length) == prefix) {
+                            attributes.push(this.attributes[key].value);
+                        }
+                    }
+                }
+                list.push(attributes);
+            });
+            return (list.length > 1 ? list : list[0]);
+        }
+    });
+}
+</script>
+  <script type="text/javascript">
+//<![CDATA[
+//jQuery.ajaxSetup({async:false});
+$(window).load(function() {
+    ENDPOINT = "https://api.guildwars2.com/v2/";
+    ITEMCACHE = [];
+    var UNKNOWN_ITEM = {
+        //"icon": "http://www.guildwars2hub.com/sites/sardu.tentonhammer.com/files/DownedEnemy.png",
+        "name": "Objet non identifié",
+        "rarity": "Unknown"
+    }
+
+    var guids = [
+        "Put API Key into those quotes"
+    ];
+
+    function get_url(path, key) {
+        var url = ENDPOINT + path;
+        if (key) {
+            url = url + "?access_token=" + key;
+        }
+        return url;
+    }
+
+    function create_bag_item(bdata, target) {
+        var ic = $("<div/>").addClass("item").addClass("r_" + bdata.item.rarity);
+        var img = $("<img/>");
+        img.attr("src", bdata.item.icon);
+        ic.append(img);
+        ic.data("name", bdata.item.name.toLowerCase());
+        if (bdata.count > 1) {
+            ic.append($("<span/>").text(bdata.count).addClass("count"));
+        }
+        ic.attr("title", bdata.item.name);
+        target.append(ic);
+    }
+
+    function get_bag(bag, target) {
+        var itemids = [];
+        var items_in_bag = false;
+        $.each(bag, function(i3, bagitem) {
+            if (bagitem) {
+                items_in_bag = true;
+                if (!ITEMCACHE[bagitem.id]) {
+                    itemids.push(bagitem.id);
+                }
+            }
+        });
+        var ids = itemids.join();
+
+        function update_bag(bag, target) {
+            $.each(bag, function(i, bdata) {
+                if (bdata) {
+                    bdata.item = ITEMCACHE[bdata.id];
+                    if (!bdata.item) {
+                        console.log("Invalid ID: " + bdata.id);
+                        bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
+                        bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
+                        create_bag_item(bdata, target);
+                    } else {
+                        create_bag_item(bdata, target);
+                    }
+                }
+            });
+        }
+        if (items_in_bag) {
+            if (ids) {
+                var url = get_url("items") + "?ids=" + ids;
+                $.getJSON(url, function(data) {
+                    $.each(data, function(i, itemdata) {
+                        ITEMCACHE[itemdata.id] = itemdata;
+                    });
+                }).always(function() {
+                    update_bag(bag, target)
+                });
+            } else {
+                update_bag(bag, target);
+            }
+        }
+    }
+
+    function get_mats_data(key, account) {
+        var curl = get_url("account/materials", key);
+        $.getJSON(curl, function(matsdata) {
+            var chardiv = $("<div/>").addClass("mats");
+            chardiv.append($("<span/>").addClass("title").text("Matériaux"));
+            var itemsdiv = $("<div/>").addClass("matstabs");
+            chardiv.append(itemsdiv);
+            while (matsdata.length) {
+                get_bag(matsdata.splice(0, 150), itemsdiv);
+            }
+            $("." + account).append(chardiv);
+            console.log("Matériaux : traité.");
+        });
+    }
+
+    function get_bank_data(key, account) {
+        var curl = get_url("account/bank", key);
+        $.getJSON(curl, function(bankdata) {
+            var chardiv = $("<div/>").addClass("bank");
+            chardiv.append($("<span/>").addClass("title").text("Banque"));
+            var itemsdiv = $("<div/>").addClass("banktabs");
+            chardiv.append(itemsdiv);
+            while (bankdata.length) {
+                get_bag(bankdata.splice(0, 150), itemsdiv);
+            }
+            $("." + account).append(chardiv);
+            console.log("Banque : traité.");
+        });
+    }
+
+    function get_char_data(character, key, account) {
+        var curl = get_url("characters/" + character, key);
+        var chardiv = $("<div/>").addClass("character");
+        $("." + account + " .characters").append(chardiv);
+        $.getJSON(curl, function(cdata) {
+            chardiv.attr({
+                race: cdata.race,
+                prof: cdata.profession,
+                gender: cdata.gender,
+                level: cdata.level
+            });
+            chardiv.append($("<span/>").addClass("title").text(character));
+            chardiv.append("<br>");
+            chardiv.append($("<span/>").addClass("spec").html("<img src=\"https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png\" class=\"icon " + cdata.gender + "\"></img><img src=\"https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png\" class=\"icon " + cdata.race + "\"></img><img src=\"https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png\" class=\"icon " + cdata.profession + "\"></img>" + cdata.level));
+            var itemsdiv = $("<div/>").addClass("stuff");
+            chardiv.append(itemsdiv);
+            get_bag(cdata.equipment, itemsdiv);
+            $.each(cdata.bags, function(i2, bag) {
+                var itemsdiv = $("<div/>").addClass("bag");
+                chardiv.append(itemsdiv);
+                get_bag(bag.inventory, itemsdiv);
+            });
+            console.log(character + " : traité.");
+        });
+    }
+
+    function get_content(key, account) {
+        console.log("Traitement de la liste des personnages...");
+        var url = get_url("characters", key);
+        $.getJSON(url, function(data) {
+            console.log("Chargement des données de personnages.");
+            var charsdiv = $("<div/>").addClass("characters");
+            $("." + account).append(charsdiv);
+            $.each(data, function(i, charname) {
+                get_char_data(charname, key, account);
+            });
+            get_bank_data(key, account);
+            get_mats_data(key, account);
+        });
+    }
+
+    function charfilter() {
+        var levmin = ($("#levmin").val() == "") ? 1 : parseInt($("#levmin").val());
+        var levmax = ($("#levmax").val() == "") ? 80 : parseInt($("#levmax").val());
+
+        var tohide = [];
+        $("input:checkbox:not(:checked,.rarity,.checkAll)").each(function() {
+            tohide.push($(this).next("label").attr("class"));
+        });
+
+        $(".character").each(function() {
+            var charlev = parseInt($(this).attr("level"));
+            var charattr = $(this).listAttributes();
+            if (
+                levmin > charlev ||
+                charlev > levmax ||
+                charattr.some(x => tohide.indexOf(x) > -1)
+            ) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
+    }
+
+    function itemfilter() {
+        var filtervalue = $("#filter").val().toLowerCase();
+        var rarivalues = [];
+        $("input:checkbox:checked.rarity").each(function() {
+            rarivalues.push($(this).next("label").attr("class"));
+        });
+        $(".item").each(function(i, e) {
+            var ee = $(e);
+            var name = ee.data("name");
+            var rari = ee.attr("class").slice(7);
+            if (name.indexOf(filtervalue) > -1 && rarivalues.indexOf(rari) > -1) {
+                ee.show();
+            } else {
+                ee.hide();
+            }
+        });
+    }
+
+    $("#filter").keyup(itemfilter);
+    $("input:checkbox.rarity").change(itemfilter);
+    $("input:checkbox.gender,input:checkbox.race,input:checkbox.prof").change(charfilter);
+    $(".levfilter").keyup(charfilter);
+    $(".checkAll").change(function() {
+        $("input:checkbox." + $(this).attr("ctrl")).prop("checked", $(this).prop("checked"));
+        if ($(this).attr("ctrl") == "rarity") {
+            itemfilter();
+        } else {
+            $(".gender,.race,.prof").each(charfilter);
+        }
+    });
+
+    $("#filterbutton").click(function() {
+        $("#filterdiv").toggle();
+    });
+
+    $("#get").click(function() {
+        $("#content").empty();
+        $("#filter").val("");
+        $(".levfilter").val("");
+        $("input:checkbox").prop("checked", true);
+        $.each(guids, function(j, key) {
+            var url = get_url("account", key);
+            $.getJSON(url, function(data) {
+                var account = data.name.replace(".", "·");
+                $("#content").append($("<div/>").addClass(account + " account"));
+                $("." + account).append("<h2>" + account + "</h2>");
+                var wurl = get_url("worlds/" + data.world, key);
+                $.getJSON(wurl, function(wdata) {
+                    var world = wdata.name;
+                    $("." + account).append("<h6>" + world + "</h6>");
+                });
+                get_content(key, account);
+            });
+        });
+        console.log("Traitement terminé.");
+    });
+}); //]]>
+  </script>
+</head>
+<body>
+<div id="header">
+    <input id="filter" placeholder="Trouve moi où est..." type="text"><input id="get" type="button" value="(Re)Charger"><img id="filterbutton" src="https://cdn0.iconfinder.com/data/icons/fatcow/32/filter.png">
+    <br><br>
+    <div class="hidden" id="filterdiv">
+        Rareté<input class="filters checkAll" type="checkbox"><br>
+        <input class="filters rarity" type="checkbox"><label class="Empty">Vide</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Junk">Inutile</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Basic">Basic</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Fine">Raffiné</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Masterwork">Chef-d'oeuvre</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Rare">Rare</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Exotic">Exotique</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Ascended">Élevé</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Legendary">Légendaire</label><br>
+        <input class="filters rarity" type="checkbox"><label class="Unknown">Inconnu</label><br>
+        Genre<input class="filters checkAll" type="checkbox"><br>
+        <input class="filters gender" type="checkbox"><label class="Female">Femelle</label><br>
+        <input class="filters gender" type="checkbox"><label class="Male">Mâle</label><br>
+        Race<input class="filters checkAll" type="checkbox"><br>
+        <input class="filters race" type="checkbox"><label class="Asura">Asura</label><br>
+        <input class="filters race" type="checkbox"><label class="Charr">Charr</label><br>
+        <input class="filters race" type="checkbox"><label class="Human">Humain</label><br>
+        <input class="filters race" type="checkbox"><label class="Norn">Norn</label><br>
+        <input class="filters race" type="checkbox"><label class="Sylvari">Sylvari</label><br>
+        Profession<input class="filters checkAll" type="checkbox"><br>
+        <input class="filters prof" type="checkbox"><label class="Elementalist">Élémentaliste</label><br>
+        <input class="filters prof" type="checkbox"><label class="Mesmer">Envoûteur</label><br>
+        <input class="filters prof" type="checkbox"><label class="Guardian">Gardien</label><br>
+        <input class="filters prof" type="checkbox"><label class="Warrior">Guerrier</label><br>
+        <input class="filters prof" type="checkbox"><label class="Engineer">Ingénieur</label><br>
+        <input class="filters prof" type="checkbox"><label class="Necromancer">Nécromant</label><br>
+        <input class="filters prof" type="checkbox"><label class="Revenant">Revenant</label><br>
+        <input class="filters prof" type="checkbox"><label class="Ranger">Rôdeur</label><br>
+        <input class="filters prof" type="checkbox"><label class="Thief">Voleur</label><br>
+        Niveau<br>
+        <input class="levfilter" id="levmin" onclick="this.select();" placeholder="min" type="text"> - <input class="levfilter" id="levmax" onclick="this.select();" placeholder="max" type="text">
+    </div>
+</div>
+
+<div id="content"></div>
+
+<div id="footer">
+    <span style="float:left;">Adapté du script de <a href="http://www.reddit.com/r/Guildwars2/comments/3cb5pc/api_character_inventories_page/">TheTerrasque</a>.</span>
+    Build GW2 : <span id="build">
+        <script>
+            var urlbuild = "https://api.guildwars2.com/v2/build";
+            $.getJSON(urlbuild, function(data){
+                $("#build").html(data.id);
+            });
+            </script>
+    </span>
+</div>
+</body>
+</html>
