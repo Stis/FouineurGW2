@@ -1,7 +1,5 @@
 # FouineurGW2
 Un simple "explorateur" de ce que vous pouvez voir de votre compte (ou même plusieurs) par l'API officielle.
-
-Un simple "explorateur" de ce que vous pouvez voir de votre compte (ou même plusieurs) par l'API officielle.
 Et comme je suis mauvais pour partir de zéro, je me suis appuyé sur ce qu'a fait TheTerrasque (http://www.reddit.com/r/Guildwars2/comments/3cb5pc/api_character_inventories_page/).
 J'utilise les icônes du wiki officiel, et une police que j'ai adapté à l'accentuation faite par KiyaKoreena (http://www.guildwars2guru.com/topic/607-guild-wars-2-based-font-v10/).
 
