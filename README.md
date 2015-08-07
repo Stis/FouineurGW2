@@ -7,3 +7,13 @@ J'utilise les icônes du wiki officiel, et une police que j'ai adapté à l'acce
 A simple "browser" of everything you can see from your account (even many accounts) using official API.
 And as i'm bad at starting from scratch, i started from TheTerrasque's work (http://www.reddit.com/r/Guildwars2/comments/3cb5pc/api_character_inventories_page/).
 I use icons from officiel wiki, and a font that i adapted for accentuated chars made by KiyaKoreena (http://www.guildwars2guru.com/topic/607-guild-wars-2-based-font-v10/).
+
+
+How to:
+Search for "var guids = [" and put your API Key into the quotes just after.
+If you want to check many accounts at same time, juste add them separated by commas:
+    var guids = [
+        "Put API Key #1 into those quotes",
+        "Put API Key #2 into those quotes",
+        "Put API Key #x into those quotes"
+    ];
