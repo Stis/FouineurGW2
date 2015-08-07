@@ -5,5 +5,5 @@ J'utilise les icônes du wiki officiel, et une police que j'ai adapté à l'acce
 
 
 A simple "browser" of everything you can see from your account (even many accounts) using official API.
-And as i'm bad at starting from scratch, i started from TheTerrasque's work ((http://www.reddit.com/r/Guildwars2/comments/3cb5pc/api_character_inventories_page/).
+And as i'm bad at starting from scratch, i started from TheTerrasque's work (http://www.reddit.com/r/Guildwars2/comments/3cb5pc/api_character_inventories_page/).
 I use icons from officiel wiki, and a font that i adapted for accentuated chars made by KiyaKoreena (http://www.guildwars2guru.com/topic/607-guild-wars-2-based-font-v10/).
