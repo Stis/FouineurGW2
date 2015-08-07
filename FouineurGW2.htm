@@ -53,11 +53,13 @@ input[type=button] {
     background-color: #8E8E8E;
     border-radius: 0 9px 9px 0;
     padding: 1px 3px;
+    cursor: pointer;
 }
 #filterbutton {
     float: right;
     width: 24px;
     height: 24px;
+    cursor: pointer;
 }
 #filterdiv {
     background-color: #333;
@@ -67,6 +69,8 @@ input[type=button] {
     width: auto;
     text-align: center;
     float: right;
+}
+.hidden{
     display: none;
 }
 .filters {
@@ -333,6 +337,10 @@ $(window).load(function() {
 
     function create_bag_item(bdata, target) {
         var ic = $("<div/>").addClass("item").addClass("r_" + bdata.item.rarity);
+        ic.attr({
+            type: bdata.item.type,
+            level: bdata.item.level
+        });
         var img = $("<img/>");
         img.attr("src", bdata.item.icon);
         ic.append(img);
@@ -547,7 +555,7 @@ $(window).load(function() {
     <input id="filter" placeholder="Trouve moi où est..." type="text"><input id="get" type="button" value="(Re)Charger"><img id="filterbutton" src="https://cdn0.iconfinder.com/data/icons/fatcow/32/filter.png">
     <br><br>
     <div class="hidden" id="filterdiv">
-        Rareté<input class="filters checkAll" type="checkbox"><br>
+        Rareté<input class="filters checkAll" ctrl="rarity" type="checkbox"><br>
         <input class="filters rarity" type="checkbox"><label class="Empty">Vide</label><br>
         <input class="filters rarity" type="checkbox"><label class="Junk">Inutile</label><br>
         <input class="filters rarity" type="checkbox"><label class="Basic">Basic</label><br>
@@ -558,16 +566,16 @@ $(window).load(function() {
         <input class="filters rarity" type="checkbox"><label class="Ascended">Élevé</label><br>
         <input class="filters rarity" type="checkbox"><label class="Legendary">Légendaire</label><br>
         <input class="filters rarity" type="checkbox"><label class="Unknown">Inconnu</label><br>
-        Genre<input class="filters checkAll" type="checkbox"><br>
+        Genre<input class="filters checkAll" ctrl="gender" type="checkbox"><br>
         <input class="filters gender" type="checkbox"><label class="Female">Femelle</label><br>
         <input class="filters gender" type="checkbox"><label class="Male">Mâle</label><br>
-        Race<input class="filters checkAll" type="checkbox"><br>
+        Race<input class="filters checkAll" ctrl="race" type="checkbox"><br>
         <input class="filters race" type="checkbox"><label class="Asura">Asura</label><br>
         <input class="filters race" type="checkbox"><label class="Charr">Charr</label><br>
         <input class="filters race" type="checkbox"><label class="Human">Humain</label><br>
         <input class="filters race" type="checkbox"><label class="Norn">Norn</label><br>
         <input class="filters race" type="checkbox"><label class="Sylvari">Sylvari</label><br>
-        Profession<input class="filters checkAll" type="checkbox"><br>
+        Profession<input class="filters checkAll" ctrl="prof" type="checkbox"><br>
         <input class="filters prof" type="checkbox"><label class="Elementalist">Élémentaliste</label><br>
         <input class="filters prof" type="checkbox"><label class="Mesmer">Envoûteur</label><br>
         <input class="filters prof" type="checkbox"><label class="Guardian">Gardien</label><br>
