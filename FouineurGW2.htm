@@ -291,8 +291,7 @@ if (jQuery) {
         }
     });
 }
-</script>
-  <script type="text/javascript">
+
     var icons = {
         Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
         Male:"https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
@@ -322,7 +321,6 @@ if (jQuery) {
         undefined: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png"
     };
 
-//<![CDATA[
 $(window).ready(function(){
     $("label").each(function() {
         if (icons[$(this).attr("class")]) {
@@ -332,8 +330,8 @@ $(window).ready(function(){
 });
 //jQuery.ajaxSetup({async:false});
 $(window).load(function() {
-    ENDPOINT = "https://api.guildwars2.com/v2/";
-    ITEMCACHE = [];
+    var ENDPOINT = "https://api.guildwars2.com/v2/";
+    var ITEMCACHE = [];
     var UNKNOWN_ITEM = {
         //"icon": "http://www.guildwars2hub.com/sites/sardu.tentonhammer.com/files/DownedEnemy.png",
         name: "Objet non identifié",
@@ -389,7 +387,6 @@ $(window).load(function() {
                 if (bdata) {
                     bdata.item = ITEMCACHE[bdata.id];
                     if (!bdata.item) {
-                        console.log("Invalid ID: " + bdata.id);
                         bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
                         bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
                         create_bag_item(bdata, target);
@@ -474,6 +471,7 @@ $(window).load(function() {
                 chardiv.append(itemsdiv);
                 get_bag(cdata.equipment, itemsdiv);
                 $.each(cdata.bags, function(i2, bag) {
+                    if (!bag) { return; }
                     var itemsdiv = $("<div/>").addClass("bag");
                     chardiv.append(itemsdiv);
                     get_bag(bag.inventory, itemsdiv);
@@ -517,7 +515,9 @@ $(window).load(function() {
             if (
                 levcmin > charlev ||
                 charlev > levcmax ||
-                charattr.some(x => tohide.indexOf(x) > -1)
+                charattr.some(function(x) {
+                    return tohide.indexOf(x) > -1;
+                })
             ) {
                 $(this).hide();
             } else {
@@ -602,7 +602,7 @@ $(window).load(function() {
         });
         console.log("Traitement terminé.");
     });
-}); //]]>
+});
   </script>
 </head>
 <body>
