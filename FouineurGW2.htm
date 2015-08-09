@@ -292,7 +292,6 @@ if (jQuery) {
     });
 }
 
-    var invalidIds = [];
     var icons = {
         Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
         Male:"https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
@@ -388,7 +387,6 @@ $(window).load(function() {
                 if (bdata) {
                     bdata.item = ITEMCACHE[bdata.id];
                     if (!bdata.item) {
-                        invalidIds.push(bdata.id);
                         bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
                         bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
                         create_bag_item(bdata, target);
@@ -410,9 +408,6 @@ $(window).load(function() {
                 });
             } else {
                 update_bag(bag, target);
-            }
-            if (invalidIds.length) {
-                console.log("Invalid IDs: " + invalidIds.join(', '));
             }
         }
     }
