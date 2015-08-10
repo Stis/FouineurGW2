@@ -332,6 +332,40 @@ $(window).on("hashchange", function() {
     guids = get_guids();
 });
 
+var Cache = {
+    saveDelay: 1000,
+    timeoutId: undefined,
+    set: function(key, value) {
+        if (this.ttl !== Infinity) {
+            value.timestamp = Date.now();
+        }
+        this.cache[key] = value;
+        this.save();
+    },
+    isStale: function(key) {
+        return this.cache[key] === undefined || this.ttl === Infinity ? true : this.cache[key].timestamp + this.ttl < Date.now();
+    },
+    save: function() {
+        if (this.timeoutId) {
+            this.timeoutId = clearTimeout(this.timeoutId);
+        }
+        this.timeoutId = setTimeout(this._save.bind(this), this.saveDelay);
+    },
+    _save: function() {
+        this.timeoutId = undefined;
+        localStorage.setItem(this.key, JSON.stringify(this.cache));
+    },
+    init: function(options) {
+        this.key = options.key;
+        this.ttl = options.ttl || Infinity;
+        this.cache = JSON.parse(localStorage.getItem(this.key) || '{}');
+        return this;
+    },
+    constructor: Cache
+};
+var items = Object.create(Cache).init({ key: 'itemCache' });
+var unknownItems = Object.create(Cache).init({ key: 'unknownItemCache', ttl: 5 * 60 * 1000 });
+
 $(window).ready(function(){
     $("label").each(function() {
         if (icons[$(this).attr("class")]) {
@@ -342,7 +376,6 @@ $(window).ready(function(){
 //jQuery.ajaxSetup({async:false});
 $(window).load(function() {
     var ENDPOINT = "https://api.guildwars2.com/v2/";
-    var ITEMCACHE = [];
     var UNKNOWN_ITEM = {
         icon: "http://wiki.guildwars2.com/images/1/1d/Deleted_Item.png",
         name: "Objet non identifié",
@@ -382,37 +415,43 @@ $(window).load(function() {
         $.each(bag, function(i3, bagitem) {
             if (bagitem) {
                 items_in_bag = true;
-                if (!ITEMCACHE[bagitem.id]) {
+                if (!items.cache[bagitem.id] && unknownItems.isStale(bagitem.id)) {
                     itemids.push(bagitem.id);
                 }
             }
         });
-        var ids = itemids.join();
 
         function update_bag(bag, target) {
             $.each(bag, function(i, bdata) {
                 if (bdata) {
-                    bdata.item = ITEMCACHE[bdata.id];
+                    bdata.item = items.cache[bdata.id];
                     if (!bdata.item) {
                         bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
                         bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
-                        create_bag_item(bdata, target);
-                    } else {
-                        create_bag_item(bdata, target);
                     }
+                    create_bag_item(bdata, target);
                 }
             });
         }
-        if (items_in_bag) {
-            if (ids) {
-                var url = get_url("items") + "?ids=" + ids;
-                $.getJSON(url, function(data) {
-                    $.each(data, function(i, itemdata) {
-                        ITEMCACHE[itemdata.id] = itemdata;
-                    });
-                }).always(function() {
-                    update_bag(bag, target)
+        function loadItems(ids) {
+            var url = get_url("items") + "?ids=" + ids.join(',');
+            $.getJSON(url, function(data) {
+                $.each(data, function(i, itemdata) {
+                    items.set(itemdata.id, itemdata);
                 });
+            }).fail(function(jqXHR) {
+                if (jqXHR.status === 404) {
+                    ids.forEach(function(id) {
+                        unknownItems.set(id, {});
+                    })
+                }
+            }).always(function() {
+                update_bag(bag, target)
+            });
+        }
+        if (items_in_bag) {
+            if (itemids.length) {
+                loadItems(itemids);
             } else {
                 update_bag(bag, target);
             }
