@@ -339,7 +339,7 @@ $(window).on("hashchange", function() {
 $(window).ready(function(){
     $("label").each(function() {
         if (icons[$(this).attr("class")]) {
-            $(this).prepend("<img src=\"" + icons[$(this).attr("class")] + "\" class=\"icon\" alt=\"" + $(this).attr("class") + "\" title=\"" + $(this).attr("class") + "\">");
+            $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], class: "icon", alt: $(this).attr("class"), title: $(this).attr("class") }));
         };
     });
 });
@@ -370,15 +370,13 @@ $(window).load(function() {
         ic.attr({
             type: bdata.item.type,
             level: bdata.item.level
-        });
-        var img = $("<img/>");
-        img.attr("src", bdata.item.icon);
-        ic.append(img);
-        ic.data("name", bdata.item.name.toLowerCase());
+        }).append($("<img/>").attr({
+            src: bdata.item.icon,
+            title: bdata.item.name
+        })).data("name", bdata.item.name.toLowerCase());
         if (bdata.count > 1) {
             ic.append($("<span/>").text(bdata.count).addClass("count"));
         }
-        ic.attr("title", bdata.item.name);
         target.append(ic);
     }
 
@@ -436,7 +434,6 @@ $(window).load(function() {
                 get_bag(matsdata.splice(0, 150), itemsdiv);
             }
             $("." + account).append(chardiv);
-            console.log("Matériaux : traité.");
         });
     }
 
@@ -451,7 +448,6 @@ $(window).load(function() {
                 get_bag(bankdata.splice(0, 150), itemsdiv);
             }
             $("." + account).append(chardiv);
-            console.log("Banque : traité.");
         });
     }
 
@@ -462,34 +458,30 @@ $(window).load(function() {
         $.getJSON(curl, function(cdata) {
             var gurl = "https://api.guildwars2.com/v1/guild_details?guild_id=" + cdata.guild;
             $.getJSON(gurl, function(gdata) {
-                chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + cdata.guild + ".svg"));
-                var tag = gdata.tag;
-                chardiv.attr({
+                chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + cdata.guild + ".svg")).attr({
                     race: cdata.race,
                     prof: cdata.profession,
                     gender: cdata.gender,
                     level: cdata.level
-                });
+                });;
+                var tag = gdata.tag;
                 var adde = (cdata.gender == "Male") ? "": "e";
                 var discis = "";
-                $.each(cdata.crafting, function(j, disci) {
+                $.each(cdata.crafting, function(i, disci) {
                     if (disci) {
                         discis += "<br><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating;
                     }
                 });
-                chardiv.append($("<span/>").addClass("title").text(character + " [" + tag + "]"));
-                chardiv.append("<br>");
-                chardiv.append($("<div/>").addClass("spec").html("<img src=\"" + icons[cdata.gender] + "\" class=\"icon " + cdata.gender + "\" alt=\"" + cdata.gender + "\" title=\"" + cdata.gender + "\"><img src=\"" + icons[cdata.race] + "\" class=\"icon " + cdata.race + "\" alt=\"" + cdata.race + "\" title=\"" + cdata.race + "\"><img src=\"" + icons[cdata.profession] + "\" class=\"icon " + cdata.profession + "\" alt=\"" + cdata.profession + "\" title=\"" + cdata.profession + "\">" + cdata.level + "<br>Né" + adde + " le " + formatDate(cdata.created) + "<br>" + cdata.deaths + " décès" + discis));
+                chardiv.append($("<span/>").addClass("title").text(character + " [" + tag + "]"),"<br>",$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[cdata.gender], class: "icon " + cdata.gender, alt: cdata.gender, title: cdata.gender }), $("<img/>").attr({src: icons[cdata.race], class: "icon " + cdata.race, alt: cdata.race, title: cdata.race }), $("<img/>").attr({src: icons[cdata.profession], class: "icon " + cdata.profession, alt: cdata.profession, title: cdata.profession }), cdata.level + "<br>Né" + adde + " le " + formatDate(cdata.created) + "<br>" + cdata.deaths + " décès" + discis));
                 var itemsdiv = $("<div/>").addClass("stuff");
                 chardiv.append(itemsdiv);
                 get_bag(cdata.equipment, itemsdiv);
-                $.each(cdata.bags, function(i2, bag) {
+                $.each(cdata.bags, function(i, bag) {
                     if (!bag) { return; }
                     var itemsdiv = $("<div/>").addClass("bag");
                     chardiv.append(itemsdiv);
                     get_bag(bag.inventory, itemsdiv);
                 });
-                console.log(character + " : traité.");
             });
         });
     }
@@ -499,10 +491,8 @@ $(window).load(function() {
     }
 
     function get_content(key, account) {
-        console.log("Traitement de la liste des personnages...");
         var url = get_url("characters", key);
         $.getJSON(url, function(data) {
-            console.log("Chargement des données de personnages.");
             var charsdiv = $("<div/>").addClass("characters");
             $("." + account).append(charsdiv);
             $.each(data, function(i, charname) {
@@ -516,12 +506,10 @@ $(window).load(function() {
     function charfilter() {
         var levcmin = ($("#levcmin").val() == "") ? 1 : parseInt($("#levcmin").val());
         var levcmax = ($("#levcmax").val() == "") ? 80 : parseInt($("#levcmax").val());
-
         var tohide = [];
         $("input:checkbox:not(:checked,.rarity,.checkAll)").each(function() {
             tohide.push($(this).next("label").attr("class"));
         });
-
         $(".character").each(function() {
             var charlev = parseInt($(this).attr("level"));
             var charattr = $(this).listAttributes();
@@ -551,16 +539,16 @@ $(window).load(function() {
         $("input:checkbox:checked.type").each(function() {
             typevalues.push($(this).next("label").attr("class"));
         });
-        $(".item").each(function(i, e) {
-            var ee = $(e);
-            var name = ee.data("name");
-            var rari = ee.attr("class").slice(7);
-            var type = ee.attr("type");
-            var itemlev = parseInt(ee.attr("level"));
+        $(".item").each(function() {
+            var ei = $(this);
+            var name = ei.data("name");
+            var rari = ei.attr("class").slice(7);
+            var type = ei.attr("type");
+            var itemlev = parseInt(ei.attr("level"));
             if (name.indexOf(filtervalue) > -1 && rarivalues.indexOf(rari) > -1 && typevalues.indexOf(type) > -1 && levimin <= itemlev && itemlev <= levimax) {
-                ee.show();
+                ei.show();
             } else {
-                ee.hide();
+                ei.hide();
             }
         });
     }
@@ -603,17 +591,15 @@ $(window).load(function() {
             var url = get_url("account", key);
             $.getJSON(url, function(data) {
                 var account = data.name.replace(".", "·");
-                $("#content").append($("<div/>").addClass(account + " account").attr("title", "Créé le " + formatDate(data.created)));
-                $("." + account).append("<h2>" + account + "</h2>");
+                $("#content").append($("<div/>").addClass(account + " account"));
+                $("." + account).append($("<h2/>").text(account).attr("title", "Créé le " + formatDate(data.created)));
                 var wurl = get_url("worlds/" + data.world, key);
                 $.getJSON(wurl, function(wdata) {
-                    var world = wdata.name;
-                    $("." + account).append("<h6>" + world + "</h6>");
+                    $("." + account).append($("<h6/>").text(wdata.name));
                 });
                 get_content(key, account);
             });
         });
-        console.log("Traitement terminé.");
     });
 });
   </script>
