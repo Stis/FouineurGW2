@@ -456,33 +456,31 @@ $(window).load(function() {
         var chardiv = $("<div/>").addClass("character");
         $("." + account + " .characters").append(chardiv);
         $.getJSON(curl, function(cdata) {
-            var gurl = "https://api.guildwars2.com/v1/guild_details?guild_id=" + cdata.guild;
-            $.getJSON(gurl, function(gdata) {
-                chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + cdata.guild + ".svg")).attr({
-                    race: cdata.race,
-                    prof: cdata.profession,
-                    gender: cdata.gender,
-                    level: cdata.level
-                });;
-                var tag = gdata.tag;
-                var adde = (cdata.gender == "Male") ? "": "e";
-                var discis = "";
-                $.each(cdata.crafting, function(i, disci) {
-                    if (disci) {
-                        discis += "<br><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating;
-                    }
-                });
-                chardiv.append($("<span/>").addClass("title").text(character + " [" + tag + "]"),"<br>",$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[cdata.gender], class: "icon " + cdata.gender, alt: cdata.gender, title: cdata.gender }), $("<img/>").attr({src: icons[cdata.race], class: "icon " + cdata.race, alt: cdata.race, title: cdata.race }), $("<img/>").attr({src: icons[cdata.profession], class: "icon " + cdata.profession, alt: cdata.profession, title: cdata.profession }), cdata.level + "<br>Né" + adde + " le " + formatDate(cdata.created) + "<br>" + cdata.deaths + " décès" + discis));
-                var itemsdiv = $("<div/>").addClass("stuff");
-                chardiv.append(itemsdiv);
-                get_bag(cdata.equipment, itemsdiv);
-                $.each(cdata.bags, function(i, bag) {
-                    if (!bag) { return; }
-                    var itemsdiv = $("<div/>").addClass("bag");
-                    chardiv.append(itemsdiv);
-                    get_bag(bag.inventory, itemsdiv);
-                });
+            var adde = (cdata.gender == "Male") ? "": "e";
+            var discis = "";
+            $.each(cdata.crafting, function(i, disci) {
+                if (disci) {
+                    discis += "<br><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating;
+                }
             });
+            chardiv.append($("<span/>").addClass("title").text(character),"<br>",$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[cdata.gender], class: "icon " + cdata.gender, alt: cdata.gender, title: cdata.gender }), $("<img/>").attr({src: icons[cdata.race], class: "icon " + cdata.race, alt: cdata.race, title: cdata.race }), $("<img/>").attr({src: icons[cdata.profession], class: "icon " + cdata.profession, alt: cdata.profession, title: cdata.profession }), cdata.level + "<br>Né" + adde + " le " + formatDate(cdata.created) + "<br>" + cdata.deaths + " décès" + discis)).attr({race: cdata.race,prof: cdata.profession,gender: cdata.gender,level: cdata.level});
+            var itemsdiv = $("<div/>").addClass("stuff");
+            chardiv.append(itemsdiv);
+            get_bag(cdata.equipment, itemsdiv);
+            $.each(cdata.bags, function(i, bag) {
+                if (!bag) { return; }
+                var itemsdiv = $("<div/>").addClass("bag");
+                chardiv.append(itemsdiv);
+                get_bag(bag.inventory, itemsdiv);
+            });
+            if (cdata.guild) {
+                var gurl = "https://api.guildwars2.com/v1/guild_details?guild_id=" + cdata.guild;
+                $.getJSON(gurl, function(gdata) {
+                    chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + cdata.guild + ".svg"));
+                    var putag = chardiv.children("span.title");
+                    putag.append(" [" + gdata.tag + "]");
+                });
+            }
         });
     }
 
