@@ -15,7 +15,7 @@
 .charbg {
     position: absolute;
     left: 0;
-    top: -15px;
+    top: -45px;
     width: 100%;
     height: auto;
     z-index: -1;
@@ -288,35 +288,6 @@ if (jQuery) {
     });
 }
 
-var icons = {
-    Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
-    Male:"https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
-    Asura:"https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png",
-    Charr:"https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png",
-    Human:"https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png",
-    Norn:"https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png",
-    Sylvari:"https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_20px.png",
-    Elementalist:"https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png",
-    Engineer:"https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png",
-    Guardian:"https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png",
-    Mesmer:"https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png",
-    Necromancer:"https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png",
-    Ranger:"https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png",
-    Revenant:"https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png",
-    Thief:"https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png",
-    Warrior:"https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
-    Armorsmith: "http://wiki.guildwars2.com/images/3/32/Armorsmith_tango_icon_20px.png",
-    Artificer: "http://wiki.guildwars2.com/images/b/b7/Artificer_tango_icon_20px.png",
-    Chef: "http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20px.png",
-    Huntsman: "http://wiki.guildwars2.com/images/f/f3/Huntsman_tango_icon_20px.png",
-    Jeweler: "http://wiki.guildwars2.com/images/f/f2/Jeweler_tango_icon_20px.png",
-    Leatherworker: "http://wiki.guildwars2.com/images/e/e5/Leatherworker_tango_icon_20px.png",
-    Tailor: "http://wiki.guildwars2.com/images/4/4d/Tailor_tango_icon_20px.png",
-    Weaponsmith: "http://wiki.guildwars2.com/images/4/46/Weaponsmith_tango_icon_20px.png",
-    //Unknown: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png",
-    undefined: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png"
-};
-
 function get_guids() {
     if (!location.hash) {
         return JSON.parse(localStorage.getItem("guids") || "[]");
@@ -366,15 +337,36 @@ var Cache = {
 var items = Object.create(Cache).init({ key: 'itemCache' });
 var unknownItems = Object.create(Cache).init({ key: 'unknownItemCache', ttl: 5 * 60 * 1000 });
 
-$(window).ready(function(){
-    $("label").each(function() {
-        if (icons[$(this).attr("class")]) {
-            $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], class: "icon", alt: $(this).attr("class"), title: $(this).attr("class") }));
-        };
-    });
-});
 //jQuery.ajaxSetup({async:false});
 $(window).load(function() {
+    var icons = {
+        Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
+        Male:"https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
+        Asura:"https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png",
+        Charr:"https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png",
+        Human:"https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png",
+        Norn:"https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png",
+        Sylvari:"https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_20px.png",
+        Elementalist:"https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png",
+        Engineer:"https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png",
+        Guardian:"https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png",
+        Mesmer:"https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png",
+        Necromancer:"https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png",
+        Ranger:"https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png",
+        Revenant:"https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png",
+        Thief:"https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png",
+        Warrior:"https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
+        Armorsmith: "http://wiki.guildwars2.com/images/3/32/Armorsmith_tango_icon_20px.png",
+        Artificer: "http://wiki.guildwars2.com/images/b/b7/Artificer_tango_icon_20px.png",
+        Chef: "http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20px.png",
+        Huntsman: "http://wiki.guildwars2.com/images/f/f3/Huntsman_tango_icon_20px.png",
+        Jeweler: "http://wiki.guildwars2.com/images/f/f2/Jeweler_tango_icon_20px.png",
+        Leatherworker: "http://wiki.guildwars2.com/images/e/e5/Leatherworker_tango_icon_20px.png",
+        Tailor: "http://wiki.guildwars2.com/images/4/4d/Tailor_tango_icon_20px.png",
+        Weaponsmith: "http://wiki.guildwars2.com/images/4/46/Weaponsmith_tango_icon_20px.png",
+        //Unknown: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png",
+        undefined: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png"
+    };
     var ENDPOINT = "https://api.guildwars2.com/v2/";
     var UNKNOWN_ITEM = {
         icon: "http://wiki.guildwars2.com/images/1/1d/Deleted_Item.png",
@@ -385,6 +377,12 @@ $(window).load(function() {
     }
 
     guids = get_guids();
+
+    $("label").each(function() {
+        if (icons[$(this).attr("class")]) {
+            $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], class: "icon", alt: $(this).attr("class"), title: $(this).attr("class") }));
+        };
+    });
 
     function get_url(path, key) {
         var url = ENDPOINT + path;
@@ -412,7 +410,7 @@ $(window).load(function() {
     function get_bag(bag, target) {
         var itemids = [];
         var items_in_bag = false;
-        $.each(bag, function(i3, bagitem) {
+        $.each(bag, function(i, bagitem) {
             if (bagitem) {
                 items_in_bag = true;
                 if (!items.cache[bagitem.id] && unknownItems.isStale(bagitem.id)) {
