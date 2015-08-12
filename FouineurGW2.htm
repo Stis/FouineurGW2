@@ -529,6 +529,15 @@ $(window).load(function() {
         });
     }
 
+    function buildnum() {
+        var urlbuild = "https://api.guildwars2.com/v2/build";
+            $.getJSON(urlbuild, function(data){
+                $("#build").html(data.id);
+            });
+    }
+
+    buildnum();
+
     function charfilter() {
         var levcmin = ($("#levcmin").val() == "") ? 1 : parseInt($("#levcmin").val());
         var levcmax = ($("#levcmax").val() == "") ? 80 : parseInt($("#levcmax").val());
@@ -609,6 +618,7 @@ $(window).load(function() {
     });
 
     $("#get").click(function() {
+        buildnum();
         $("#content").empty();
         $("#filter").val("");
         $(".levfilter").val("");
@@ -703,15 +713,7 @@ $(window).load(function() {
 <div id="content"></div>
 
 <div id="footer">
-    <span style="float:left;">Adapté du script de <a href="http://www.reddit.com/r/Guildwars2/comments/3cb5pc/api_character_inventories_page/">TheTerrasque</a>.</span>
-    Build GW2 : <span id="build">
-        <script>
-            var urlbuild = "https://api.guildwars2.com/v2/build";
-            $.getJSON(urlbuild, function(data){
-                $("#build").html(data.id);
-            });
-            </script>
-    </span>
+    Build GW2 : <span id="build">.....</span>
 </div>
 </body>
 </html>
