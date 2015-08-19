@@ -310,7 +310,15 @@ var Cache = {
         this.save();
     },
     isStale: function(key) {
-        return this.cache[key] === undefined || this.ttl === Infinity ? true : this.cache[key].timestamp + this.ttl < Date.now();
+        if (this.cache[key] === undefined || this.ttl === Infinity) {
+            return true;
+        }
+        if (this.cache[key].timestamp + this.ttl >= Date.now()) {
+            return false;
+        }
+        delete this.cache[key];
+        this.save();
+        return true;
     },
     save: function() {
         if (this.timeoutId) {
@@ -331,7 +339,8 @@ var Cache = {
     constructor: Cache
 };
 var items = Object.create(Cache).init({ key: 'itemCache' });
-var unknownItems = Object.create(Cache).init({ key: 'unknownItemCache', ttl: 5 * 60 * 1000 });
+var unknownItems = Object.create(Cache).init({ key: 'unknownItemCache', ttl: 24 * 60 * 60 * 1000 });
+var guilds = Object.create(Cache).init({ key: 'guildCache', ttl: 24 * 60 * 60 * 1000 });
 
 var icons = {
     Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
@@ -505,13 +514,22 @@ function get_char_data(character, key, account) {
             chardiv.append(itemsdiv);
             get_bag(bag.inventory, itemsdiv);
         });
-        if (cdata.guild) {
-            var gurl = "https://api.guildwars2.com/v1/guild_details?guild_id=" + cdata.guild;
-            $.getJSON(gurl, function(gdata) {
-                chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + cdata.guild + ".svg"));
+        var guildId = cdata.guild;
+        if (guildId) {
+            function insertGuildIntoPage(guildData) {
+                chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + guildId + ".svg"));
                 var putag = chardiv.children("span.title");
-                putag.append(" [" + gdata.tag + "]");
-            });
+                putag.append(" [" + guildData.tag + "]");
+            }
+            if (guilds.isStale(guildId)) {
+                var gurl = "https://api.guildwars2.com/v1/guild_details?guild_id=" + guildId;
+                $.getJSON(gurl, function(gdata) {
+                    guilds.set(guildId, gdata);
+                    insertGuildIntoPage(gdata);
+                });
+            } else {
+                insertGuildIntoPage(guilds.cache[guildId]);
+            }
         }
     });
 }
