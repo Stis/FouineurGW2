@@ -167,7 +167,8 @@ h6 {
     width: 32px;
 }
 .r_Empty {
-    border: none;
+    border-color: #000;
+    opacity: .2;
 }
 .r_Basic {
     border-color: #FFF;
@@ -399,6 +400,18 @@ $(window).load(function() {
         if (bdata.count > 1) {
             ic.append($("<span/>").text(bdata.count).addClass("count"));
         }
+        else if (bdata.count < 1) {
+            ic.addClass("r_Empty");
+        }
+        target.append(ic);
+    }
+
+    function create_empty(bdata, target) {
+        var ic = $("<div/>").addClass("item").addClass("r_Empty");
+        ic.attr({
+            type: "Empty",
+            level: "0"
+        }).data("name", "empty slot");
         target.append(ic);
     }
 
@@ -424,6 +437,7 @@ $(window).load(function() {
                     }
                     create_bag_item(bdata, target);
                 }
+                else {create_empty(null, target);}
             });
         }
         function loadItems(ids) {
@@ -577,7 +591,7 @@ $(window).load(function() {
         $(".item").each(function() {
             var ei = $(this);
             var name = ei.data("name");
-            var rari = ei.attr("class").slice(7);
+            var rari = ei.attr("class").split(" ")[1].slice(2);
             var type = ei.attr("type");
             var itemlev = parseInt(ei.attr("level"));
             if (name.indexOf(filtervalue) > -1 && rarivalues.indexOf(rari) > -1 && typevalues.indexOf(type) > -1 && levimin <= itemlev && itemlev <= levimax) {
@@ -681,6 +695,7 @@ $(window).load(function() {
         <input class="filters type" type="checkbox"><label class="Trait">Trait</label><br>
         <input class="filters type" type="checkbox"><label class="Trophy">Trophée</label><br>
         <input class="filters type" type="checkbox"><label class="Unknown">Inconnu</label><br>
+        <input class="filters type" type="checkbox"><label class="Empty">Slot vide</label><br>
         Niveau<br>
         <input class="levfilter" id="levimin" onclick="this.select();" placeholder="min" type="text"> - <input class="levfilter" id="levimax" onclick="this.select();" placeholder="max" type="text">
         </div>
