@@ -49,8 +49,8 @@ input[type=button] {
 }
 #filterContainer,
 #filterbutton {
-    width: 24px;
     height: 24px;
+    width: 24px;
 }
 #filterContainer {
     float: right;
@@ -250,7 +250,7 @@ h6 {
     position: fixed;
     right: 0;
     bottom: 0;
-    background: #333;
+    background-color: #333;
     box-shadow: -1.5px -1.5px 3px rgba(0, 0, 0, .25);
     padding: 0 8px;
     text-align: right;
@@ -345,9 +345,9 @@ var Cache = {
     constructor: Cache
 };
 var items = Object.create(Cache).init({ key: 'itemCache' });
+var skins = Object.create(Cache).init({ key: 'skinCache' });
 var unknownItems = Object.create(Cache).init({ key: 'unknownItemCache', ttl: 24 * 60 * 60 * 1000 });
 var guilds = Object.create(Cache).init({ key: 'guildCache', ttl: 24 * 60 * 60 * 1000 });
-
 var icons = {
     Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
     Male:"https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
@@ -393,24 +393,6 @@ function get_url(path, key) {
     return url;
 }
 
-function create_bag_item(bdata, target) {
-    var ic = $("<div/>").addClass("item").addClass("r_" + bdata.item.rarity);
-    ic.attr({
-        type: bdata.item.type,
-        level: bdata.item.level
-    }).append($("<img/>").attr({
-        src: bdata.item.icon,
-        title: bdata.item.name
-    })).data("name", bdata.item.name.toLowerCase());
-    if (bdata.count > 1) {
-        ic.append($("<span/>").text(bdata.count).addClass("count"));
-    }
-    else if (bdata.count < 1) {
-        ic.addClass("r_Empty");
-    }
-    target.append(ic);
-}
-
 function create_empty(bdata, target) {
     var ic = $("<div/>").addClass("item").addClass("r_Empty");
     ic.attr({
@@ -420,54 +402,99 @@ function create_empty(bdata, target) {
     target.append(ic);
 }
 
+function create_bag_item(bdata, target) {
+    var ic = $("<div/>").addClass("item").addClass("r_" + bdata.item.rarity);
+    ic.attr({
+        type: bdata.item.type,
+        level: bdata.item.level
+    }).append($("<img/>").attr({
+        src: bdata.skin ? bdata.sk.icon : bdata.item.icon,
+        title: bdata.skin ? bdata.sk.name : bdata.item.name
+    })).data("name", bdata.skin ? bdata.sk.name.toLowerCase() : bdata.item.name.toLowerCase());
+    if (bdata.count > 1) {
+        ic.append($("<span/>").text(bdata.count).addClass("count"));
+    }
+    else if (bdata.count < 1) {
+        ic.addClass("r_Empty");
+    }
+    target.append(ic);
+}
+
+function update_bag(bag, target) {
+    for (var bdata of bag) {
+        if (bdata) {
+            bdata.item = items.cache[bdata.id];
+            bdata.sk = skins.cache[bdata.skin];
+            if (!bdata.item) {
+                bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
+                bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
+            }
+            create_bag_item(bdata, target);
+        }
+        else {
+            create_empty(null, target);
+        }
+    };
+}
+
+function loadItems(ids) {
+    if (!ids.length) {
+        return;
+    }
+    var url = get_url("items") + "?ids=" + ids.join(',');
+    return $.getJSON(url, function(data) {
+        $.each(data, function(i, itemdata) {
+            items.set(itemdata.id, itemdata);
+        });
+    }).fail(function(jqXHR) {
+        if (jqXHR.status === 404) {
+            ids.forEach(function(id) {
+                unknownItems.set(id, {});
+            })
+        }
+    });
+}
+
+function loadSkins(ids) {
+    if (!ids.length) {
+        return;
+    }
+    var url = get_url("skins") + "?ids=" + ids.join(',');
+    return $.getJSON(url, function(data) {
+        $.each(data, function(i, skindata) {
+            skins.set(skindata.id, skindata);
+        });
+    }).fail(function(jqXHR) {
+        if (jqXHR.status === 404) {
+            ids.forEach(function(id) {
+                unknownItems.set(id, {});
+            })
+        }
+    });
+}
+
 function get_bag(bag, target) {
     var itemids = [];
+    var skinids = [];
     var items_in_bag = false;
-    $.each(bag, function(i, bagitem) {
+    for (var bagitem of bag) {
         if (bagitem) {
             items_in_bag = true;
             if (!items.cache[bagitem.id] && unknownItems.isStale(bagitem.id)) {
                 itemids.push(bagitem.id);
             }
-        }
-    });
-
-    function update_bag(bag, target) {
-        $.each(bag, function(i, bdata) {
-            if (bdata) {
-                bdata.item = items.cache[bdata.id];
-                if (!bdata.item) {
-                    bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
-                    bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
-                }
-                create_bag_item(bdata, target);
+            if (bagitem.skin && !skins.cache[bagitem.skin] && unknownItems.isStale(bagitem.skin)) {
+                skinids.push(bagitem.skin);
             }
-            else {create_empty(null, target);}
-        });
-    }
-    function loadItems(ids) {
-        var url = get_url("items") + "?ids=" + ids.join(',');
-        $.getJSON(url, function(data) {
-            $.each(data, function(i, itemdata) {
-                items.set(itemdata.id, itemdata);
-            });
-        }).fail(function(jqXHR) {
-            if (jqXHR.status === 404) {
-                ids.forEach(function(id) {
-                    unknownItems.set(id, {});
-                });
-            }
-        }).always(function() {
-            update_bag(bag, target);
-        });
-    }
-    if (items_in_bag) {
-        if (itemids.length) {
-            loadItems(itemids);
-        } else {
-            update_bag(bag, target);
         }
-    }
+    };
+    Promise.resolve()
+    .then(loadSkins.bind(this, skinids))
+    .then(loadItems.bind(this, itemids))
+    .catch(function(err) {
+        console.error("Erreur : ", err);
+    })
+    .then(update_bag.bind(this, bag, target));
 }
 
 function get_mats_data(key, account) {
@@ -540,6 +567,7 @@ function get_char_data(character, key, account) {
     });
 }
 
+
 function formatDate(t) {
     return new Date(t).toLocaleDateString();
 }
@@ -580,7 +608,7 @@ function charfilter() {
             charattr.some(function(x) {
                 return tohide.indexOf(x) > -1;
             })
-        ) {
+            ) {
             $(this).hide();
         } else {
             $(this).show();
@@ -589,16 +617,17 @@ function charfilter() {
 }
 
 function itemfilter() {
+    if ($(".rarity:checked").length < $(".rarity").length) {
+        $("#chieur").prop("checked", 0);
+    } else {
+        $("#chieur").prop("checked", 1);
+    }
     var levimin = ($("#levimin").val() == "") ? 0 : parseInt($("#levimin").val());
     var levimax = ($("#levimax").val() == "") ? 80 : parseInt($("#levimax").val());
     var filtervalue = $("#filter").val().toLowerCase();
-    var rarivalues = [];
-    $("input:checkbox:checked.rarity").each(function() {
-        rarivalues.push($(this).next("label").attr("class"));
-    });
-    var typevalues = [];
-    $("input:checkbox:checked.type").each(function() {
-        typevalues.push($(this).next("label").attr("class"));
+    var toshow = [];
+    $(".rarity:checked,.type:checked").each(function() {
+        toshow.push($(this).next("label").attr("class"));
     });
     $(".item").each(function() {
         var ei = $(this);
@@ -606,7 +635,7 @@ function itemfilter() {
         var rari = ei.attr("class").split(" ")[1].slice(2);
         var type = ei.attr("type");
         var itemlev = parseInt(ei.attr("level"));
-        if (name.indexOf(filtervalue) > -1 && rarivalues.indexOf(rari) > -1 && typevalues.indexOf(type) > -1 && levimin <= itemlev && itemlev <= levimax) {
+        if (name.indexOf(filtervalue) > -1 && toshow.indexOf(rari) > -1 && toshow.indexOf(type) > -1 && levimin <= itemlev && itemlev <= levimax) {
             ei.show();
         } else {
             ei.hide();
@@ -638,8 +667,8 @@ function reload() {
 
 function initEvents() {
     $("#filter").keyup(itemfilter);
-    $("input:checkbox.rarity,input:checkbox.type").change(itemfilter);
-    $("input:checkbox.gender,input:checkbox.race,input:checkbox.prof").change(charfilter);
+    $(".rarity,.type").change(itemfilter);
+    $(".gender,.race,.prof").change(charfilter);
     $("#items .levfilter").keyup(itemfilter);
     $("#chars .levfilter").keyup(charfilter);
     $(".checkAll").change(function() {
@@ -671,6 +700,7 @@ function initEvents() {
 
 //jQuery.ajaxSetup({async:false});
 $(window).load(function() {
+    buildnum();
     $("label").each(function() {
         if (icons[$(this).attr("class")]) {
             $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], class: "icon", alt: $(this).attr("class"), title: $(this).attr("class") }));
@@ -696,7 +726,7 @@ $(window).load(function() {
             </div>
             <div id="items" class="tab-content">
                 Rareté<input class="filters checkAll" ctrl="rarity" type="checkbox"><br>
-                <input class="filters rarity" type="checkbox"><label class="Empty">Vide</label><br>
+                <!-- <input class="filters rarity" type="checkbox"><label class="Empty">Vide</label><br> -->
                 <input class="filters rarity" type="checkbox"><label class="Junk">Inutile</label><br>
                 <input class="filters rarity" type="checkbox"><label class="Basic">Basic</label><br>
                 <input class="filters rarity" type="checkbox"><label class="Fine">Raffiné</label><br>
@@ -723,7 +753,7 @@ $(window).load(function() {
                 <input class="filters type" type="checkbox"><label class="Trait">Trait</label><br>
                 <input class="filters type" type="checkbox"><label class="Trophy">Trophée</label><br>
                 <input class="filters type" type="checkbox"><label class="Unknown">Inconnu</label><br>
-                <input class="filters type" type="checkbox"><label class="Empty">Slot vide</label><br>
+                <input class="filters type" type="checkbox" id="chieur"><label class="Empty">Slot vide</label><br>
                 Niveau<br>
                 <input class="levfilter" id="levimin" onclick="this.select();" placeholder="min" type="text"> - <input class="levfilter" id="levimax" onclick="this.select();" placeholder="max" type="text">
             </div>
