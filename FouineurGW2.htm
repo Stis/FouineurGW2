@@ -159,18 +159,22 @@ h6 {
 }
 .item {
     display: inline-block;
+    position: relative;
     height: 32px;
     width: 32px;
     border: 2px solid #fff;
     border-radius: 3px;
     border-width: 2px 0 0 2px;
-    overflow: hidden;
-    margin: 1px;
+    overflow: visible;
+    margin: 1px 1px 0 1px;
     padding: 0;
 }
 .item img {
     height: 32px;
     width: 32px;
+}
+.item:hover img {
+    top: -25%;
 }
 .r_Empty {
     border-color: #000;
@@ -234,17 +238,30 @@ h6 {
     color: red;
 }
 .count {
-    display: inline-block;
-    width: 32px;
-    margin-left: -34px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
     padding: 1px;
     color: #fff;
     font-size: 85%;
     text-align: right;
     text-shadow: 1px 1px black;
 }
+.item:hover .count, .item:hover img {
+    position: absolute;
+    width: 150%;
+    left: -25%;
+    z-index: 1;
+}
+.item:hover img {
+    height: 150%;
+}
 .item:hover .count {
     background-color: rgba(0, 0, 0, 0.7);
+    bottom: -25%;
+    width: 150%;
 }
 #footer {
     position: fixed;
@@ -412,7 +429,7 @@ function create_bag_item(bdata, target) {
         title: bdata.skin ? bdata.sk.name : bdata.item.name
     })).data("name", bdata.skin ? bdata.sk.name.toLowerCase() : bdata.item.name.toLowerCase());
     if (bdata.count > 1) {
-        ic.append($("<span/>").text(bdata.count).addClass("count"));
+        ic.append($("<div/>").text(bdata.count).addClass("count"));
     }
     else if (bdata.count < 1) {
         ic.addClass("r_Empty");
@@ -450,7 +467,7 @@ function loadItems(ids) {
         if (jqXHR.status === 404) {
             ids.forEach(function(id) {
                 unknownItems.set(id, {});
-            })
+            });
         }
     });
 }
@@ -468,7 +485,7 @@ function loadSkins(ids) {
         if (jqXHR.status === 404) {
             ids.forEach(function(id) {
                 unknownItems.set(id, {});
-            })
+            });
         }
     });
 }
