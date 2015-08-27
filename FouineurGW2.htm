@@ -599,13 +599,17 @@ function charfilter() {
 }
 
 function itemfilter() {
-    $("#chieur").prop("checked", $(".rarity:checked").length == $(".rarity").length ? 1 : 0);
+    //$("#chieur").prop("checked", $(".rarity:checked").length == $(".rarity").length ? 1 : 0);
     var levimin = ($("#levimin").val() == "") ? 0 : parseInt($("#levimin").val());
     var levimax = ($("#levimax").val() == "") ? 80 : parseInt($("#levimax").val());
     var filtervalue = $("#filter").val().toLowerCase();
-    var toshow = [];
-    $(".rarity:checked,.type:checked").each(function() {
-        toshow.push($(this).next("label").attr("class"));
+    var rarivalues = [];
+    $("input:checkbox:checked.rarity").each(function() {
+        rarivalues.push($(this).next("label").attr("class"));
+    });
+    var typevalues = [];
+    $("input:checkbox:checked.type").each(function() {
+        typevalues.push($(this).next("label").attr("class"));
     });
     $(".item").each(function() {
         var ei = $(this);
@@ -613,7 +617,7 @@ function itemfilter() {
         var rari = ei.attr("class").split(" ")[1].slice(2);
         var type = ei.attr("type");
         var itemlev = parseInt(ei.attr("level"));
-        if (name.indexOf(filtervalue) > -1 && toshow.indexOf(rari) > -1 && toshow.indexOf(type) > -1 && levimin <= itemlev && itemlev <= levimax) {
+        if (name.indexOf(filtervalue) > -1 && rarivalues.indexOf(rari) > -1 && typevalues.indexOf(type) > -1 && levimin <= itemlev && itemlev <= levimax) {
             ei.show();
         } else {
             ei.hide();
