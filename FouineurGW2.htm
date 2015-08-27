@@ -135,11 +135,14 @@ h6 {
 .charbg {
     position: absolute;
     left: 0;
-    top: -45px;
+    top: -40px;
     height: auto;
     width: 100%;
     z-index: -1;
     opacity: 0.2;
+}
+.spec {
+    min-height: 125px;
 }
 .spec img {
     margin: 0 4px -4px 0;
@@ -165,7 +168,7 @@ h6 {
     border-radius: 3px;
     border-width: 2px 0 0 2px;
     overflow: hidden;
-    margin: 1px;
+    margin: 0px 1px;
     padding: 0;
 }
 .item img {
@@ -296,11 +299,12 @@ function get_guids() {
     }
     var guids = location.hash.slice(1).split(",");
     localStorage.setItem("guids", JSON.stringify(guids));
-    history.pushState(undefined, document.title, location.href.slice(0, location.href.indexOf('#')));
+    history.replaceState(undefined, document.title, location.href.slice(0, location.href.indexOf('#')));
+    history.back()
     return guids;
 }
-var guids;
 
+var guids;
 $(window).on("hashchange", function() {
     guids = get_guids();
 });
@@ -350,21 +354,21 @@ var unknownItems = Object.create(Cache).init({ key: 'unknownItemCache', ttl: 24 
 var guilds = Object.create(Cache).init({ key: 'guildCache', ttl: 24 * 60 * 60 * 1000 });
 var icons = {
     Female: "https://cdn3.iconfinder.com/data/icons/fatcow/16/female.png",
-    Male:"https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
-    Asura:"https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png",
-    Charr:"https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png",
-    Human:"https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png",
-    Norn:"https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png",
-    Sylvari:"https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_20px.png",
-    Elementalist:"https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png",
-    Engineer:"https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png",
-    Guardian:"https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png",
-    Mesmer:"https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png",
-    Necromancer:"https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png",
-    Ranger:"https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png",
-    Revenant:"https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png",
-    Thief:"https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png",
-    Warrior:"https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
+    Male: "https://cdn3.iconfinder.com/data/icons/fatcow/16x16_0560/male.png",
+    Asura: "https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png",
+    Charr: "https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png",
+    Human: "https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png",
+    Norn: "https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png",
+    Sylvari: "https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_20px.png",
+    Elementalist: "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png",
+    Engineer: "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png",
+    Guardian: "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png",
+    Mesmer: "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png",
+    Necromancer: "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png",
+    Ranger: "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png",
+    Revenant: "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png",
+    Thief: "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png",
+    Warrior: "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
     Armorsmith: "http://wiki.guildwars2.com/images/3/32/Armorsmith_tango_icon_20px.png",
     Artificer: "http://wiki.guildwars2.com/images/b/b7/Artificer_tango_icon_20px.png",
     Chef: "http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20px.png",
@@ -373,7 +377,6 @@ var icons = {
     Leatherworker: "http://wiki.guildwars2.com/images/e/e5/Leatherworker_tango_icon_20px.png",
     Tailor: "http://wiki.guildwars2.com/images/4/4d/Tailor_tango_icon_20px.png",
     Weaponsmith: "http://wiki.guildwars2.com/images/4/46/Weaponsmith_tango_icon_20px.png",
-    //Unknown: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png",
     undefined: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png"
 };
 var ENDPOINT = "https://api.guildwars2.com/v2/";
@@ -384,40 +387,42 @@ var UNKNOWN_ITEM = {
     level: "0",
     type: "Unknown"
 };
+var EMPTY_SLOT = {
+    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII=",
+    name: "Slot vide",
+    rarity: "Empty",
+    level: "0",
+    type: "Empty"
+};
 
 function get_url(path, key) {
     var url = ENDPOINT + path;
     if (key) {
-        url = url + "?access_token=" + key;
+        url += "?access_token=" + key;
     }
     return url;
 }
 
-function create_empty(bdata, target) {
-    var ic = $("<div/>").addClass("item").addClass("r_Empty");
-    ic.attr({
-        type: "Empty",
-        level: "0"
-    }).data("name", "empty slot");
-    target.append(ic);
-}
-
-function create_bag_item(bdata, target) {
-    var ic = $("<div/>").addClass("item").addClass("r_" + bdata.item.rarity);
-    ic.attr({
+function create_bag_item(bdata) {
+    if (!bdata) {
+        var bdata = {slot: "emptyslot", item: $.extend(true, {}, EMPTY_SLOT)};
+    }
+    var ic = $("<div/>").addClass("item").addClass("r_" + bdata.item.rarity)
+    .attr({
         type: bdata.item.type,
-        level: bdata.item.level
-    }).append($("<img/>").attr({
+        level: bdata.item.level,
+        slot: bdata.slot ? bdata.slot : "notstuff"})
+    .append($("<img/>").attr({
         src: bdata.skin ? bdata.sk.icon : bdata.item.icon,
-        title: bdata.skin ? bdata.sk.name : bdata.item.name
-    })).data("name", bdata.skin ? bdata.sk.name.toLowerCase() : bdata.item.name.toLowerCase());
+        title: bdata.skin ? bdata.sk.name : bdata.item.name}))
+    .data("name", bdata.skin ? bdata.sk.name.toLowerCase() : bdata.item.name.toLowerCase());
     if (bdata.count > 1) {
         ic.append($("<span/>").text(bdata.count).addClass("count"));
     }
     else if (bdata.count < 1) {
         ic.addClass("r_Empty");
     }
-    target.append(ic);
+    return ic;
 }
 
 function update_bag(bag, target) {
@@ -427,42 +432,24 @@ function update_bag(bag, target) {
             bdata.sk = skins.cache[bdata.skin];
             if (!bdata.item) {
                 bdata.item = $.extend(true, {}, UNKNOWN_ITEM);
-                bdata.item.name = bdata.item.name + " [" + bdata.id + "]";
+                bdata.item.name += " [" + bdata.id + "]";
             }
-            create_bag_item(bdata, target);
+            target.append(create_bag_item(bdata));
         }
         else {
-            create_empty(null, target);
+            target.append(create_bag_item(null));
         }
     };
 }
 
-function loadItems(ids) {
+function loadItems(ids, type) {
     if (!ids.length) {
         return;
     }
-    var url = get_url("items") + "?ids=" + ids.join(',');
+    var url = get_url(type) + "?ids=" + ids.join(',');
     return $.getJSON(url, function(data) {
         $.each(data, function(i, itemdata) {
-            items.set(itemdata.id, itemdata);
-        });
-    }).fail(function(jqXHR) {
-        if (jqXHR.status === 404) {
-            ids.forEach(function(id) {
-                unknownItems.set(id, {});
-            })
-        }
-    });
-}
-
-function loadSkins(ids) {
-    if (!ids.length) {
-        return;
-    }
-    var url = get_url("skins") + "?ids=" + ids.join(',');
-    return $.getJSON(url, function(data) {
-        $.each(data, function(i, skindata) {
-            skins.set(skindata.id, skindata);
+            eval(type).set(itemdata.id, itemdata);
         });
     }).fail(function(jqXHR) {
         if (jqXHR.status === 404) {
@@ -476,10 +463,8 @@ function loadSkins(ids) {
 function get_bag(bag, target) {
     var itemids = [];
     var skinids = [];
-    var items_in_bag = false;
     for (var bagitem of bag) {
         if (bagitem) {
-            items_in_bag = true;
             if (!items.cache[bagitem.id] && unknownItems.isStale(bagitem.id)) {
                 itemids.push(bagitem.id);
             }
@@ -489,8 +474,8 @@ function get_bag(bag, target) {
         }
     };
     Promise.resolve()
-    .then(loadSkins.bind(this, skinids))
-    .then(loadItems.bind(this, itemids))
+    .then(loadItems.bind(this, skinids, "skins"))
+    .then(loadItems.bind(this, itemids, "items"))
     .catch(function(err) {
         console.error("Erreur : ", err);
     })
@@ -501,9 +486,8 @@ function get_mats_data(key, account) {
     var curl = get_url("account/materials", key);
     $.getJSON(curl, function(matsdata) {
         var chardiv = $("<div/>").addClass("mats");
-        chardiv.append($("<span/>").addClass("title").text("Matériaux"));
         var itemsdiv = $("<div/>").addClass("matstabs");
-        chardiv.append(itemsdiv);
+        chardiv.append($("<span/>").addClass("title").text("Matériaux"),itemsdiv);
         while (matsdata.length) {
             get_bag(matsdata.splice(0, 150), itemsdiv);
         }
@@ -515,9 +499,8 @@ function get_bank_data(key, account) {
     var curl = get_url("account/bank", key);
     $.getJSON(curl, function(bankdata) {
         var chardiv = $("<div/>").addClass("bank");
-        chardiv.append($("<span/>").addClass("title").text("Banque"));
         var itemsdiv = $("<div/>").addClass("banktabs");
-        chardiv.append(itemsdiv);
+        chardiv.append($("<span/>").addClass("title").text("Banque"),itemsdiv);
         while (bankdata.length) {
             get_bag(bankdata.splice(0, 150), itemsdiv);
         }
@@ -537,7 +520,7 @@ function get_char_data(character, key, account) {
                 discis += "<br><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating;
             }
         });
-        chardiv.append($("<span/>").addClass("title").text(character),"<br>",$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[cdata.gender], class: "icon " + cdata.gender, alt: cdata.gender, title: cdata.gender }), $("<img/>").attr({src: icons[cdata.race], class: "icon " + cdata.race, alt: cdata.race, title: cdata.race }), $("<img/>").attr({src: icons[cdata.profession], class: "icon " + cdata.profession, alt: cdata.profession, title: cdata.profession }), cdata.level + "<br>Né" + adde + " le " + formatDate(cdata.created) + "<br>" + cdata.deaths + " décès" + discis)).attr({race: cdata.race,prof: cdata.profession,gender: cdata.gender,level: cdata.level});
+        chardiv.append($("<div/>").addClass("title").text(character),$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[cdata.gender], class: "icon " + cdata.gender, alt: cdata.gender, title: cdata.gender }), $("<img/>").attr({src: icons[cdata.race], class: "icon " + cdata.race, alt: cdata.race, title: cdata.race }), $("<img/>").attr({src: icons[cdata.profession], class: "icon " + cdata.profession, alt: cdata.profession, title: cdata.profession }), cdata.level + "<br>Né" + adde + " le " + formatDate(cdata.created) + "<br>" + cdata.deaths + " décès" + discis)).attr({race: cdata.race,prof: cdata.profession,gender: cdata.gender,level: cdata.level});
         var itemsdiv = $("<div/>").addClass("stuff");
         chardiv.append(itemsdiv);
         get_bag(cdata.equipment, itemsdiv);
@@ -551,7 +534,7 @@ function get_char_data(character, key, account) {
         if (guildId) {
             function insertGuildIntoPage(guildData) {
                 chardiv.append($("<img/>").addClass("charbg").attr("src", "http://guilds.gw2w2w.com/" + guildId + ".svg"));
-                var putag = chardiv.children("span.title");
+                var putag = chardiv.children("div.title");
                 putag.append(" [" + guildData.tag + "]");
             }
             if (guilds.isStale(guildId)) {
@@ -566,7 +549,6 @@ function get_char_data(character, key, account) {
         }
     });
 }
-
 
 function formatDate(t) {
     return new Date(t).toLocaleDateString();
@@ -617,11 +599,7 @@ function charfilter() {
 }
 
 function itemfilter() {
-    if ($(".rarity:checked").length < $(".rarity").length) {
-        $("#chieur").prop("checked", 0);
-    } else {
-        $("#chieur").prop("checked", 1);
-    }
+    $("#chieur").prop("checked", $(".rarity:checked").length == $(".rarity").length ? 1 : 0);
     var levimin = ($("#levimin").val() == "") ? 0 : parseInt($("#levimin").val());
     var levimax = ($("#levimax").val() == "") ? 80 : parseInt($("#levimax").val());
     var filtervalue = $("#filter").val().toLowerCase();
@@ -662,7 +640,61 @@ function reload() {
             get_content(key, account);
         });
     });
+
+    Promise.resolve()
+    .then(sortStuff())
+    .then(sortAcc())
+    .catch(function(err) {
+        console.error("Erreur reload : ", err);
+    });
+
     document.querySelector('#filter').focus();
+}
+
+function sortStuff() {
+    return $(".stuff").each(function() {
+        $(this).append(
+            $("<div/>").append(
+                $("<div/>").append(
+                    $(this).find("[slot=Helm]").length ? $(this).find("[slot=Helm]") : create_bag_item(null),
+                    $(this).find("[slot=Shoulders]").length ? $(this).find("[slot=Shoulders]") : create_bag_item(null),
+                    $(this).find("[slot=Coat]").length ? $(this).find("[slot=Coat]") : create_bag_item(null),
+                    $(this).find("[slot=Gloves]").length ? $(this).find("[slot=Gloves]") : create_bag_item(null),
+                    $(this).find("[slot=Leggings]").length ? $(this).find("[slot=Leggings]") : create_bag_item(null),
+                    $(this).find("[slot=Boots]").length ? $(this).find("[slot=Boots]") : create_bag_item(null)),
+                $("<div/>").append(
+                    $(this).find("[slot=WeaponA1]").length ? $(this).find("[slot=WeaponA1]") : create_bag_item(null),
+                    $(this).find("[slot=WeaponA2]").length ? $(this).find("[slot=WeaponA2]") : create_bag_item(null),
+                    $(this).find("[slot=WeaponB1]").length ? $(this).find("[slot=WeaponB1]") : create_bag_item(null),
+                    $(this).find("[slot=WeaponB2]").length ? $(this).find("[slot=WeaponB2]") : create_bag_item(null)),
+                $("<div/>").append(
+                    $(this).find("[slot=HelmAquatic]").length ? $(this).find("[slot=HelmAquatic]") : create_bag_item(null),
+                    $(this).find("[slot=WeaponAquaticA]").length ? $(this).find("[slot=WeaponAquaticA]") : create_bag_item(null),
+                    $(this).find("[slot=WeaponAquaticB]").length ? $(this).find("[slot=WeaponAquaticB]") : create_bag_item(null)),
+                $("<div/>").append(
+                    $(this).find("[slot=Backpack]").length ? $(this).find("[slot=Backpack]") : create_bag_item(null),
+                    $(this).find("[slot=Accessory1]").length ? $(this).find("[slot=Accessory1]") : create_bag_item(null),
+                    $(this).find("[slot=Accessory2]").length ? $(this).find("[slot=Accessory2]") : create_bag_item(null),
+                    $(this).find("[slot=Amulet]").length ? $(this).find("[slot=Amulet]") : create_bag_item(null),
+                    $(this).find("[slot=Ring1]").length ? $(this).find("[slot=Ring1]") : create_bag_item(null),
+                    $(this).find("[slot=Ring2]").length ? $(this).find("[slot=Ring2]") : create_bag_item(null))).css("display","flex"),
+            $("<div/>").append(
+                $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : create_bag_item(null),
+                $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : create_bag_item(null),
+                $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : create_bag_item(null))
+        );
+    });
+}
+
+function sortAcc() {
+     return $(".account").each(function() {
+        $(this).append(
+            $(this).find("h2"),
+            $(this).find("h6"),
+            $(this).find(".characters"),
+            $(this).find(".bank"),
+            $(this).find(".mats"));
+    });
 }
 
 function initEvents() {
@@ -698,7 +730,7 @@ function initEvents() {
     $("#get").click(reload);
 }
 
-//jQuery.ajaxSetup({async:false});
+// jQuery.ajaxSetup({async:false});
 $(window).load(function() {
     buildnum();
     $("label").each(function() {
