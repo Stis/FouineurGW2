@@ -1,0 +1,316 @@
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-regular-webfont.woff") format("woff");
+    font-weight:normal;
+    font-style:normal;
+}
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-italic-webfont.woff") format("woff");
+    font-weight:normal;
+    font-style:italic;
+}
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-semibold-webfont.woff") format("woff");
+    font-weight:bold;
+    font-style:normal;
+}
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-semibolditalic-webfont.woff") format("woff");
+    font-weight:bold;
+    font-style:italic;
+}
+* {
+    font-family: CronosPro;
+    text-align: center;
+}
+body {
+    background-color: #555;
+    color: #CACACA;
+}
+#header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 28px;
+    width: 100%;
+    z-index: 10;
+    background-color: #333;
+    box-shadow: 0 1.5px 3px rgba(0, 0, 0, .25);
+    padding-top: 4px;
+}
+#menuDiv {
+    display: none;
+    position: absolute;
+    top: 32px;
+    background-color: #333;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
+    text-align: left;
+}
+#menu img {
+    height: 24px;
+    width: 24px;
+}
+input[type=text] {
+    background-color: #CCC;
+    border: none;
+    padding: 2px 4px;
+}
+#filter {
+    position:absolute;
+    right:58px;
+    height: 17px;
+    border-radius: 9px 0 0 9px;
+}
+[type=button] {
+    position:absolute;
+    right:32px;
+    height:21px;
+    cursor: pointer;
+    background-color: #CCC;
+    border: none;
+    border-radius: 0 9px 9px 0;
+    padding: 1px;
+}
+[type=button] img {
+    width: 18px;
+}
+#filterContainer {
+    float: right;
+}
+#filterButton {
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+}
+#filterDiv {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 32px;
+    background-color: #333;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
+}
+ul.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+ul.tabs li {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px;
+    color: #888;
+}
+ul.tabs li.current {
+    color: #FFF;
+}
+.tabContent {
+    display: none;
+    padding: 10px;
+}
+.tabContent.current {
+    display: inherit;
+}
+.filters {
+    position: absolute;
+    right: 0;
+}
+label {
+    float: left;
+    background-repeat: no-repeat;
+    text-align: left;
+}
+.icon {
+    height: 16px;
+    margin-bottom: -4px;
+}
+.type + label {
+    color: #888;
+}
+:not(.rarity) + label {
+    width: 60%;
+}
+.levFilter {
+    width: 30px;
+    border-radius: 9px;
+}
+#content {
+    position:absolute;
+    top:32px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:auto;
+}
+section {
+    height: 0;
+    overflow: hidden;
+    z-index: -1;
+    opacity: 0;
+}
+section.visible {
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    position: static;
+    z-index: 1
+}
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+}
+tr:nth-child(even) {
+    background-color: #505050;
+}
+.currName {
+    text-align: left;
+}
+#bagStuff {
+    display: flex;
+}
+.account {
+    border-right: 1px dotted #888;
+}
+h2 {
+    margin-bottom: 0;
+}
+h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.characters {
+    display: flex;
+}
+.character {
+    position: relative;
+    min-width: 210px;
+    width: 210px;
+}
+.charBg {
+    position: absolute;
+    left: 0;
+    top: -40px;
+    height: auto;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.2;
+}
+.spec {
+    min-height: 125px;
+}
+.spec img {
+    margin: 0 4px -4px 0;
+}
+.stuff,
+.bag,
+.bankTabs,
+.matsTabs {
+    margin: 0 auto 10px auto;
+}
+.stuff {
+    box-shadow: 0px 20px 2px -19px #CCC;
+}
+.bankTabs,
+.matsTabs {
+    width: 360px;
+}
+.item {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    border-width: 2px 0 0 2px;
+    overflow: hidden;
+    margin: 0px 1px;
+    padding: 0;
+}
+.item img,
+#wallet img,
+.thead img {
+    height: 32px;
+    width: 32px;
+}
+.r_Empty {
+    border-color: #000;
+    opacity: .2;
+}
+.r_Junk {
+    border-color: #AAA;
+}
+.r_Basic {
+    border-color: #FFF;
+}
+.r_Fine {
+    border-color: #62A4DA;
+}
+.r_Masterwork {
+    border-color: #1A9306;
+}
+.r_Rare {
+    border-color: #FCD00B;
+}
+.r_Exotic {
+    border-color: #FFA405;
+}
+.r_Ascended {
+    border-color: #FB3E8D;
+}
+.r_Legendary {
+    border-color: #4C139D;
+}
+.r_Unknown {
+    border-color: red;
+}
+.Empty {
+    color: black;
+}
+.Junk {
+    color: #AAA;
+}
+.Basic {
+    color: #FFF;
+}
+.Fine {
+    color: #62A4DA;
+}
+.Masterwork {
+    color: #1A9306;
+}
+.Rare {
+    color: #FCD00B;
+}
+.Exotic {
+    color: #FFA405;
+}
+.Ascended {
+    color: #FB3E8D;
+}
+.Legendary {
+    color: #4C139D;
+}
+.Unknown {
+    color: red;
+}
+.count {
+    display: inline-block;
+    width: 32px;
+    margin-left: -34px;
+    padding: 1px;
+    color: #fff;
+    font-size: 85%;
+    text-align: right;
+    text-shadow: 1px 1px black;
+}
+.item:hover .count {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.hidden {
+    display:none;
+}
