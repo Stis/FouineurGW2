@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="shortcut icon" type="image/png" href="http://wiki.guildwars2.com/images/5/51/Mini_Skritt_Forager.png" />
+  <title>Le fouineur</title>
+  <style type="text/css">
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-regular-webfont.woff") format("woff");
+    font-weight:normal;
+    font-style:normal;
+}
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-italic-webfont.woff") format("woff");
+    font-weight:normal;
+    font-style:italic;
+}
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-semibold-webfont.woff") format("woff");
+    font-weight:bold;
+    font-style:normal;
+}
+@font-face {
+    font-family: "CronosPro";
+    src: url("https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-semibolditalic-webfont.woff") format("woff");
+    font-weight:bold;
+    font-style:italic;
+}
+* {
+    font-family: CronosPro;
+    text-align: center;
+}
+body {
+    background-color: #555;
+    color: #CACACA;
+}
+#header {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 28px;
+    width: 100%;
+    z-index: 10;
+    background-color: #333;
+    box-shadow: 0 1.5px 3px rgba(0, 0, 0, .25);
+    padding-top: 4px;
+}
+#menuDiv {
+    display: none;
+    position: absolute;
+    top: 32px;
+    background-color: #333;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
+    text-align: left;
+}
+#menu img {
+    height: 24px;
+    width: 24px;
+}
+input[type=text] {
+    background-color: #CCC;
+    border: none;
+    padding: 2px 4px;
+}
+#filter {
+    position:absolute;
+    right:58px;
+    height: 17px;
+    border-radius: 9px 0 0 9px;
+}
+[type=button] {
+    position:absolute;
+    right:32px;
+    height:21px;
+    cursor: pointer;
+    background-color: #CCC;
+    border: none;
+    border-radius: 0 9px 9px 0;
+    padding: 1px;
+}
+[type=button] img {
+    width: 18px;
+}
+#filterContainer {
+    float: right;
+}
+#filterButton {
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+}
+#filterDiv {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 32px;
+    background-color: #333;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
+}
+ul.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+ul.tabs li {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px;
+    color: #888;
+}
+ul.tabs li.current {
+    color: #FFF;
+}
+.tabContent {
+    display: none;
+    padding: 10px;
+}
+.tabContent.current {
+    display: inherit;
+}
+.filters {
+    position: absolute;
+    right: 0;
+}
+label {
+    float: left;
+    background-repeat: no-repeat;
+    text-align: left;
+}
+.icon {
+    height: 16px;
+    margin-bottom: -4px;
+}
+.type + label {
+    color: #888;
+}
+:not(.rarity) + label {
+    width: 60%;
+}
+.levFilter {
+    width: 30px;
+    border-radius: 9px;
+}
+#content {
+    position:absolute;
+    top:32px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    overflow:auto;
+}
+section {
+    height: 0;
+    overflow: hidden;
+    z-index: -1;
+    opacity: 0;
+}
+section.visible {
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    position: static;
+    z-index: 1
+}
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+}
+tr:nth-child(even) {
+    background-color: #505050;
+}
+.currName {
+    text-align: left;
+}
+#bagStuff {
+    display: flex;
+}
+.account {
+    border-right: 1px dotted #888;
+}
+h2 {
+    margin-bottom: 0;
+}
+h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.characters {
+    display: flex;
+}
+.character {
+    position: relative;
+    min-width: 210px;
+    width: 210px;
+}
+.charBg {
+    position: absolute;
+    left: 0;
+    top: -40px;
+    height: auto;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.2;
+}
+.spec {
+    min-height: 125px;
+}
+.spec img {
+    margin: 0 4px -4px 0;
+}
+.stuff,
+.bag,
+.bankTabs,
+.matsTabs {
+    margin: 0 auto 10px auto;
+}
+.stuff {
+    box-shadow: 0px 20px 2px -19px #CCC;
+}
+.bankTabs,
+.matsTabs {
+    width: 360px;
+}
+.item {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    border-width: 2px 0 0 2px;
+    overflow: hidden;
+    margin: 0px 1px;
+    padding: 0;
+}
+.item img,
+#wallet img,
+.thead img {
+    height: 32px;
+    width: 32px;
+}
+.r_Empty {
+    border-color: #000;
+    opacity: .2;
+}
+.r_Junk {
+    border-color: #AAA;
+}
+.r_Basic {
+    border-color: #FFF;
+}
+.r_Fine {
+    border-color: #62A4DA;
+}
+.r_Masterwork {
+    border-color: #1A9306;
+}
+.r_Rare {
+    border-color: #FCD00B;
+}
+.r_Exotic {
+    border-color: #FFA405;
+}
+.r_Ascended {
+    border-color: #FB3E8D;
+}
+.r_Legendary {
+    border-color: #4C139D;
+}
+.r_Unknown {
+    border-color: red;
+}
+.Empty {
+    color: black;
+}
+.Junk {
+    color: #AAA;
+}
+.Basic {
+    color: #FFF;
+}
+.Fine {
+    color: #62A4DA;
+}
+.Masterwork {
+    color: #1A9306;
+}
+.Rare {
+    color: #FCD00B;
+}
+.Exotic {
+    color: #FFA405;
+}
+.Ascended {
+    color: #FB3E8D;
+}
+.Legendary {
+    color: #4C139D;
+}
+.Unknown {
+    color: red;
+}
+.count {
+    display: inline-block;
+    width: 32px;
+    margin-left: -34px;
+    padding: 1px;
+    color: #fff;
+    font-size: 85%;
+    text-align: right;
+    text-shadow: 1px 1px black;
+}
+.item:hover .count {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.hidden {
+    display:none;
+}
+</style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+/*!
+ * listAttributes jQuery Plugin v1.1.0
+ *
+ * Copyright 2010, Michael Riddle
+ * Licensed under the MIT
+ * http://jquery.org/license
+ *
+ * Date: Sun Mar 28 05:49:39 2010 -0900
+ *
+ *https://jquery-list-attributes.googlecode.com/files/jquery.listAttributes.js
+ */
+if (jQuery) {
+    jQuery(document).ready(function() {
+        jQuery.fn.listAttributes = function(prefix) {
+            var list = [];
+            $(this).each(function() {
+                //console.info(this);
+                var attributes = [];
+                for (var key in this.attributes) {
+                    if (!isNaN(key)) {
+                        if (!prefix || this.attributes[key].name.substr(0, prefix.length) == prefix) {
+                            attributes.push(this.attributes[key].value);
+                        }
+                    }
+                }
+                list.push(attributes);
+            });
+            return (list.length > 1 ? list : list[0]);
+        };
+    });
+}
+
+var guids;
+$(window).on("hashchange", function() {
+    guids = getGuids();
+});
+
+function getGuids() {
+    if (!location.hash) {
+        return JSON.parse(localStorage.getItem("guids") || "[]");
+    }
+    var guids = location.hash.slice(1).split(",");
+    localStorage.setItem("guids", JSON.stringify(guids));
+    history.replaceState(undefined, document.title, location.href.slice(0, location.href.indexOf("#")));
+    history.back()
+    return guids;
+}
+
+var Cache = {
+    saveDelay: 1000,
+    timeoutId: undefined,
+    set: function(key, value) {
+        if (this.ttl !== Infinity) {
+            value.timestamp = Date.now();
+        }
+        this.cache[key] = value;
+        this.save();
+    },
+    isStale: function(key) {
+        if (this.cache[key] === undefined || this.ttl === Infinity) {
+            return true;
+        }
+        if (this.cache[key].timestamp + this.ttl >= Date.now()) {
+            return false;
+        }
+        delete this.cache[key];
+        this.save();
+        return true;
+    },
+    save: function() {
+        if (this.timeoutId) {
+            this.timeoutId = clearTimeout(this.timeoutId);
+        }
+        this.timeoutId = setTimeout(this._save.bind(this), this.saveDelay);
+    },
+    _save: function() {
+        this.timeoutId = undefined;
+        localStorage.setItem(this.key, JSON.stringify(this.cache));
+    },
+    init: function(options) {
+        this.key = options.key;
+        this.ttl = options.ttl || Infinity;
+        this.cache = JSON.parse(localStorage.getItem(this.key) || "{}");
+        return this;
+    },
+    constructor: Cache
+};
+var items = Object.create(Cache).init({ key: "itemCache" });
+var skins = Object.create(Cache).init({ key: "skinCache" });
+var unknownItems = Object.create(Cache).init({ key: "unknownItemCache", ttl: 24 * 60 * 60 * 1000 });
+var dyes = Object.create(Cache).init({ key: "dyeCache" });
+var wallet = Object.create(Cache).init({ key: "walletCache" });
+var guilds = Object.create(Cache).init({ key: "guildCache", ttl: 24 * 60 * 60 * 1000 });
+var icons = {
+    fr: "https://www.iconfinder.com/data/icons/fatcow/16/flag_france.png",
+    en: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/flag_great_britain.png",
+    sp: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/flag_spain.png",
+    de: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/flag_germany.png",
+    sacs: "https://cdn0.iconfinder.com/data/icons/fatcow/16/box_open.png",
+    skins: "https://cdn0.iconfinder.com/data/icons/fatcow/16/ribbon.png",
+    wallet: "https://cdn0.iconfinder.com/data/icons/fatcow/16/total_plan_cost.png",
+    dyes: "https://cdn3.iconfinder.com/data/icons/fatcow/16/color_wheel.png",
+    contacts: "https://cdn3.iconfinder.com/data/icons/fatcow/16/book_addresses.png",
+    mails: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/email_air.png",
+    settings: "https://cdn0.iconfinder.com/data/icons/fatcow/16/gear_in.png",
+    no: "https://iconfinder.com/data/icons/fatcow/16/cross.png",
+    yes: "https://iconfinder.com/data/icons/fatcow/16/tick.png",
+    cloth: "https://render.guildwars2.com/file/7FBA68B71DB805E416315067DD0DDEEB204CFC65/63577.png",
+    leather: "https://render.guildwars2.com/file/BB34A319132236042659CE7B31DF6FA890FF6501/65954.png",
+    metal: "https://render.guildwars2.com/file/D1941454313ACCB234906840E1FB401D49091B96/220460.png",
+    Female: "https://iconfinder.com/data/icons/fatcow/16/female.png",
+    Male: "https://iconfinder.com/data/icons/fatcow/16/male.png",
+    Asura: "https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png",
+    Charr: "https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png",
+    Human: "https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png",
+    Norn: "https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png",
+    Sylvari: "https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_20px.png",
+    Elementalist: "https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png",
+    Engineer: "https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png",
+    Guardian: "https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png",
+    Mesmer: "https://wiki.guildwars2.com/images/6/60/Mesmer_tango_icon_20px.png",
+    Necromancer: "https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png",
+    Ranger: "https://wiki.guildwars2.com/images/4/43/Ranger_tango_icon_20px.png",
+    Revenant: "https://wiki.guildwars2.com/images/b/b5/Revenant_tango_icon_20px.png",
+    Thief: "https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png",
+    Warrior: "https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png",
+    Armorsmith: "http://wiki.guildwars2.com/images/3/32/Armorsmith_tango_icon_20px.png",
+    Artificer: "http://wiki.guildwars2.com/images/b/b7/Artificer_tango_icon_20px.png",
+    Chef: "http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20px.png",
+    Huntsman: "http://wiki.guildwars2.com/images/f/f3/Huntsman_tango_icon_20px.png",
+    Jeweler: "http://wiki.guildwars2.com/images/f/f2/Jeweler_tango_icon_20px.png",
+    Leatherworker: "http://wiki.guildwars2.com/images/e/e5/Leatherworker_tango_icon_20px.png",
+    Tailor: "http://wiki.guildwars2.com/images/4/4d/Tailor_tango_icon_20px.png",
+    Weaponsmith: "http://wiki.guildwars2.com/images/4/46/Weaponsmith_tango_icon_20px.png",
+    undefined: "https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png"
+};
+var endPoint = "https://api.guildwars2.com/v2/";
+var unkItem = {
+    icon: "http://wiki.guildwars2.com/images/1/1d/Deleted_Item.png",
+    name: "Objet non identifié",
+    rarity: "Unknown",
+    level: "0",
+    type: "Unknown"
+};
+var emptySlot = {
+    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII=",
+    name: "Slot vide",
+    rarity: "Empty",
+    level: "0",
+    type: "Empty"
+};
+
+function formatDate(t) {
+    return new Date(t).toLocaleDateString();
+}
+
+function getURL(path, key) {
+    var url = endPoint + path;
+    if (key) {
+        url += "?access_token=" + key;
+    }
+    return url;
+}
+
+function buildVer() {
+    var url = "https://api.guildwars2.com/v2/build";
+    $.getJSON(url, function(data){
+        $("#build").html(data.id);
+    });
+}
+
+$(window).load(function() {
+    buildVer();
+    $("label").each(function() {
+        if (icons[$(this).attr("class")]) {
+            $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], class: "icon", alt: $(this).attr("class"), title: $(this).attr("class") }));
+        };
+    });
+    guids = getGuids();
+    initEvents();
+});
+
+function initEvents() {
+    $("#menu").hover(function() {
+        $("#menuDiv").toggle();
+    });
+    $("#getBuilds").click(getBuilds);
+    $("#getWallet").click(getWallet);
+    $("#getBags").click(getBags);
+    $("#filter").keyup(itemFilter);
+    $("#reloadButton").click(getBags);
+    $("#filterContainer").hover(function() {
+        $("#filterDiv").toggle();
+    });
+    $("ul.tabs li").click(function() {
+        var tabId = $(this).attr("toShow");
+
+        $("ul.tabs li").removeClass("current");
+        $(".tabContent").removeClass("current");
+
+        $(this).addClass("current");
+        $("#" + tabId).addClass("current");
+    });
+    $(".checkAll").change(function() {
+        $("input:checkbox." + $(this).attr("ctrl")).prop("checked", $(this).prop("checked"));
+        var filt = $(this).attr("ctrl");
+        if (filt == "rarity" || filt == "type") {
+            itemFilter();
+        } else {
+            charFilter();
+        }
+    });
+    $(".rarity,.type").change(itemFilter);
+    $(".gender,.race,.prof").change(charFilter);
+    $("#items .levFilter").keyup(itemFilter);
+    $("#chars .levFilter").keyup(charFilter);
+    $("#getWard").click(getWard);
+    $("#getDyes").click(getDyes);
+    $("#getPvP").click(getPvP);
+    $("#build").click(buildVer);
+}
+
+// BUILDS start
+function getBuilds() {
+    $("section").removeClass("visible");
+    $("#builds").addClass("visible").empty().text("WORK IN PROGRESS...");
+    var url = getURL("character/:id/specializations", key);
+}
+// BUILDS end
+// WALLET start
+function getWallet() {
+    $("section").removeClass("visible");
+    $("#walletHead").addClass("visible");
+    $("#wallet").addClass("visible").empty().append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName").prop("title","name"))));
+    $.getJSON("https://api.guildwars2.com/v2/currencies?ids=all", function(data) {
+        var result;
+        data.sort(function(a,b) {return a.order > b.order;});
+        for(var curr in data) {
+            result += "<tr title=\"" + data[curr].description + "\"><td id=\"curr" + data[curr].id + "\" class=\"currName\">" + data[curr].name + "</td><td><img src=\"" + data[curr].icon + "\" class=\"icon\"></td></tr>";
+        }
+        $("#currList tr:last-of-type").after(result);
+    });
+    $.each(guids, function(i, key) {
+        var url = getURL("account", key);
+        $.getJSON(url, function(data) {
+            var accName = data.name;
+            var url = getURL("account/wallet", key);
+            $.getJSON(url, function(data) {
+                $("tr.thead .currName").after($("<td/>").text(accName));
+                $("tr:not(.thead) .currName").after($("<td/>"));
+                for(var curr in data) {
+                    $("#curr"+data[curr].id+"+ td").text(data[curr].value);
+                }
+            });
+        });
+    });
+}
+// WALLET end
+// BAGS start
+function getBags() {
+    $("section").removeClass("visible");
+    $("#dyes").empty()
+    $("#bagStuffHead, #bagStuff").addClass("visible");
+    $("#bagStuff").empty();
+    $("#filter").val("");
+    $("input:checkbox").prop("checked", true);
+    $(".levFilter").val("");
+    $.each(guids, function(i, key) {
+        var url = getURL("account", key);
+        $.getJSON(url, function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            $("#bagStuff").append($("<div/>").addClass(account + " account"));
+            $("." + account).append($("<h2/>").text(accName).attr("title", "Créé le " + formatDate(data.created)));
+            var url = getURL("worlds/" + data.world, key);
+            $.getJSON(url, function(wdata) {
+                $("." + account).append($("<h6/>").text(wdata.name));
+            });
+            getContent(key, account);
+        });
+    });
+
+    Promise.resolve()
+    .then(sortStuff())
+    .then(sortAcc())
+    .catch(function(err) {
+        console.error("Erreur getBags : ", err);
+    });
+
+    document.querySelector("#filter").focus();
+}
+
+function getContent(key, account) {
+    var url = getURL("characters", key);
+    $.getJSON(url, function(data) {
+        var charsDiv = $("<div/>").addClass("characters");
+        $("." + account).append(charsDiv);
+        $.each(data, function(i, charName) {
+            getCharData(charName, key, account);
+        });
+        getBankData(key, account);
+        getMatsData(key, account);
+    });
+}
+
+function getCharData(character, key, account) {
+    var url = getURL("characters/" + character, key);
+    var charDiv = $("<div/>").addClass("character");
+    $("." + account + " .characters").append(charDiv);
+    $.getJSON(url, function(charData) {
+        var addE = (charData.gender == "Male") ? "": "e";
+        var discis = "";
+        $.each(charData.crafting, function(i, disci) {
+            if (disci) {
+                discis += "<br><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating;
+            }
+        });
+        charDiv.append($("<div/>").addClass("title").text(character),$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[charData.gender], class: "icon " + charData.gender, alt: charData.gender, title: charData.gender }), $("<img/>").attr({src: icons[charData.race], class: "icon " + charData.race, alt: charData.race, title: charData.race }), $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }), charData.level + "<br>Né" + addE + " le " + formatDate(charData.created) + "<br>" + charData.deaths + " décès" + discis)).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
+        var itemsDiv = $("<div/>").addClass("stuff");
+        charDiv.append(itemsDiv);
+        getBag(charData.equipment, itemsDiv);
+        $.each(charData.bags, function(i, bag) {
+            if (!bag) { return; }
+            var itemsDiv = $("<div/>").addClass("bag");
+            charDiv.append(itemsDiv);
+            getBag(bag.inventory, itemsDiv);
+        });
+        var guildId = charData.guild;
+        if (guildId) {
+            function insertGuildIntoPage(guildData) {
+                charDiv.append($("<img/>").addClass("charBg").attr("src", "http://guilds.gw2w2w.com/" + guildId + ".svg"));
+                var addTag = charDiv.children("div.title");
+                addTag.append(" [" + guildData.tag + "]");
+            }
+            if (guilds.isStale(guildId)) {
+                var url = "https://api.guildwars2.com/v1/guild_details?guild_id=" + guildId;
+                $.getJSON(url, function(gdata) {
+                    guilds.set(guildId, gdata);
+                    insertGuildIntoPage(gdata);
+                });
+            } else {
+                insertGuildIntoPage(guilds.cache[guildId]);
+            }
+        }
+    });
+}
+
+function getBankData(key, account) {
+    var url = getURL("account/bank", key);
+    $.getJSON(url, function(bankData) {
+        var charDiv = $("<div/>").addClass("bank");
+        var itemsDiv = $("<div/>").addClass("bankTabs");
+        charDiv.append($("<span/>").addClass("title").text("Banque"),itemsDiv);
+        while (bankData.length) {
+            getBag(bankData.splice(0, 150), itemsDiv);
+        }
+        $("." + account).append(charDiv);
+    });
+}
+
+function getMatsData(key, account) {
+    var url = getURL("account/materials", key);
+    $.getJSON(url, function(matsData) {
+        var charDiv = $("<div/>").addClass("mats");
+        var itemsDiv = $("<div/>").addClass("matsTabs");
+        charDiv.append($("<span/>").addClass("title").text("Matériaux"),itemsDiv);
+        while (matsData.length) {
+            getBag(matsData.splice(0, 150), itemsDiv);
+        }
+        $("." + account).append(charDiv);
+    });
+}
+
+function getBag(bag, target) {
+    var itemIDs = [];
+    var skinIDs = [];
+    for (var bagItem of bag) {
+        if (bagItem) {
+            if (!items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
+                itemIDs.push(bagItem.id);
+            }
+            if (bagItem.skin && !skins.cache[bagItem.skin] && unknownItems.isStale(bagItem.skin)) {
+                skinIDs.push(bagItem.skin);
+            }
+        }
+    };
+    Promise.resolve()
+    .then(loadItems.bind(this, skinIDs, "skins"))
+    .then(loadItems.bind(this, itemIDs, "items"))
+    .catch(function(err) {
+        console.error("Erreur : ", err);
+    })
+    .then(updateBag.bind(this, bag, target));
+}
+
+function loadItems(ids, type) {
+    if (!ids.length) {
+        return;
+    }
+    var url = getURL(type) + "?ids=" + ids.join(",");
+    return $.getJSON(url, function(data) {
+        $.each(data, function(i, itemData) {
+            eval(type).set(itemData.id, itemData);
+        });
+    }).fail(function(jqXHR) {
+        if (jqXHR.status === 404) {
+            ids.forEach(function(id) {
+                unknownItems.set(id, {});
+            })
+        }
+    });
+}
+
+function updateBag(bag, target) {
+    for (var bagItem of bag) {
+        if (bagItem) {
+            bagItem.item = items.cache[bagItem.id];
+            bagItem.sk = skins.cache[bagItem.skin];
+            if (!bagItem.item) {
+                bagItem.item = $.extend(true, {}, unkItem);
+                bagItem.item.name += " [" + bagItem.id + "]";
+            }
+            target.append(createBagItem(bagItem));
+        }
+        else {
+            target.append(createBagItem(null));
+        }
+    };
+}
+
+function createBagItem(bagItem) {
+    if (!bagItem) {
+        var bagItem = {slot: "emptyslot", item: $.extend(true, {}, emptySlot)};
+    }
+    var itemSlot = $("<div/>").addClass("item").addClass("r_" + bagItem.item.rarity)
+    .attr({
+        type: bagItem.item.type,
+        level: bagItem.item.level,
+        slot: bagItem.slot ? bagItem.slot : "notstuff"})
+    .append($("<img/>").attr({
+        src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon,
+        title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
+    .data("name", bagItem.skin ? bagItem.sk.name.toLowerCase() : bagItem.item.name.toLowerCase());
+    if (bagItem.count > 1) {
+        itemSlot.append($("<span/>").text(bagItem.count).addClass("count"));
+    }
+    else if (bagItem.count < 1) {
+        itemSlot.addClass("r_Empty");
+    }
+    return itemSlot;
+}
+
+function sortStuff() {
+    return $(".stuff").each(function() {
+        $(this).append(
+            $("<div/>").append(
+                $("<div/>").append(
+                    $(this).find("[slot=Helm]").length ? $(this).find("[slot=Helm]") : createBagItem(null),
+                    $(this).find("[slot=Shoulders]").length ? $(this).find("[slot=Shoulders]") : createBagItem(null),
+                    $(this).find("[slot=Coat]").length ? $(this).find("[slot=Coat]") : createBagItem(null),
+                    $(this).find("[slot=Gloves]").length ? $(this).find("[slot=Gloves]") : createBagItem(null),
+                    $(this).find("[slot=Leggings]").length ? $(this).find("[slot=Leggings]") : createBagItem(null),
+                    $(this).find("[slot=Boots]").length ? $(this).find("[slot=Boots]") : createBagItem(null)),
+                $("<div/>").append(
+                    $(this).find("[slot=WeaponA1]").length ? $(this).find("[slot=WeaponA1]") : createBagItem(null),
+                    $(this).find("[slot=WeaponA2]").length ? $(this).find("[slot=WeaponA2]") : createBagItem(null),
+                    $(this).find("[slot=WeaponB1]").length ? $(this).find("[slot=WeaponB1]") : createBagItem(null),
+                    $(this).find("[slot=WeaponB2]").length ? $(this).find("[slot=WeaponB2]") : createBagItem(null)),
+                $("<div/>").append(
+                    $(this).find("[slot=HelmAquatic]").length ? $(this).find("[slot=HelmAquatic]") : createBagItem(null),
+                    $(this).find("[slot=WeaponAquaticA]").length ? $(this).find("[slot=WeaponAquaticA]") : createBagItem(null),
+                    $(this).find("[slot=WeaponAquaticB]").length ? $(this).find("[slot=WeaponAquaticB]") : createBagItem(null)),
+                $("<div/>").append(
+                    $(this).find("[slot=Backpack]").length ? $(this).find("[slot=Backpack]") : createBagItem(null),
+                    $(this).find("[slot=Accessory1]").length ? $(this).find("[slot=Accessory1]") : createBagItem(null),
+                    $(this).find("[slot=Accessory2]").length ? $(this).find("[slot=Accessory2]") : createBagItem(null),
+                    $(this).find("[slot=Amulet]").length ? $(this).find("[slot=Amulet]") : createBagItem(null),
+                    $(this).find("[slot=Ring1]").length ? $(this).find("[slot=Ring1]") : createBagItem(null),
+                    $(this).find("[slot=Ring2]").length ? $(this).find("[slot=Ring2]") : createBagItem(null))).css("display","flex"),
+$("<div/>").append(
+    $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : createBagItem(null),
+    $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : createBagItem(null),
+    $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : createBagItem(null))
+);
+});
+}
+
+function sortAcc() {
+   return $(".account").each(function() {
+    $(this).append(
+        $(this).find("h2"),
+        $(this).find("h6"),
+        $(this).find(".characters"),
+        $(this).find(".bank"),
+        $(this).find(".mats"));
+});
+}
+// FILTERS for BAGS start
+function itemFilter() {
+    $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked,.type:checked").length == $(".rarity:not(:hidden),.type").length ? 1 : 0);
+    var levIMin = ($("#levIMin").val() == "") ? 0 : parseInt($("#levIMin").val());
+    var levIMax = ($("#levIMax").val() == "") ? 80 : parseInt($("#levIMax").val());
+    var filterValue = $("#filter").val().toLowerCase();
+    var toHide = $("#items input:checkbox:not(:checked,.checkAll)").map(function() {
+        return $(this).next("label").attr("class");
+    }).get();
+    $(".item").each(function() {
+        var itemLev = parseInt($(this).attr("level"));
+        var name = $(this).data("name");
+        var itemAttr = [$(this).attr("class").split(" ")[1].slice(2),$(this).attr("type")];
+        if (
+            levIMin > itemLev ||
+            itemLev > levIMax ||
+            name.indexOf(filterValue) < 0 ||
+            itemAttr.some(function(x) {
+                return toHide.indexOf(x) > -1;
+            })
+            ) {
+            $(this).addClass("hidden");
+        } else {
+            $(this).removeClass("hidden");
+        }
+    });
+    charFilter();
+}
+
+function charFilter() {
+    var levCMin = ($("#levCMin").val() == "") ? 1 : parseInt($("#levCMin").val());
+    var levCMax = ($("#levCMax").val() == "") ? 80 : parseInt($("#levCMax").val());
+    var toHide = $("#chars input:checkbox:not(:checked,.checkAll)").map(function() {
+        return $(this).next("label").attr("class");
+    }).get();
+    $(".character").each(function() {
+        var charLev = parseInt($(this).attr("level"));
+        var charAttr = $(this).listAttributes();
+        var amIEmpty = $(this).find(".item:not(.hidden)").length;
+        if (
+            amIEmpty == 0 ||
+            levCMin > charLev ||
+            charLev > levCMax ||
+            charAttr.some(function(x) {
+                return toHide.indexOf(x) > -1;
+            })
+            ) {
+            $(this).addClass("hidden");
+        } else {
+            $(this).removeClass("hidden");
+        }
+    });
+}
+// FILTERS for BAGS end
+// BAGS end
+// WARDROBE start
+function getWard() {
+    $("section").removeClass("visible");
+    $("#wardrobe").addClass("visible").empty().text("WORK IN PROGRESS...");
+    $.each(guids, function(i, key) {
+        var url = getURL("account/skins", key);
+        $.getJSON(url, function(data) {
+
+        });
+    });
+}
+// WARDROBE end
+// DYES start
+function getDyes() {
+    $("section").removeClass("visible");
+    $("#dyesHead").addClass("visible");
+    $("#dyes").addClass("visible").empty().append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").prop("title","cloth"),$("<td/>").prop("title","leather"),$("<td/>").prop("title","metal"))));
+    $(".thead td").each(function() {
+        $(this).append($("<img/>").addClass("icon").attr({src:icons[$(this).attr("title")],alt:$(this).attr("title")})).css({"color":"rgba(0,0,0,0)","background-color":"black"});
+    });
+    $.getJSON("https://api.guildwars2.com/v2/colors?ids=all", function(data) {
+        var result;
+        data.sort(function(a,b) {return a.name.localeCompare(b.name);});
+        for(var dye in data) {
+            result += "<tr id=\"dye" + data[dye].id + "\"><td colspan=\"3\" style=\"background: -moz-linear-gradient(left, rgb(" + data[dye].cloth.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 66%, rgb(" + data[dye].metal.rgb.join() + ") 66%);text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);\" class=\"dyename\">" + data[dye].name + "</td></tr>";
+        }
+        $("#dyeList tr:last-of-type").after(result);
+    });
+    $.each(guids, function(i, key) {
+        var url = getURL("account", key);
+        $.getJSON(url, function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            var url = getURL("account/dyes", key);
+            $.getJSON(url, function(data) {
+                $("tr.thead td[title=metal]").after($("<td/>").text(accName));
+                $("#dyeList tr:not(.thead) .dyename").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"})));
+                for(var id in data) {
+                    $("#dye"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
+                }
+            });
+        });
+    });
+}
+// DYES end
+// PVP start
+function getPvP() {
+    $("section").removeClass("visible");
+    $("#pvp").addClass("visible").empty().text("WORK IN PROGRESS...");
+    var url = getURL("pvp/games", key);
+    var url = getURL("pvp/stats", key);
+}
+// PVP end
+</script>
+</head>
+<body>
+    <div id="header">
+        <div id="menu" style="float:left;">
+            <img alt="Menu" id="menuButton" src="https://cdn0.iconfinder.com/data/icons/flat-color-icons/504/menu-24.png" title="Menu">
+            <div id="menuDiv">
+            <span id="getBuilds"><img alt="Builds" src="http://wiki.guildwars2.com/images/4/44/Hero_point.png" title="Builds">Spécialisations</span><br />
+            <span id="getWallet"><img alt="Portefeuille" src="https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png" title="Portefeuille">Portefeuille</span><br />
+            <span id="getBags"><img alt="Sacs" src="https://www.iconfinder.com/data/icons/fatcow/32/box_open.png" title="Sacs">Sacs et coffres</span><br />
+            <span id="getWard"><img alt="Garde-robe" src="https://www.iconfinder.com/data/icons/fatcow/32x32/ribbon.png" title="Garde-robe">Garde-robe</span><br />
+            <span id="getDyes"><img alt="Teintures" src="https://www.iconfinder.com/data/icons/fatcow/32/color_wheel.png" title="Teintures">Teintures</span><br />
+            <span id="getPvP"><img alt="JcJ" src="http://wiki.guildwars2.com/images/thumb/2/23/PvP_Menu_Bar_icon.png/24px-PvP_Menu_Bar_icon.png" title="JcJ">Joueur contre Joueur</span><br />
+            <br />
+            Build GW2 : <span id="build">.....</span>
+            </div>
+        </div>
+        <section id="buildsHead">Le Fouineur - Spécialisations</section>
+        <section id="walletHead">Le Fouineur - Portefeuille</section>
+        <section id="bagStuffHead">Le Fouineur - Sacs et coffres
+        <input id="filter" placeholder="Trouve moi où est..." type="text">
+        <button type="button" id="reloadButton"><img alt="Recharger" src="https://cdn0.iconfinder.com/data/icons/fatcow/32x32/update.png" title="Recharger"></button>
+        <div id="filterContainer">
+            <img alt="Filtres" id="filterButton" src="https://iconfinder.com/data/icons/fatcow/32/filter.png" title="Filtres">
+            <div id="filterDiv">
+                <ul class="tabs">
+                    <li class="tab" toShow="items">Objets</li>
+                    <li class="tab" toShow="chars">Perso.</li>
+                </ul>
+                <div id="intro" class="tabContent current">
+                    Choisissez si vous<br> voulez filtrer par<br> objets ou personnages.
+                </div>
+                <div id="items" class="tabContent">
+                    Rareté<input class="filters checkAll" ctrl="rarity" type="checkbox"><br>
+                    <input class="filters rarity" type="checkbox" style="display:none;"><label class="Empty" style="display:none;">Vide</label><br style="display:none;">
+                    <input class="filters rarity" type="checkbox"><label class="Junk">Inutile</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Basic">Basic</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Fine">Raffiné</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Masterwork">Chef-d'oeuvre</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Rare">Rare</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Exotic">Exotique</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Ascended">Élevé</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Legendary">Légendaire</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Unknown">Inconnu</label><br>
+                    Type<input class="filters checkAll" ctrl="type" type="checkbox"><br>
+                    <input class="filters type" type="checkbox"><label class="UpgradeComponent">Amélioration</label><br>
+                    <input class="filters type" type="checkbox"><label class="Weapon">Arme</label><br>
+                    <input class="filters type" type="checkbox"><label class="Armor">Armure</label><br>
+                    <input class="filters type" type="checkbox"><label class="Trinket">Bijou</label><br>
+                    <input class="filters type" type="checkbox"><label class="Consumable">Consommable</label><br>
+                    <input class="filters type" type="checkbox"><label class="Container">Conteneur</label><br>
+                    <input class="filters type" type="checkbox"><label class="Back">Dorsal</label><br>
+                    <input class="filters type" type="checkbox"><label class="Gizmo">Gizmo</label><br>
+                    <input class="filters type" type="checkbox"><label class="CraftingMaterial">Matériau</label><br>
+                    <input class="filters type" type="checkbox"><label class="MiniPet">Miniature</label><br>
+                    <input class="filters type" type="checkbox"><label class="Tool">Outil</label><br>
+                    <input class="filters type" type="checkbox"><label class="Gathering">Récolte</label><br>
+                    <input class="filters type" type="checkbox"><label class="Bag">Sac</label><br>
+                    <input class="filters type" type="checkbox"><label class="Trait">Trait</label><br>
+                    <input class="filters type" type="checkbox"><label class="Trophy">Trophée</label><br>
+                    <input class="filters type" type="checkbox"><label class="Unknown">Inconnu</label><br>
+                    <input class="filters type" type="checkbox"><label class="Empty">Slot vide</label><br>
+                    Niveau<br>
+                    <input class="levFilter" id="levIMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levIMax" onclick="this.select();" placeholder="max" type="text">
+                </div>
+                <div id="chars" class="tabContent">
+                    Genre<input class="filters checkAll" ctrl="gender" type="checkbox"><br>
+                    <input class="filters gender" type="checkbox"><label class="Female"></label><br>
+                    <input class="filters gender" type="checkbox"><label class="Male"></label><br>
+                    Race<input class="filters checkAll" ctrl="race" type="checkbox"><br>
+                    <input class="filters race" type="checkbox"><label class="Asura"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Charr"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Human"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Norn"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Sylvari"></label><br>
+                    Profession<input class="filters checkAll" ctrl="prof" type="checkbox"><br>
+                    <input class="filters prof" type="checkbox"><label class="Elementalist"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Mesmer"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Guardian"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Warrior"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Engineer"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Necromancer"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Revenant"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Ranger"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Thief"></label><br>
+                    Niveau<br>
+                    <input class="levFilter" id="levCMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levCMax" onclick="this.select();" placeholder="max" type="text">
+                </div>
+            </div>
+        </div>
+        </section>
+        <section id="wardrobeHead">Le Fouineur - Garde-robe</section>
+        <section id="dyesHead">Le Fouineur - Teintures</section>
+        <section id="pvpHead">Le Fouineur - Joueur contre Joueur</section>
+    </div>
+
+    <div id="content">
+        <section id="builds"></section>
+        <section id="wallet"></section>
+        <section id="bagStuff"></section>
+        <section id="wardrobe"></section>
+        <section id="dyes"></section>
+        <section id="pvp"></section>
+    </div>
+</body>
+</html>
