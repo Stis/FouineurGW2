@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="shortcut icon" type="image/png" href="http://wiki.guildwars2.com/images/5/51/Mini_Skritt_Forager.png" />
+  <title>Le fouineur</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+    <div id="header">
+        <div id="menu" style="float:left;">
+            <img alt="Menu" id="menuButton" src="https://cdn0.iconfinder.com/data/icons/flat-color-icons/504/menu-24.png" title="Menu">
+            <div id="menuDiv">
+            <span id="getBuilds"><img alt="Builds" src="http://wiki.guildwars2.com/images/4/44/Hero_point.png" title="Builds">Spécialisations</span><br />
+            <span id="getWallet"><img alt="Portefeuille" src="https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png" title="Portefeuille">Portefeuille</span><br />
+            <span id="getBags"><img alt="Sacs" src="https://www.iconfinder.com/data/icons/fatcow/32/box_open.png" title="Sacs">Sacs et coffres</span><br />
+            <span id="getWard"><img alt="Garde-robe" src="https://www.iconfinder.com/data/icons/fatcow/32x32/ribbon.png" title="Garde-robe">Garde-robe</span><br />
+            <span id="getDyes"><img alt="Teintures" src="https://www.iconfinder.com/data/icons/fatcow/32/color_wheel.png" title="Teintures">Teintures</span><br />
+            <span id="getPvP"><img alt="JcJ" src="http://wiki.guildwars2.com/images/thumb/2/23/PvP_Menu_Bar_icon.png/24px-PvP_Menu_Bar_icon.png" title="JcJ">Joueur contre Joueur</span><br />
+            <br />
+            Build GW2 : <span id="build">.....</span>
+            </div>
+        </div>
+        <section id="buildsHead">Le Fouineur - Spécialisations</section>
+        <section id="walletHead">Le Fouineur - Portefeuille</section>
+        <section id="bagStuffHead">Le Fouineur - Sacs et coffres
+        <input id="filter" placeholder="Trouve moi où est..." type="text">
+        <button type="button" id="reloadButton"><img alt="Recharger" src="https://cdn0.iconfinder.com/data/icons/fatcow/32x32/update.png" title="Recharger"></button>
+        <div id="filterContainer">
+            <img alt="Filtres" id="filterButton" src="https://iconfinder.com/data/icons/fatcow/32/filter.png" title="Filtres">
+            <div id="filterDiv">
+                <ul class="tabs">
+                    <li class="tab" toShow="items">Objets</li>
+                    <li class="tab" toShow="chars">Perso.</li>
+                </ul>
+                <div id="intro" class="tabContent current">
+                    Choisissez si vous<br> voulez filtrer par<br> objets ou personnages.
+                </div>
+                <div id="items" class="tabContent">
+                    Rareté<input class="filters checkAll" ctrl="rarity" type="checkbox"><br>
+                    <input class="filters rarity" type="checkbox" style="display:none;"><label class="Empty" style="display:none;">Vide</label><br style="display:none;">
+                    <input class="filters rarity" type="checkbox"><label class="Junk">Inutile</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Basic">Basic</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Fine">Raffiné</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Masterwork">Chef-d'oeuvre</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Rare">Rare</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Exotic">Exotique</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Ascended">Élevé</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Legendary">Légendaire</label><br>
+                    <input class="filters rarity" type="checkbox"><label class="Unknown">Inconnu</label><br>
+                    Type<input class="filters checkAll" ctrl="type" type="checkbox"><br>
+                    <input class="filters type" type="checkbox"><label class="UpgradeComponent">Amélioration</label><br>
+                    <input class="filters type" type="checkbox"><label class="Weapon">Arme</label><br>
+                    <input class="filters type" type="checkbox"><label class="Armor">Armure</label><br>
+                    <input class="filters type" type="checkbox"><label class="Trinket">Bijou</label><br>
+                    <input class="filters type" type="checkbox"><label class="Consumable">Consommable</label><br>
+                    <input class="filters type" type="checkbox"><label class="Container">Conteneur</label><br>
+                    <input class="filters type" type="checkbox"><label class="Back">Dorsal</label><br>
+                    <input class="filters type" type="checkbox"><label class="Gizmo">Gizmo</label><br>
+                    <input class="filters type" type="checkbox"><label class="CraftingMaterial">Matériau</label><br>
+                    <input class="filters type" type="checkbox"><label class="MiniPet">Miniature</label><br>
+                    <input class="filters type" type="checkbox"><label class="Tool">Outil</label><br>
+                    <input class="filters type" type="checkbox"><label class="Gathering">Récolte</label><br>
+                    <input class="filters type" type="checkbox"><label class="Bag">Sac</label><br>
+                    <input class="filters type" type="checkbox"><label class="Trait">Trait</label><br>
+                    <input class="filters type" type="checkbox"><label class="Trophy">Trophée</label><br>
+                    <input class="filters type" type="checkbox"><label class="Unknown">Inconnu</label><br>
+                    <input class="filters type" type="checkbox"><label class="Empty">Slot vide</label><br>
+                    Niveau<br>
+                    <input class="levFilter" id="levIMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levIMax" onclick="this.select();" placeholder="max" type="text">
+                </div>
+                <div id="chars" class="tabContent">
+                    Genre<input class="filters checkAll" ctrl="gender" type="checkbox"><br>
+                    <input class="filters gender" type="checkbox"><label class="Female"></label><br>
+                    <input class="filters gender" type="checkbox"><label class="Male"></label><br>
+                    Race<input class="filters checkAll" ctrl="race" type="checkbox"><br>
+                    <input class="filters race" type="checkbox"><label class="Asura"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Charr"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Human"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Norn"></label><br>
+                    <input class="filters race" type="checkbox"><label class="Sylvari"></label><br>
+                    Profession<input class="filters checkAll" ctrl="prof" type="checkbox"><br>
+                    <input class="filters prof" type="checkbox"><label class="Elementalist"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Mesmer"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Guardian"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Warrior"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Engineer"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Necromancer"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Revenant"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Ranger"></label><br>
+                    <input class="filters prof" type="checkbox"><label class="Thief"></label><br>
+                    Niveau<br>
+                    <input class="levFilter" id="levCMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levCMax" onclick="this.select();" placeholder="max" type="text">
+                </div>
+            </div>
+        </div>
+        </section>
+        <section id="wardrobeHead">Le Fouineur - Garde-robe</section>
+        <section id="dyesHead">Le Fouineur - Teintures</section>
+        <section id="pvpHead">Le Fouineur - Joueur contre Joueur</section>
+    </div>
+
+    <div id="content">
+        <section>Intro</section>
+        <section id="builds"></section>
+        <section id="wallet"></section>
+        <section id="bagStuff"></section>
+        <section id="wardrobe"></section>
+        <section id="dyes"></section>
+        <section id="pvp"></section>
+    </div>
+</body>
+</html>
