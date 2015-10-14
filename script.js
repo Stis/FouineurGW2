@@ -93,9 +93,11 @@ var wallet = Object.create(Cache).init({ key: "walletCache" });
 var guilds = Object.create(Cache).init({ key: "guildCache", ttl: 24 * 60 * 60 * 1000 });
 var icons = {
     fr: "https://www.iconfinder.com/data/icons/fatcow/16/flag_france.png",
-    en: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/flag_great_britain.png",
-    sp: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/flag_spain.png",
-    de: "https://cdn2.iconfinder.com/data/icons/fatcow/16x16/flag_germany.png",
+    en: "https://www.iconfinder.com/data/icons/fatcow/16/flag_great_britain.png",
+    es: "https://www.iconfinder.com/data/icons/fatcow/16/flag_spain.png",
+    de: "https://www.iconfinder.com/data/icons/fatcow/16x16/flag_germany.png",
+    ko: "https://www.iconfinder.com/data/icons/fatcow/16/flag_south_korea.png",
+    zh: "https://www.iconfinder.com/data/icons/fatcow/16/flag_china.png",
     sacs: "https://cdn0.iconfinder.com/data/icons/fatcow/16/box_open.png",
     skins: "https://cdn0.iconfinder.com/data/icons/fatcow/16/ribbon.png",
     wallet: "https://cdn0.iconfinder.com/data/icons/fatcow/16/total_plan_cost.png",
@@ -217,6 +219,7 @@ function initEvents() {
     $("#getWard").click(getWard);
     $("#getDyes").click(getDyes);
     $("#getPvP").click(getPvP);
+    $("#getDaily").click(getDaily);
     $("#build").click(buildVer);
 }
 
@@ -603,3 +606,22 @@ function getPvP() {
     var url = getURL("pvp/stats", key);
 }
 // PVP end
+// DAILY start
+function getDaily() {
+    $("section").removeClass("visible");
+    $("#dailyHead").addClass("visible");
+    $("#daily").addClass("visible").empty().append($("<table/>").prop("id","dailyList"));
+    var url = getURL("achievements");
+    $.getJSON(url, function(data) {
+        $.getJSON(url+"?ids="+JSON.stringify(data), function(dailyAch) {
+            dailyAch.sort(function(a,b) {return a.name > b.name;});
+            $.each(dailyAch, function(i, oneAch) {
+                $("#dailyList").append($("<tr/>").append(
+                "<td title=\""+oneAch.id+"\"><img src=\""+oneAch.icon+"\"></td>",
+                "<td title=\""+oneAch.description+"\">"+oneAch.name+"</td>",
+                "<td>"+oneAch.requirement+"</td>"
+                ));
+            });
+        });
+    });
+}
