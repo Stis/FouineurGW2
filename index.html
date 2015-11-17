@@ -2,24 +2,24 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="shortcut icon" type="image/png" href="http://wiki.guildwars2.com/images/5/51/Mini_Skritt_Forager.png" />
+  <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
   <title>Le fouineur</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
     <div id="header">
         <div id="menu" style="float:left;">
-            <img alt="Menu" id="menuButton" src="https://cdn0.iconfinder.com/data/icons/flat-color-icons/504/menu-24.png" title="Menu">
+            <img alt="Menu" id="menuButton" src="img/menu.png" title="Menu">
             <div id="menuDiv">
-            <span id="getBuilds"><img alt="Builds" src="http://wiki.guildwars2.com/images/4/44/Hero_point.png" title="Builds">Spécialisations</span><br />
-            <span id="getWallet"><img alt="Portefeuille" src="https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png" title="Portefeuille">Portefeuille</span><br />
-            <span id="getBags"><img alt="Sacs" src="https://www.iconfinder.com/data/icons/fatcow/32/box_open.png" title="Sacs">Sacs et coffres</span><br />
-            <span id="getWard"><img alt="Garde-robe" src="https://www.iconfinder.com/data/icons/fatcow/32x32/ribbon.png" title="Garde-robe">Garde-robe</span><br />
-            <span id="getDyes"><img alt="Teintures" src="https://www.iconfinder.com/data/icons/fatcow/32/color_wheel.png" title="Teintures">Teintures</span><br />
-            <span id="getPvP"><img alt="JcJ" src="http://wiki.guildwars2.com/images/thumb/2/23/PvP_Menu_Bar_icon.png/24px-PvP_Menu_Bar_icon.png" title="JcJ">Joueur contre Joueur</span><br />
-            <span id="getDaily"><img alt="Quotidien" src="http://wiki.guildwars2.com/images/thumb/1/14/Daily_Achievement.png/24px-Daily_Achievement.png" title="Quotidien">Quotidien</span><br />
+            <span id="getBuilds"><img alt="Builds" src="img/specialisation.png" title="Builds">Spécialisations</span><br />
+            <span id="getWallet"><img alt="Portefeuille" src="img/portefeuille.png" title="Portefeuille">Portefeuille</span><br />
+            <span id="getBags"><img alt="Sacs" src="img/sacs.png" title="Sacs">Sacs et coffres</span><br />
+            <span id="getWard"><img alt="Garde-robe" src="img/garderobe.png" title="Garde-robe">Garde-robe</span><br />
+            <span id="getDyes"><img alt="Teintures" src="img/teintures.png" title="Teintures">Teintures</span><br />
+            <span id="getPvP"><img alt="JcJ" src="img/jcj.png" title="JcJ">Joueur contre Joueur</span><br />
+            <span id="getDaily"><img alt="Quotidien" src="img/succes.png" title="Quotidien">Quotidien</span><br />
             <br />
             Build GW2 : <span id="build">.....</span>
             </div>
@@ -28,15 +28,15 @@
         <section id="walletHead">Le Fouineur - Portefeuille</section>
         <section id="bagStuffHead">Le Fouineur - Sacs et coffres
         <input id="filter" placeholder="Trouve moi où est..." type="text">
-        <button type="button" id="reloadButton"><img alt="Recharger" src="https://cdn0.iconfinder.com/data/icons/fatcow/32x32/update.png" title="Recharger"></button>
+        <button type="button" id="reloadButton"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
         <div id="filterContainer">
-            <img alt="Filtres" id="filterButton" src="https://iconfinder.com/data/icons/fatcow/32/filter.png" title="Filtres">
+            <img alt="Filtres" id="filterButton" src="img/filtres.png" title="Filtres">
             <div id="filterDiv">
                 <ul class="tabs">
                     <li class="tab" toShow="items">Objets</li>
                     <li class="tab" toShow="chars">Perso.</li>
                 </ul>
-                <div id="intro" class="tabContent current">
+                <div class="tabContent current">
                     Choisissez si vous<br> voulez filtrer par<br> objets ou personnages.
                 </div>
                 <div id="items" class="tabContent">
@@ -105,7 +105,7 @@
     </div>
 
     <div id="content">
-        <section>Intro</section>
+        <section id="intro" class="visible"></section>
         <section id="builds"></section>
         <section id="wallet"></section>
         <section id="bagStuff"></section>
