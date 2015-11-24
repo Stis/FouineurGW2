@@ -612,10 +612,15 @@ function getDaily() {
     $("section").removeClass("visible");
     $("#dailyHead").addClass("visible");
     $("#daily").addClass("visible").empty().append($("<table/>").prop("id","dailyList"));
-    var url = getURL("achievements");
+    var url = getURL("achievements/daily");
     $.getJSON(url, function(data) {
-        $.getJSON(url+"?ids="+JSON.stringify(data), function(dailyAch) {
-            dailyAch.sort(function(a,b) {return a.name > b.name;});
+        var ids=[];
+        $.each(data.pve, function(i, id) { ids.push(id.id);});
+        $.each(data.pvp, function(i, id) { ids.push(id.id);});
+        $.each(data.wvw, function(i, id) { ids.push(id.id);});
+        var url = getURL("achievements");
+        $.getJSON(url+"?ids="+ids, function(dailyAch) {
+            // dailyAch.sort(function(a,b) {return a.name > b.name;});
             $.each(dailyAch, function(i, oneAch) {
                 $("#dailyList").append($("<tr/>").append(
                 "<td title=\""+oneAch.id+"\"><img src=\""+oneAch.icon+"\"></td>",
