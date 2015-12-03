@@ -141,7 +141,7 @@ label {
 }
 #content {
     position:absolute;
-    top:32px;
+    top:30px;
     left:0px;
     right:0px;
     bottom:0px;
@@ -178,9 +178,9 @@ tr:nth-child(even) {
     border-right: 1px dotted #888;
 }
 h2 {
-    margin-bottom: 0;
+    margin: 0;
 }
-h6 {
+h5 {
     margin-top: 0;
     margin-bottom: 10px;
 }
