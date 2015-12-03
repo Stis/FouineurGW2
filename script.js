@@ -135,6 +135,9 @@ var icons = {
     Scribe: "img/illustration.png",
     Tailor: "img/tailleur.png",
     Weaponsmith: "img/forgarme.png",
+    PlayForFree: "img/P4F.ico",
+    GuildWars2: "img/GW2.ico",
+    HeartOfThorns: "img/HoT.ico",
     undefined: "img/nondefini.png"
 };
 var endPoint = "https://api.guildwars2.com/v2/";
@@ -263,7 +266,7 @@ function getWallet() {
 // BAGS start
 function getBags() {
     $("section").removeClass("visible");
-    $("#dyes").empty()
+    $("#dyes").empty();
     $("#bagStuffHead, #bagStuff").addClass("visible");
     $("#bagStuff").empty();
     $("#filter").val("");
@@ -274,19 +277,19 @@ function getBags() {
         $.getJSON(url, function(data) {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
-            $("#bagStuff").append($("<div/>").addClass(account + " account"));
-            $("." + account).append($("<h2/>").text(accName).attr("title", "Créé le " + formatDate(data.created)));
+            var typAcc = data.access;
             var url = getURL("worlds/" + data.world, key);
             $.getJSON(url, function(wdata) {
-                $("." + account).append($("<h6/>").text(wdata.name));
+                $("#bagStuff").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accName,$("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })).attr("title", "Créé le " + formatDate(data.created)),$("<h5/>").addClass("server").text(wdata.name),$("<h5/>").addClass("fractlev").text("Niv. fractale : " + data.fractal_level)));
+                getContent(key, account);
             });
-            getContent(key, account);
         });
+// if (i == guids.length - 1){ sortStuff();};
     });
 
     Promise.resolve()
-    .then(sortStuff())
-    .then(sortAcc())
+    .then(sortStuff)
+    // .then(sortAcc())
     .catch(function(err) {
         console.error("Erreur getBags : ", err);
     });
@@ -481,24 +484,24 @@ function sortStuff() {
                     $(this).find("[slot=Amulet]").length ? $(this).find("[slot=Amulet]") : createBagItem(null),
                     $(this).find("[slot=Ring1]").length ? $(this).find("[slot=Ring1]") : createBagItem(null),
                     $(this).find("[slot=Ring2]").length ? $(this).find("[slot=Ring2]") : createBagItem(null))).css("display","flex"),
-$("<div/>").append(
-    $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : createBagItem(null),
-    $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : createBagItem(null),
-    $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : createBagItem(null))
-);
-});
+            $("<div/>").append(
+                $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : createBagItem(null),
+                $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : createBagItem(null),
+                $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : createBagItem(null))
+        );
+    });
 }
 
-function sortAcc() {
-   return $(".account").each(function() {
-    $(this).append(
-        $(this).find("h2"),
-        $(this).find("h6"),
-        $(this).find(".characters"),
-        $(this).find(".bank"),
-        $(this).find(".mats"));
-});
-}
+// function sortAcc() {
+//    return $(".account").each(function() {
+//     $(this).append(
+//         $(this).find("h2"),
+//         $(this).find("h6"),
+//         $(this).find(".characters"),
+//         $(this).find(".bank"),
+//         $(this).find(".mats"));
+// });
+// }
 // FILTERS for BAGS start
 function itemFilter() {
     $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked,.type:checked").length == $(".rarity:not(:hidden),.type").length ? 1 : 0);
@@ -615,17 +618,19 @@ function getDaily() {
     var url = getURL("achievements/daily");
     $.getJSON(url, function(data) {
         var ids=[];
-        $.each(data.pve, function(i, id) { ids.push(id.id);});
-        $.each(data.pvp, function(i, id) { ids.push(id.id);});
-        $.each(data.wvw, function(i, id) { ids.push(id.id);});
+        ids = ids.concat(data.pve.map(daily => daily.id)); //array1.concat(array2, array3,..., arrayX)
+        ids = ids.concat(data.pvp.map(daily => daily.id));
+        ids = ids.concat(data.wvw.map(daily => daily.id));
         var url = getURL("achievements");
         $.getJSON(url+"?ids="+ids, function(dailyAch) {
-            // dailyAch.sort(function(a,b) {return a.name > b.name;});
+            dailyAch.sort(function(a,b) {return a.id > b.id;});
+            var dummy=88;
             $.each(dailyAch, function(i, oneAch) {
                 $("#dailyList").append($("<tr/>").append(
                 "<td title=\""+oneAch.id+"\"><img src=\""+oneAch.icon+"\"></td>",
                 "<td title=\""+oneAch.description+"\">"+oneAch.name+"</td>",
-                "<td>"+oneAch.requirement+"</td>"
+                "<td>"+oneAch.requirement+"</td>",
+                "<td width=100>Min. : "+dummy+"<br>Max. : "+dummy+"</td>"
                 ));
             });
         });
