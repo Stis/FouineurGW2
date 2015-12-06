@@ -272,34 +272,32 @@ function getBags() {
     $("#filter").val("");
     $("input:checkbox").prop("checked", true);
     $(".levFilter").val("");
-    $.each(guids, function(i, key) {
+
+    var pendingRequests = guids.map(key => {
         var url = getURL("account", key);
-        $.getJSON(url, function(data) {
+        return Promise.resolve($.getJSON(url)).then(function(data) {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
             var typAcc = data.access;
             var url = getURL("worlds/" + data.world, key);
-            $.getJSON(url, function(wdata) {
+            return Promise.resolve($.getJSON(url)).then(function(wdata) {
                 $("#bagStuff").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accName,$("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })).attr("title", "Créé le " + formatDate(data.created)),$("<h5/>").addClass("server").text(wdata.name),$("<h5/>").addClass("fractlev").text("Niv. fractale : " + data.fractal_level)));
-                getContent(key, account);
+                return getContent(key, account);
             });
         });
-// if (i == guids.length - 1){ sortStuff();};
+    });
+    Promise.all(pendingRequests).then(datas => {
+        sortStuff();
+        console.log('fini !', datas);
     });
 
-    Promise.resolve()
-    .then(sortStuff)
-    // .then(sortAcc())
-    .catch(function(err) {
-        console.error("Erreur getBags : ", err);
-    });
 
     document.querySelector("#filter").focus();
 }
 
 function getContent(key, account) {
     var url = getURL("characters", key);
-    $.getJSON(url, function(data) {
+    return Promise.resolve($.getJSON(url)).then(function(data) {
         var charsDiv = $("<div/>").addClass("characters");
         $("." + account).append(charsDiv);
         $.each(data, function(i, charName) {
