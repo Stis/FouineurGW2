@@ -222,6 +222,8 @@ function initEvents() {
     $("#chars .levFilter").keyup(charFilter);
     $("#getWard").click(getWard);
     $("#getDyes").click(getDyes);
+    $("#dyeFilter").keyup(dyeFilter);
+    $("#reloadDyes").click(getDyes);
     $("#getPvP").click(getPvP);
     $("#getDaily").click(getDaily);
     $("#build").click(buildVer);
@@ -322,9 +324,8 @@ function getCharData(character, key, account) {
                 discis += "<br><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating;
             }
         });
-        charDiv.append($("<div/>").addClass("title").text(character),$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[charData.gender], class: "icon " + charData.gender, alt: charData.gender, title: charData.gender }), $("<img/>").attr({src: icons[charData.race], class: "icon " + charData.race, alt: charData.race, title: charData.race }), $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }), charData.level + "<br>Né" + addE + " le " + formatDate(charData.created) + "<br>" + charData.deaths + " décès" + discis)).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
         var itemsDiv = $("<div/>").addClass("stuff");
-        charDiv.append(itemsDiv);
+        charDiv.append($("<div/>").addClass("title").text(character),$("<div/>").addClass("spec").append($("<img/>").attr({src: icons[charData.gender], class: "icon " + charData.gender, alt: charData.gender, title: charData.gender }), $("<img/>").attr({src: icons[charData.race], class: "icon " + charData.race, alt: charData.race, title: charData.race }), $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }), charData.level + "<br>Né" + addE + " le " + formatDate(charData.created) + "<br>" + charData.deaths + " décès" + discis),itemsDiv).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
         getBag(charData.equipment, itemsDiv);
         $.each(charData.bags, function(i, bag) {
             if (!bag) { return; }
@@ -440,14 +441,14 @@ function createBagItem(bagItem) {
         var bagItem = {slot: "emptyslot", item: $.extend(true, {}, emptySlot)};
     }
     var itemSlot = $("<div/>").addClass("item").addClass("r_" + bagItem.item.rarity)
-    .attr({
+     .attr({
         type: bagItem.item.type,
         level: bagItem.item.level,
         slot: bagItem.slot ? bagItem.slot : "notstuff"})
-    .append($("<img/>").attr({
+     .append($("<img/>").attr({
         src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon,
         title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
-    .data("name", bagItem.skin ? bagItem.sk.name.toLowerCase() : bagItem.item.name.toLowerCase());
+     .data("name", bagItem.skin ? bagItem.sk.name.toLowerCase() : bagItem.item.name.toLowerCase());
     if (bagItem.count > 1) {
         itemSlot.append($("<span/>").text(bagItem.count).addClass("count"));
     }
@@ -491,17 +492,6 @@ function sortStuff() {
         );
     });
 }
-
-// function sortAcc() {
-//    return $(".account").each(function() {
-//     $(this).append(
-//         $(this).find("h2"),
-//         $(this).find("h6"),
-//         $(this).find(".characters"),
-//         $(this).find(".bank"),
-//         $(this).find(".mats"));
-// });
-// }
 // FILTERS for BAGS start
 function itemFilter() {
     $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked,.type:checked").length == $(".rarity:not(:hidden),.type").length ? 1 : 0);
@@ -578,12 +568,10 @@ function getDyes() {
         $(this).append($("<img/>").addClass("icon").attr({src:icons[$(this).attr("title")],alt:$(this).attr("title")})).css({"color":"rgba(0,0,0,0)","background-color":"black"});
     });
     $.getJSON("https://api.guildwars2.com/v2/colors?ids=all", function(data) {
-        var result;
         data.sort(function(a,b) {return a.name.localeCompare(b.name);});
         for(var dye in data) {
-            result += "<tr id=\"dye" + data[dye].id + "\"><td colspan=\"3\" style=\"background: -moz-linear-gradient(left, rgb(" + data[dye].cloth.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 66%, rgb(" + data[dye].metal.rgb.join() + ") 66%);text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);\" class=\"dyename\">" + data[dye].name + "</td></tr>";
+            $("#dyeList").append($("<tr/>").attr({id: "dye" + data[dye].id}).data("name", data[dye].name.toLowerCase()).append($("<td/>").attr({colspan: "3", style: "background: -moz-linear-gradient(left, rgb(" + data[dye].cloth.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 66%, rgb(" + data[dye].metal.rgb.join() + ") 66%);text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);"}).addClass("dyename").text(data[dye].name)));
         }
-        $("#dyeList tr:last-of-type").after(result);
     });
     $.each(guids, function(i, key) {
         var url = getURL("account", key);
@@ -601,6 +589,19 @@ function getDyes() {
         });
     });
 }
+// FILTERS for DYES start
+function dyeFilter() {
+    var filterValue = $("#dyeFilter").val().toLowerCase();
+    $("tr:not(.thead)").each(function() {
+        var name = $(this).data("name");
+        if (name.indexOf(filterValue) < 0) {
+            $(this).addClass("hidden");
+        } else {
+            $(this).removeClass("hidden");
+        }
+    });
+}
+// FILTERS for DYES end
 // DYES end
 // PVP start
 function getPvP() {
@@ -618,9 +619,15 @@ function getDaily() {
     var url = getURL("achievements/daily");
     $.getJSON(url, function(data) {
         var ids=[];
-        ids = ids.concat(data.pve.map(daily => daily.id)); //array1.concat(array2, array3,..., arrayX)
-        ids = ids.concat(data.pvp.map(daily => daily.id));
-        ids = ids.concat(data.wvw.map(daily => daily.id));
+        ids = ids.concat(
+            data.pve.map(daily => daily.id),
+            data.pvp.map(daily => daily.id),
+            data.wvw.map(daily => daily.id)
+        );
+        var levels = [];
+        levels = levels.concat(
+            data.pve.map(daily => daily.id = {min:daily.level.min,max:daily.level.max})
+            );
         var url = getURL("achievements");
         $.getJSON(url+"?ids="+ids, function(dailyAch) {
             dailyAch.sort(function(a,b) {return a.id > b.id;});
