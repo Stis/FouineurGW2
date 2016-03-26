@@ -225,7 +225,7 @@ function initEvents() {
     $(".gender,.race,.prof").change(charFilter);
     $("#items .levFilter").keyup(itemFilter);
     $("#chars .levFilter").keyup(charFilter);
-    $("#simpleFilter").keyup(simpleFilter);
+    $(".simpleFilter").keyup(function() {simpleFilter($(this));});
     $("#getWard").click(getWard);
     $("#reloadWard").click(getWard);
     $("#getDyes").click(getDyes);
@@ -240,11 +240,12 @@ function initEvents() {
 function resetView(who) {
     $("section").removeClass("visible");
     $("#content section").empty();
+    $(".simpleFilter").val("");
     $("#"+who+",#"+who+"Head").addClass("visible");
 }
 
-function simpleFilter() {
-    var filterValue = $("#simpleFilter").val().toLowerCase();
+function simpleFilter(who) {
+    var filterValue = who.val().toLowerCase();
     $("tr:not(.thead)").each(function() {
         var name = $(this).data("name");
         if (name.indexOf(filterValue) < 0) {
