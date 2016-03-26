@@ -59,7 +59,7 @@ input[type=text] {
     border: none;
     padding: 2px 4px;
 }
-#filter, #dyeFilter {
+#filter, #simpleFilter {
     position:absolute;
     right:58px;
     height: 17px;

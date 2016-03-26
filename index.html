@@ -18,6 +18,7 @@
                 <span id="getBags"><img alt="Sacs" src="img/sacs.png" title="Sacs">Sacs et coffres</span><br />
                 <span id="getWard"><img alt="Garde-robe" src="img/garderobe.png" title="Garde-robe">Garde-robe</span><br />
                 <span id="getDyes"><img alt="Teintures" src="img/teintures.png" title="Teintures">Teintures</span><br />
+                <span id="getRecipes"><img alt="Recettes" src="img/recettes.png" title="Recettes">Recettes</span><br />
                 <span id="getPvP"><img alt="JcJ" src="img/jcj.png" title="JcJ">Joueur contre Joueur</span><br />
                 <span id="getDaily"><img alt="Quotidien" src="img/succes.png" title="Quotidien">Quotidien</span><br />
                 <br />
@@ -28,7 +29,7 @@
         <section id="walletHead">Le Fouineur - Portefeuille</section>
         <section id="bagStuffHead">Le Fouineur - Sacs et coffres
             <input id="filter" placeholder="Trouve moi où est..." type="text">
-            <button type="button" id="reloadButton"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
+            <button type="button" id="reloadBags"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
             <div id="filterContainer">
                 <img alt="Filtres" id="filterButton" src="img/filtres.png" title="Filtres">
                 <div id="filterDiv">
@@ -98,10 +99,17 @@
                 </div>
             </div>
         </section>
-        <section id="wardrobeHead">Le Fouineur - Garde-robe</section>
+        <section id="wardrobeHead">Le Fouineur - Garde-robe
+            <input id="simpleFilter" placeholder="Trouve moi où est..." type="text">
+            <button type="button" id="reloadWard"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
+        </section>
         <section id="dyesHead">Le Fouineur - Teintures
-            <input id="dyeFilter" placeholder="Trouve moi où est..." type="text">
+            <input id="simpleFilter" placeholder="Trouve moi où est..." type="text">
             <button type="button" id="reloadDyes"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
+        </section>
+        <section id="recipesHead">Le Fouineur - Recettes
+            <input id="simpleFilter" placeholder="Trouve moi où est..." type="text">
+            <button type="button" id="reloadReci"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
         </section>
         <section id="pvpHead">Le Fouineur - Joueur contre Joueur</section>
         <section id="dailyHead">Le Fouineur - Succès du quotidien</section>
@@ -114,6 +122,7 @@
         <section id="bagStuff"></section>
         <section id="wardrobe"></section>
         <section id="dyes"></section>
+        <section id="recipes"></section>
         <section id="pvp"></section>
         <section id="daily"></section>
     </div>

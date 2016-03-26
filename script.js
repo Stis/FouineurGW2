@@ -88,20 +88,25 @@ var Cache = {
 var items = Object.create(Cache).init({ key: "itemCache" });
 var skins = Object.create(Cache).init({ key: "skinCache" });
 var unknownItems = Object.create(Cache).init({ key: "unknownItemCache", ttl: 24 * 60 * 60 * 1000 });
-var dyes = Object.create(Cache).init({ key: "dyeCache" });
-var wallet = Object.create(Cache).init({ key: "walletCache" });
+var dyes = Object.create(Cache).init({ key: "dyeCache" }); // finalement, il semble
+var wallet = Object.create(Cache).init({ key: "walletCache" }); // que j'ai oublié
+var sharedBag = Object.create(Cache).init({ key: "sharedBag" }); // de me servir de ça
 var guilds = Object.create(Cache).init({ key: "guildCache", ttl: 24 * 60 * 60 * 1000 });
 var icons = {
-    fr: "img/fr.png",
+    de: "img/de.png",
     en: "img/en.png",
     es: "img/es.png",
-    de: "img/de.png",
+    fr: "img/fr.png",
     ko: "img/ko.png",
     zh: "img/zh.png",
+    builds: "img/specialisation.png",
+    wallet: "img/portefeuille.png",
     sacs: "img/sacs.png",
     skins: "img/garderobe.png",
-    wallet: "img/portefeuille.png",
     dyes: "img/teintures.png",
+    recipes: "img/recettes.png",
+    pvp: "img/jcj.png",
+    daily: "img/succes.png",
     contacts: "img/contacts.png",
     mails: "img/courriers.png",
     settings: "img/reglages.png",
@@ -194,7 +199,7 @@ function initEvents() {
     $("#getWallet").click(getWallet);
     $("#getBags").click(getBags);
     $("#filter").keyup(itemFilter);
-    $("#reloadButton").click(getBags);
+    $("#reloadBags").click(getBags);
     $("#filterContainer").hover(function() {
         $("#filterDiv").toggle();
     });
@@ -220,27 +225,47 @@ function initEvents() {
     $(".gender,.race,.prof").change(charFilter);
     $("#items .levFilter").keyup(itemFilter);
     $("#chars .levFilter").keyup(charFilter);
+    $("#simpleFilter").keyup(simpleFilter);
     $("#getWard").click(getWard);
+    $("#reloadWard").click(getWard);
     $("#getDyes").click(getDyes);
-    $("#dyeFilter").keyup(dyeFilter);
     $("#reloadDyes").click(getDyes);
+    $("#getRecipes").click(getRecipes);
+    $("#reloadReci").click(getRecipes);
     $("#getPvP").click(getPvP);
     $("#getDaily").click(getDaily);
     $("#build").click(buildVer);
 }
 
+function resetView(who) {
+    $("section").removeClass("visible");
+    $("#content section").empty();
+    $("#"+who+",#"+who+"Head").addClass("visible");
+}
+
+function simpleFilter() {
+    var filterValue = $("#simpleFilter").val().toLowerCase();
+    $("tr:not(.thead)").each(function() {
+        var name = $(this).data("name");
+        if (name.indexOf(filterValue) < 0) {
+            $(this).addClass("hidden");
+        } else {
+            $(this).removeClass("hidden");
+        }
+    });
+}
+
 // BUILDS start
 function getBuilds() {
-    $("section").removeClass("visible");
-    $("#builds").addClass("visible").empty().text("WORK IN PROGRESS...");
+    resetView("builds");
+    $("#builds").text("WORK IN PROGRESS...");
     var url = getURL("character/:id/specializations", key);
 }
 // BUILDS end
 // WALLET start
 function getWallet() {
-    $("section").removeClass("visible");
-    $("#walletHead").addClass("visible");
-    $("#wallet").addClass("visible").empty().append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName").prop("title","name"))));
+    resetView("wallet");
+    $("#wallet").append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName").prop("title","name"))));
     $.getJSON("https://api.guildwars2.com/v2/currencies?ids=all", function(data) {
         var result;
         data.sort(function(a,b) {return a.order > b.order;});
@@ -267,10 +292,7 @@ function getWallet() {
 // WALLET end
 // BAGS start
 function getBags() {
-    $("section").removeClass("visible");
-    $("#dyes").empty();
-    $("#bagStuffHead, #bagStuff").addClass("visible");
-    $("#bagStuff").empty();
+    resetView("bagStuff");
     $("#filter").val("");
     $("input:checkbox").prop("checked", true);
     $(".levFilter").val("");
@@ -302,6 +324,7 @@ function getBags() {
 function getContent(key, account) {
     var url = getURL("characters", key);
     $.getJSON(url, function(data) {
+        // getSharedBag(key, account);
         var charsDiv = $("<div/>").addClass("characters");
         $("." + account).append(charsDiv);
         $.each(data, function(i, charName) {
@@ -311,6 +334,15 @@ function getContent(key, account) {
         getMatsData(key, account);
     });
 }
+
+// function getSharedBag(key, account) {
+//     var url = getURL("account/inventory", key);
+//     $.getJSON(url, function(sharedBagData) {
+//         sharedBag = $("<div/>").addClass("bag shared");
+//         getBag(sharedBagData, sharedBag);
+//         localStorage.setItem("sharedBag", JSON.stringify(sharedBag));
+//     });
+// }
 
 function getCharData(character, key, account) {
     var url = getURL("characters/" + character, key);
@@ -549,21 +581,41 @@ function charFilter() {
 // BAGS end
 // WARDROBE start
 function getWard() {
-    $("section").removeClass("visible");
-    $("#wardrobe").addClass("visible").empty().text("WORK IN PROGRESS...");
+    resetView("wardrobe");
+    $("#wardrobe").append($("<table/>").prop("id","wardList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead")))));
+    // $.getJSON("https://api.guildwars2.com/v2/skins?page=1000&page_size=200", function(data) {
+        // var count = parseInt(data.text.slice(data.text.lastIndexOf("- "), data.text.lastIndexOf(".")));
+        var count = 19;
+        while (count > -1) {
+            $.getJSON("https://api.guildwars2.com/v2/skins?page="+count+"&page_size=200", function(data) {
+                for(var skin in data) {
+                    $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append($("<td/>").addClass("skinname").text(data[skin].name)));
+                }
+            });
+            count--;
+        }
+    // });
     $.each(guids, function(i, key) {
-        var url = getURL("account/skins", key);
+        var url = getURL("account", key);
         $.getJSON(url, function(data) {
-
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            var url = getURL("account/skins", key);
+            $.getJSON(url, function(data) {
+                $("#wardList tr.thead td.thead").after($("<td/>").text(accName));
+                $("#wardList tr:not(.thead) .skinname").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"})));
+                for(var id in data) {
+                    $("#skin"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
+                }
+            });
         });
     });
 }
 // WARDROBE end
 // DYES start
 function getDyes() {
-    $("section").removeClass("visible");
-    $("#dyesHead").addClass("visible");
-    $("#dyes").addClass("visible").empty().append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").prop("title","cloth"),$("<td/>").prop("title","leather"),$("<td/>").prop("title","metal"))));
+    resetView("dyes");
+    $("#dyes").append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").prop("title","cloth"),$("<td/>").prop("title","leather"),$("<td/>").prop("title","metal"))));
     $(".thead td").each(function() {
         $(this).append($("<img/>").addClass("icon").attr({src:icons[$(this).attr("title")],alt:$(this).attr("title")})).css({"color":"rgba(0,0,0,0)","background-color":"black"});
     });
@@ -589,33 +641,26 @@ function getDyes() {
         });
     });
 }
-// FILTERS for DYES start
-function dyeFilter() {
-    var filterValue = $("#dyeFilter").val().toLowerCase();
-    $("tr:not(.thead)").each(function() {
-        var name = $(this).data("name");
-        if (name.indexOf(filterValue) < 0) {
-            $(this).addClass("hidden");
-        } else {
-            $(this).removeClass("hidden");
-        }
-    });
-}
-// FILTERS for DYES end
 // DYES end
+// RECIPES start
+function getRecipes() {
+    resetView("recipes");
+    $("#recipes").text("WORK IN PROGRESS...");
+    var url = getURL("");
+}
+// RECIPES end
 // PVP start
 function getPvP() {
-    $("section").removeClass("visible");
-    $("#pvp").addClass("visible").empty().text("WORK IN PROGRESS...");
+    resetView("pvp");
+    $("#pvp").text("WORK IN PROGRESS...");
     var url = getURL("pvp/games", key);
     var url = getURL("pvp/stats", key);
 }
 // PVP end
 // DAILY start
 function getDaily() {
-    $("section").removeClass("visible");
-    $("#dailyHead").addClass("visible");
-    $("#daily").addClass("visible").empty().append($("<table/>").prop("id","dailyList"));
+    resetView("daily");
+    $("#daily").append($("<table/>").prop("id","dailyList"));
     var url = getURL("achievements/daily");
     $.getJSON(url, function(data) {
         var ids=[];
@@ -643,3 +688,4 @@ function getDaily() {
         });
     });
 }
+// DAILY end
