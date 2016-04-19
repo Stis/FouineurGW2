@@ -668,7 +668,8 @@ function getDaily() {
         ids = ids.concat(
             data.pve.map(daily => daily.id),
             data.pvp.map(daily => daily.id),
-            data.wvw.map(daily => daily.id)
+            data.wvw.map(daily => daily.id),
+            data.special ? data.special.map(daily => daily.id) : ""
         );
         var levels = [];
         levels = levels.concat(
