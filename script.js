@@ -586,7 +586,7 @@ function getWard() {
     $("#wardrobe").append($("<table/>").prop("id","wardList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead")))));
     // $.getJSON("https://api.guildwars2.com/v2/skins?page=1000&page_size=200", function(data) {
         // var count = parseInt(data.text.slice(data.text.lastIndexOf("- "), data.text.lastIndexOf(".")));
-        var count = 19;
+        var count = 20;
         while (count > -1) {
             $.getJSON("https://api.guildwars2.com/v2/skins?page="+count+"&page_size=200", function(data) {
                 for(var skin in data) {
