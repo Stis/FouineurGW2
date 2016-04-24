@@ -160,6 +160,23 @@ section.visible {
     position: static;
     z-index: 1
 }
+#keyList {
+    height: 95px;
+    width: 724px;
+    background: #CCC;
+    border: none;
+}
+#saveKeys, #delKeys {
+    cursor: pointer;
+    background-color: #CCC;
+    border: none;
+    border-radius: 9px 0 0 9px;
+    padding: 1px;
+    margin: 4px -2px 0 -2px;
+}
+#delKeys {
+    border-radius: 0 9px 9px 0;
+}
 table {
     margin-left: auto;
     margin-right: auto;

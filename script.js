@@ -30,22 +30,6 @@ if (jQuery) {
     });
 }
 
-var guids;
-$(window).on("hashchange", function() {
-    guids = getGuids();
-});
-
-function getGuids() {
-    if (!location.hash) {
-        return JSON.parse(localStorage.getItem("guids") || "[]");
-    }
-    var guids = location.hash.slice(1).split(",");
-    localStorage.setItem("guids", JSON.stringify(guids));
-    history.replaceState(undefined, document.title, location.href.slice(0, location.href.indexOf("#")));
-    history.back()
-    return guids;
-}
-
 var Cache = {
     saveDelay: 1000,
     timeoutId: undefined,
@@ -85,6 +69,7 @@ var Cache = {
     },
     constructor: Cache
 };
+var guids;
 var items = Object.create(Cache).init({ key: "itemCache" });
 var skins = Object.create(Cache).init({ key: "skinCache" });
 var unknownItems = Object.create(Cache).init({ key: "unknownItemCache", ttl: 24 * 60 * 60 * 1000 });
@@ -187,11 +172,28 @@ $(window).load(function() {
             $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], class: "icon", alt: $(this).attr("class"), title: $(this).attr("class") }));
         };
     });
-    guids = getGuids();
+    guids = JSON.parse(localStorage.getItem("guids") || "[]");
     initEvents();
 });
 
 function initEvents() {
+    if ($("#intro:not(.hidden)")) {
+        if (guids) {
+            $.each(guids, function(i, key) {
+                $("#keyList").append(key+"\n");
+            });
+            $("#keyList").html($("#keyList").val().replace(/\n$/, ""));
+        }
+    }
+    $("#saveKeys").click(function() {
+        guids = $("#keyList").val().replace("#","").split(/\n| |,/);
+        localStorage.setItem("guids", JSON.stringify(guids));
+        location.reload(true);
+    });
+    $("#delKeys").click(function() {
+        localStorage.removeItem("guids");
+        location.reload();
+    });
     $("#menu").hover(function() {
         $("#menuDiv").toggle();
     });
