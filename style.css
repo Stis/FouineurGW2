@@ -1,26 +1,26 @@
 @font-face {
     font-family: "CronosPro";
     src: url("font/cronospro-regular-webfont.woff") format("woff");
-    font-weight:normal;
-    font-style:normal;
+    font-weight: normal;
+    font-style: normal;
 }
 @font-face {
     font-family: "CronosPro";
     src: url("font/cronospro-italic-webfont.woff") format("woff");
-    font-weight:normal;
-    font-style:italic;
+    font-weight: normal;
+    font-style: italic;
 }
 @font-face {
     font-family: "CronosPro";
     src: url("font/cronospro-semibold-webfont.woff") format("woff");
-    font-weight:bold;
-    font-style:normal;
+    font-weight: bold;
+    font-style: normal;
 }
 @font-face {
     font-family: "CronosPro";
     src: url("font/cronospro-semibolditalic-webfont.woff") format("woff");
-    font-weight:bold;
-    font-style:italic;
+    font-weight: bold;
+    font-style: italic;
 }
 * {
     font-family: CronosPro;
@@ -60,15 +60,15 @@ input[type=text] {
     padding: 2px 4px;
 }
 #filter, .simpleFilter {
-    position:absolute;
+    position: absolute;
     right:58px;
     height: 17px;
     border-radius: 9px 0 0 9px;
 }
 [type=button] {
-    position:absolute;
-    right:32px;
-    height:21px;
+    position: absolute;
+    right: 32px;
+    height: 21px;
     cursor: pointer;
     background-color: #CCC;
     border: none;
@@ -140,12 +140,12 @@ label {
     border-radius: 9px;
 }
 #content {
-    position:absolute;
-    top:30px;
-    left:0px;
-    right:0px;
-    bottom:0px;
-    overflow:auto;
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow: auto;
 }
 section {
     height: 0;
@@ -181,6 +181,9 @@ table {
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
+}
+.thead {
+    font-weight: bold;
 }
 tr:nth-child(even) {
     background-color: #505050;
@@ -329,5 +332,5 @@ h5 {
     background-color: rgba(0, 0, 0, 0.7);
 }
 .hidden {
-    display:none;
+    display: none;
 }

@@ -235,7 +235,8 @@ function initEvents() {
     $("#getRecipes").click(getRecipes);
     $("#reloadReci").click(getRecipes);
     $("#getPvP").click(getPvP);
-    $("#getDaily").click(getDaily);
+    $("#getDaily").click(function() {getDaily("today");});
+    $("#getDailyTom").click(function() {getDaily("tomorrow");});
     $("#build").click(buildVer);
 }
 
@@ -661,10 +662,13 @@ function getPvP() {
 }
 // PVP end
 // DAILY start
-function getDaily() {
+function getDaily(when) {
     resetView("daily");
     $("#daily").append($("<table/>").prop("id","dailyList"));
-    var url = getURL("achievements/daily");
+    switch(when) {
+        case "today": var url = getURL("achievements/daily"); break;
+        case "tomorrow": var url = getURL("achievements/daily/tomorrow");
+    }
     $.getJSON(url, function(data) {
         var ids=[];
         ids = ids.concat(
@@ -675,7 +679,7 @@ function getDaily() {
         );
         var levels = [];
         levels = levels.concat(
-            data.pve.map(daily => daily.id = {min:daily.level.min,max:daily.level.max})
+            data.pve.map(daily => each = {min:daily.level.min,max:daily.level.max})
             );
         var url = getURL("achievements");
         $.getJSON(url+"?ids="+ids, function(dailyAch) {

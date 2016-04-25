@@ -3,9 +3,9 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
-  <title>Le fouineur</title>
+  <title>Le Fouineur</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="jquery-2.2.3.min.js"></script>
   <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
@@ -13,21 +13,23 @@
         <div id="menu" style="float:left;">
             <img alt="Menu" id="menuButton" src="img/menu.png" title="Menu">
             <div id="menuDiv">
-                <span id="getBuilds"><img alt="Builds" src="img/specialisation.png" title="Builds">Spécialisations</span><br />
+                <!-- <span id="getBuilds"><img alt="Builds" src="img/specialisation.png" title="Builds">Spécialisations</span><br /> -->
                 <span id="getWallet"><img alt="Portefeuille" src="img/portefeuille.png" title="Portefeuille">Portefeuille</span><br />
-                <span id="getBags"><img alt="Sacs" src="img/sacs.png" title="Sacs">Sacs et coffres</span><br />
+                <span id="getBags"><img alt="Sacs et coffres" src="img/sacs.png" title="Sacs et coffres">Sacs et coffres</span><br />
                 <span id="getWard"><img alt="Garde-robe" src="img/garderobe.png" title="Garde-robe">Garde-robe</span><br />
                 <span id="getDyes"><img alt="Teintures" src="img/teintures.png" title="Teintures">Teintures</span><br />
-                <span id="getRecipes"><img alt="Recettes" src="img/recettes.png" title="Recettes">Recettes</span><br />
-                <span id="getPvP"><img alt="JcJ" src="img/jcj.png" title="JcJ">Joueur contre Joueur</span><br />
+                <!-- <span id="getRecipes"><img alt="Recettes" src="img/recettes.png" title="Recettes">Recettes</span><br /> -->
+                <!-- <span id="getPvP"><img alt="JcJ" src="img/jcj.png" title="JcJ">Joueur contre Joueur</span><br /> -->
                 <span id="getDaily"><img alt="Quotidien" src="img/succes.png" title="Quotidien">Quotidien</span><br />
+                <span id="getDailyTom"><img alt="Quotidien de demain" src="img/succes.png" title="Quotidien de demain">... de demain</span><br />
                 <br />
                 Build GW2 : <span id="build">.....</span>
             </div>
         </div>
-        <section id="buildsHead">Le Fouineur - Spécialisations</section>
-        <section id="walletHead">Le Fouineur - Portefeuille</section>
-        <section id="bagStuffHead">Le Fouineur - Sacs et coffres
+        <section id="introhead" class="visible">Le Fouineur</section>
+        <section id="buildsHead">Spécialisations</section>
+        <section id="walletHead">Portefeuille</section>
+        <section id="bagStuffHead">Sacs et coffres
             <input id="filter" placeholder="Trouve moi où est..." type="text">
             <button type="button" id="reloadBags"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
             <div id="filterContainer">
@@ -99,20 +101,20 @@
                 </div>
             </div>
         </section>
-        <section id="wardrobeHead">Le Fouineur - Garde-robe
+        <section id="wardrobeHead">Garde-robe
             <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
             <button type="button" id="reloadWard"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
         </section>
-        <section id="dyesHead">Le Fouineur - Teintures
+        <section id="dyesHead">Teintures
             <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
             <button type="button" id="reloadDyes"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
         </section>
-        <section id="recipesHead">Le Fouineur - Recettes
+        <section id="recipesHead">Recettes
             <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
             <button type="button" id="reloadReci"><img alt="Recharger" src="img/recharger.png" title="Recharger"></button>
         </section>
-        <section id="pvpHead">Le Fouineur - Joueur contre Joueur</section>
-        <section id="dailyHead">Le Fouineur - Succès du quotidien</section>
+        <section id="pvpHead">Joueur contre Joueur</section>
+        <section id="dailyHead">Succès du quotidien</section>
     </div>
 
     <div id="content">
