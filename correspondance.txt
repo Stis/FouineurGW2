@@ -36,12 +36,14 @@ img/maitrequeu.png				http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20p
 img/male.png					https://iconfinder.com/data/icons/fatcow/16/male.png
 img/menu.png					https://cdn0.iconfinder.com/data/icons/flat-color-icons/504/menu-24.png
 img/metal.png					https://render.guildwars2.com/file/D1941454313ACCB234906840E1FB401D49091B96/220460.png
+img/miniatures.png				http://wiki.guildwars.com/images/e/ef/Miniature_Kuunavang.png
 img/necromant.png				https://wiki.guildwars2.com/images/4/43/Necromancer_tango_icon_20px.png
 img/no.png					https://iconfinder.com/data/icons/fatcow/16/cross.png
 img/nondefini.png				https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png
 img/norn.png					https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png
 img/P4F.ico
 img/portefeuille.png				https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png
+img/quotijce.png				http://wiki.guildwars2.com/images/1/14/Daily_Achievement.png
 img/recettes.png				https://www.iconfinder.com/icons/51445/cook_book_recipe_group_icon#size=32
 img/recharger.png				https://cdn0.iconfinder.com/data/icons/fatcow/32x32/update.png
 img/reglages.png				https://cdn0.iconfinder.com/data/icons/fatcow/16/gear_in.png

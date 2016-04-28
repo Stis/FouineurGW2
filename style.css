@@ -41,6 +41,23 @@ body {
     box-shadow: 0 1.5px 3px rgba(0, 0, 0, .25);
     padding-top: 4px;
 }
+#menu {
+    float: left;
+    cursor: pointer;
+}
+#menuButton,
+#filterButton {
+    height: 24px !important;
+    margin: 0 !important;
+}
+#filterButton {
+    cursor: pointer;
+}
+#menu img,
+#wallet img {
+    height: 20px;
+    margin-bottom: -5px
+}
 #menuDiv {
     display: none;
     position: absolute;
@@ -50,9 +67,17 @@ body {
     box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
     text-align: left;
 }
-#menu img {
-    height: 24px;
-    width: 24px;
+section {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    z-index: -1;
+}
+section.visible {
+    height: auto;
+    overflow: visible;
+    opacity: 1;
+    z-index: 1;
 }
 input[type=text] {
     background-color: #CCC;
@@ -61,30 +86,22 @@ input[type=text] {
 }
 #filter, .simpleFilter {
     position: absolute;
-    right:58px;
-    height: 17px;
+    right: 50px;
+    height: 20px;
     border-radius: 9px 0 0 9px;
 }
-[type=button] {
+.button {
     position: absolute;
-    right: 32px;
-    height: 21px;
+    right: 28px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     background-color: #CCC;
-    border: none;
     border-radius: 0 9px 9px 0;
-    padding: 1px;
-}
-[type=button] img {
-    width: 18px;
+    padding: 2px;
 }
 #filterContainer {
     float: right;
-}
-#filterButton {
-    cursor: pointer;
-    height: 24px;
-    width: 24px;
 }
 #filterDiv {
     display: none;
@@ -95,28 +112,23 @@ input[type=text] {
     border-radius: 0 0 8px 8px;
     box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
 }
-ul.tabs {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-ul.tabs li {
+.tab {
     cursor: pointer;
     display: inline-block;
     padding: 10px;
     color: #888;
 }
-ul.tabs li.current {
+.tab.current {
     color: #FFF;
 }
 .tabContent {
     display: none;
-    padding: 10px;
 }
 .tabContent.current {
     display: inherit;
+    padding: 10px;
 }
-.filters {
+input[type=checkbox] {
     position: absolute;
     right: 0;
 }
@@ -125,9 +137,9 @@ label {
     background-repeat: no-repeat;
     text-align: left;
 }
-.icon {
+label img {
     height: 16px;
-    margin-bottom: -4px;
+    margin-bottom: -2px;
 }
 .type + label {
     color: #888;
@@ -146,19 +158,6 @@ label {
     right: 0px;
     bottom: 0px;
     overflow: auto;
-}
-section {
-    height: 0;
-    overflow: hidden;
-    z-index: -1;
-    opacity: 0;
-}
-section.visible {
-    height: auto;
-    overflow: visible;
-    opacity: 1;
-    position: static;
-    z-index: 1
 }
 #keyList {
     height: 95px;
@@ -188,10 +187,17 @@ table {
 tr:nth-child(even) {
     background-color: #505050;
 }
-.currName {
-    text-align: left;
+.thead img {
+    height: 24px;
+    margin: -1px 0 -6px 0;
 }
-#bagStuff {
+tr:not(.thead) td:first-of-type img {
+    height: 32px;
+    margin: -1px 0 -6px 0;
+}
+#bagStuff,
+.characters,
+.flexme {
     display: flex;
 }
 .account {
@@ -200,12 +206,13 @@ tr:nth-child(even) {
 h2 {
     margin: 0;
 }
+h2 img {
+    height: 16px;
+    width: 16px;
+}
 h5 {
     margin-top: 0;
     margin-bottom: 10px;
-}
-.characters {
-    display: flex;
 }
 .character {
     position: relative;
@@ -225,9 +232,11 @@ h5 {
     min-height: 125px;
 }
 .spec img {
-    margin: 0 4px -4px 0;
+    height: 16px;
+    margin: 0 4px -3px 0;
 }
 .stuff,
+.sharedBag,
 .bag,
 .bankTabs,
 .matsTabs {
@@ -235,6 +244,9 @@ h5 {
 }
 .stuff {
     box-shadow: 0px 20px 2px -19px #CCC;
+}
+.sharedBag {
+    box-shadow: 0px 20px 2px -19px #888;
 }
 .bankTabs,
 .matsTabs {
@@ -251,11 +263,8 @@ h5 {
     margin: 0px 1px;
     padding: 0;
 }
-.item img,
-#wallet img,
-.thead img {
+.item img {
     height: 32px;
-    width: 32px;
 }
 .r_Empty {
     border-color: #000;
@@ -333,4 +342,15 @@ h5 {
 }
 .hidden {
     display: none;
+}
+a {
+    color:inherit;
+    text-decoration: none;
+}
+#daily img {
+    height: 48px;
+    margin: 0 0 -5px 0;
+}
+.yesno {
+    margin-bottom: -3px;
 }
