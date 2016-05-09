@@ -593,7 +593,7 @@ function getWard() {
         while (count > -1) {
             $.getJSON(getURL("skins?page="+count+"&page_size=200"), function(data) {
                 for(var skin in data) {
-                    var desc = data[skin].description || "";
+                    var desc = data[skin].description ? data[skin].description.replace(/\"/g,'&quot;') : "";
                     $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append(
                         $("<td/>").html("<img src=\""+data[skin].icon+"\" title=\""+desc +"\">"),
                         $("<td/>").addClass("skinname "+data[skin].rarity).html("<a href=\""+searchURL+data[skin].name+" skin\">"+data[skin].name+"</a>")
@@ -669,7 +669,7 @@ function getDyes() {
     $.getJSON(getURL("colors?ids=all"), function(data) {
         data.sort(function(a,b) {return a.name.localeCompare(b.name);});
         for(var dye in data) {
-            $("#dyeList").append($("<tr/>").attr({id: "dye" + data[dye].id}).data("name", data[dye].name.toLowerCase()).append($("<td/>").attr({colspan: "3", style: "background: -moz-linear-gradient(left, rgb(" + data[dye].cloth.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 66%, rgb(" + data[dye].metal.rgb.join() + ") 66%);text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);"}).addClass("dyename").text(data[dye].name)));
+            $("#dyeList").append($("<tr/>").attr({id: "dye" + data[dye].id}).data("name", data[dye].name.toLowerCase()).data("cats", JSON.stringify(data[dye].categories).toLowerCase()).append($("<td/>").attr({colspan: "3", style: "background: -moz-linear-gradient(left, rgb(" + data[dye].cloth.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 33%, rgb(" + data[dye].leather.rgb.join() + ") 66%, rgb(" + data[dye].metal.rgb.join() + ") 66%);text-shadow: 0px 0px 5px rgba(0, 0, 0, 1);"}).addClass("dyename").text(data[dye].name)));
         }
     });
     $.each(guids, function(i, key) {
