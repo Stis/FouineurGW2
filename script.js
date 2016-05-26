@@ -268,11 +268,12 @@ function getBuilds() {
 // WALLET start
 function getWallet() {
     resetView("wallet");
-    $("#wallet").append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName").prop("title","name"))));
+    $("#wallet").append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName"))));
     $.getJSON(getURL("currencies?ids=all"), function(data) {
         var result;
         data.sort(function(a,b) {return a.order > b.order;});
         $.each(data, function(i, curr) {
+            curr.description = curr.description ? curr.description.replace(/\"/g,'&quot;') : "";
             result += "<tr title=\"" + curr.description + "\"><td id=\"curr" + curr.id + "\" class=\"currName\">" + curr.name + "</td><td><img src=\"" + curr.icon + "\" class=\"icon\"></td></tr>";
         });
         $("#currList tr:last-of-type").after(result);
@@ -593,13 +594,13 @@ function getWard() {
         while (count > -1) {
             $.getJSON(getURL("skins?page="+count+"&page_size=200"), function(data) {
                 for(var skin in data) {
-                    var desc = data[skin].description ? data[skin].description.replace(/\"/g,'&quot;') : "";
+                    data[skin].description = data[skin].description ? data[skin].description.replace(/\"/g,'&quot;') : "";
                     $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append(
-                        $("<td/>").html("<img src=\""+data[skin].icon+"\" title=\""+desc +"\">"),
+                        $("<td/>").html("<img src=\""+data[skin].icon+"\" title=\""+data[skin].description+"\">"),
                         $("<td/>").addClass("skinname "+data[skin].rarity).html("<a href=\""+searchURL+data[skin].name+" skin\">"+data[skin].name+"</a>")
                         ));
                     // $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append(
-                    //     $("<td/>").html("<img src=\""+data[skin].icon+"\" title=\""+desc +"\" style=\"width: 36px; margin-bottom:-5px;\">"),
+                    //     $("<td/>").html("<img src=\""+data[skin].icon+"\" title=\""+data[skin].description+"\" style=\"width: 36px; margin-bottom:-5px;\">"),
                     //     $("<td/>").addClass("id").text(data[skin].id),
                     //     $("<td/>").addClass("skinname "+data[skin].rarity).text(data[skin].name),
                     //     $("<td/>").addClass("type").text(data[skin].type),
@@ -637,9 +638,9 @@ function getMinis() {
     $.getJSON(getURL("minis?ids=all"), function(data) {
         data.sort(function(a,b) {return a.order > b.order;});
         for(var mini in data) {
-            var unlock = data[mini].unlock || "";
+            data[mini].unlock = data[mini].unlock ? data[mini].unlock.replace(/\"/g,'&quot;') : "";
             $("#minisList").append($("<tr/>").attr({id: "mini" + data[mini].id}).data("name", data[mini].name.toLowerCase()).append(
-                $("<td/>").html("<img src=\""+data[mini].icon+"\" title=\""+unlock +"\">"),
+                $("<td/>").html("<img src=\""+data[mini].icon+"\" title=\""+data[mini].unlock+"\">"),
                 $("<td/>").addClass("mininame").html("<a href=\""+searchURL+data[mini].item_id+"\">"+data[mini].name+"</a>")
                 ));
         }
@@ -719,6 +720,7 @@ function getDaily(when) {
             var dummy=88;
             $.each(dailyAch, function(i, oneAch) {
                 oneIcon = oneAch.icon ? oneAch.icon : icons["dailypve"];
+                oneAch.description = oneAch.description ? oneAch.description.replace(/\"/g,'&quot;') : "";
                 $("#dailyList").append($("<tr/>").append(
                 "<td title=\""+oneAch.id+"\"><img src=\""+oneIcon+"\"></td>",
                 "<td title=\""+oneAch.description+"\">"+oneAch.name+"</td>",
