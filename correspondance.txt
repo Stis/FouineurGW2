@@ -23,18 +23,22 @@ img/filtres.png					https://iconfinder.com/data/icons/fatcow/32/filter.png
 img/forgarme.png				http://wiki.guildwars2.com/images/4/46/Weaponsmith_tango_icon_20px.png
 img/forgarmure.png				http://wiki.guildwars2.com/images/3/32/Armorsmith_tango_icon_20px.png
 img/fr.png					https://www.iconfinder.com/data/icons/fatcow/16/flag_france.png
+img/fractales.png				https://wiki.guildwars2.com/wiki/File:Fractals_of_the_Mists_%28map_icon%29.png
 img/garderobe.png				https://www.iconfinder.com/data/icons/fatcow/32x32/ribbon.png
 img/gardien.png					https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png
 img/guerrier.png				https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png
 img/GW2.ico
 img/HoT.ico
 img/humain.png					https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png
+img/identites.png				https://cdn2.iconfinder.com/data/icons/freeicons/PNG_256x256/User%20Info.png
 img/illustration.png				http://wiki.guildwars2.com/images/0/0b/Scribe_tango_icon_20px.png
 img/ingenieur.png				https://wiki.guildwars2.com/images/2/27/Engineer_tango_icon_20px.png
 img/jcj.png					http://wiki.guildwars2.com/images/thumb/2/23/PvP_Menu_Bar_icon.png/24px-PvP_Menu_Bar_icon.png
 img/ko.png					https://www.iconfinder.com/data/icons/fatcow/16/flag_south_korea.png
 img/maitrequeu.png				http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20px.png
 img/male.png					https://iconfinder.com/data/icons/fatcow/16/male.png
+img/rangmcm.png					https://wiki.guildwars2.com/wiki/File:WvW_Ability_Point.png
+img/rangjcj.png					https://wiki.guildwars2.com/wiki/File:Rank_Point.png
 img/menu.png					https://cdn0.iconfinder.com/data/icons/flat-color-icons/504/menu-24.png
 img/metal.png					https://render.guildwars2.com/file/D1941454313ACCB234906840E1FB401D49091B96/220460.png
 img/miniatures.png				http://wiki.guildwars.com/images/e/ef/Miniature_Kuunavang.png

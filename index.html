@@ -12,7 +12,8 @@
     <div id="header">
         <div id="menu">
             <img alt="Menu" id="menuButton" src="img/menu.png" title="Menu">
-            <div id="menuDiv">
+            <div id="menuPop">
+                <span id="getIdents"><img alt="Identités" src="img/identites.png" title="Identités">Identités</span><br />
                 <!-- <span id="getBuilds"><img alt="Builds" src="img/specialisation.png" title="Builds">Spécialisations</span><br /> -->
                 <span id="getWallet"><img alt="Portefeuille" src="img/portefeuille.png" title="Portefeuille">Portefeuille</span><br />
                 <span id="getBags"><img alt="Sacs et coffres" src="img/sacs.png" title="Sacs et coffres">Sacs et coffres</span><br />
@@ -29,123 +30,76 @@
                 Build GW2 : <span id="build">.....</span>
             </div>
         </div>
-        <section id="introhead" class="visible">Le Fouineur</section>
-        <section id="buildsHead">Spécialisations</section>
-        <section id="walletHead">Portefeuille</section>
-        <section id="bagStuffHead">Sacs et coffres
-            <input id="filter" placeholder="Trouve moi où est..." type="text">
-            <img alt="Recharger" src="img/recharger.png" title="Recharger" id="reloadBags" class="button">
-            <div id="filterContainer">
-                <img alt="Filtres" id="filterButton" src="img/filtres.png" title="Filtres">
-                <div id="filterDiv">
-                    <div>
-                        <span class="tab" toShow="items">Objets</span>
-                        <span class="tab" toShow="chars">Perso.</span>
-                    </div>
-                    <div class="tabContent current">
-                        Choisissez si vous<br> voulez filtrer par<br> objets ou personnages.
-                    </div>
-                    <div id="items" class="tabContent">
-                        Rareté<input class="checkAll" ctrl="rarity" type="checkbox"><br>
-                        <span class="hidden"><input class="rarity" type="checkbox"><label class="Empty">Vide</label><br></span>
-                        <input class="rarity" type="checkbox"><label class="Junk">Inutile</label><br>
-                        <input class="rarity" type="checkbox"><label class="Basic">Basic</label><br>
-                        <input class="rarity" type="checkbox"><label class="Fine">Raffiné</label><br>
-                        <input class="rarity" type="checkbox"><label class="Masterwork">Chef-d'oeuvre</label><br>
-                        <input class="rarity" type="checkbox"><label class="Rare">Rare</label><br>
-                        <input class="rarity" type="checkbox"><label class="Exotic">Exotique</label><br>
-                        <input class="rarity" type="checkbox"><label class="Ascended">Élevé</label><br>
-                        <input class="rarity" type="checkbox"><label class="Legendary">Légendaire</label><br>
-                        <input class="rarity" type="checkbox"><label class="Unknown">Inconnu</label><br>
-                        Type<input class="checkAll" ctrl="type" type="checkbox"><br>
-                        <input class="type" type="checkbox"><label class="UpgradeComponent">Amélioration</label><br>
-                        <input class="type" type="checkbox"><label class="Weapon">Arme</label><br>
-                        <input class="type" type="checkbox"><label class="Armor">Armure</label><br>
-                        <input class="type" type="checkbox"><label class="Trinket">Bijou</label><br>
-                        <input class="type" type="checkbox"><label class="Consumable">Consommable</label><br>
-                        <input class="type" type="checkbox"><label class="Container">Conteneur</label><br>
-                        <input class="type" type="checkbox"><label class="Back">Dorsal</label><br>
-                        <input class="type" type="checkbox"><label class="Gizmo">Gizmo</label><br>
-                        <input class="type" type="checkbox"><label class="CraftingMaterial">Matériau</label><br>
-                        <input class="type" type="checkbox"><label class="MiniPet">Miniature</label><br>
-                        <input class="type" type="checkbox"><label class="Tool">Outil</label><br>
-                        <input class="type" type="checkbox"><label class="Gathering">Récolte</label><br>
-                        <input class="type" type="checkbox"><label class="Bag">Sac</label><br>
-                        <input class="type" type="checkbox"><label class="Trait">Trait</label><br>
-                        <input class="type" type="checkbox"><label class="Trophy">Trophée</label><br>
-                        <input class="type" type="checkbox"><label class="Unknown">Inconnu</label><br>
-                        <input class="type" type="checkbox"><label class="Empty">Slot vide</label><br>
-                        Niveau<br>
-                        <input class="levFilter" id="levIMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levIMax" onclick="this.select();" placeholder="max" type="text">
-                    </div>
-                    <div id="chars" class="tabContent">
-                        Genre<input class="checkAll" ctrl="gender" type="checkbox"><br>
-                        <input class="gender" type="checkbox"><label class="Female"></label><br>
-                        <input class="gender" type="checkbox"><label class="Male"></label><br>
-                        Race<input class="checkAll" ctrl="race" type="checkbox"><br>
-                        <input class="race" type="checkbox"><label class="Asura"></label><br>
-                        <input class="race" type="checkbox"><label class="Charr"></label><br>
-                        <input class="race" type="checkbox"><label class="Human"></label><br>
-                        <input class="race" type="checkbox"><label class="Norn"></label><br>
-                        <input class="race" type="checkbox"><label class="Sylvari"></label><br>
-                        Profession<input class="checkAll" ctrl="prof" type="checkbox"><br>
-                        <input class="prof" type="checkbox"><label class="Elementalist"></label><br>
-                        <input class="prof" type="checkbox"><label class="Mesmer"></label><br>
-                        <input class="prof" type="checkbox"><label class="Guardian"></label><br>
-                        <input class="prof" type="checkbox"><label class="Warrior"></label><br>
-                        <input class="prof" type="checkbox"><label class="Engineer"></label><br>
-                        <input class="prof" type="checkbox"><label class="Necromancer"></label><br>
-                        <input class="prof" type="checkbox"><label class="Revenant"></label><br>
-                        <input class="prof" type="checkbox"><label class="Ranger"></label><br>
-                        <input class="prof" type="checkbox"><label class="Thief"></label><br>
-                        Niveau<br>
-                        <input class="levFilter" id="levCMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levCMax" onclick="this.select();" placeholder="max" type="text">
-                    </div>
+        <span id="title">Le Fouineur</span>
+        <input class="simpleFilter hidden" placeholder="Trouve moi où est..." type="text">
+        <input id="filterInp" class="hidden" placeholder="Trouve moi où est..." type="text">
+        <div id="filter" class="hidden">
+            <img alt="Filtres" id="filterButton" src="img/filtres.png" title="Filtres">
+            <div id="filterPop">
+                <div id="items" class="hidden">
+                    Rareté<input class="checkAll" ctrl="rarity" type="checkbox"><br>
+                    <span class="hidden"><input class="rarity" type="checkbox"><label class="Empty">Vide</label><br></span>
+                    <input class="rarity" type="checkbox"><label class="Junk">Inutile</label><br>
+                    <input class="rarity" type="checkbox"><label class="Basic">Basic</label><br>
+                    <input class="rarity" type="checkbox"><label class="Fine">Raffiné</label><br>
+                    <input class="rarity" type="checkbox"><label class="Masterwork">Chef-d'oeuvre</label><br>
+                    <input class="rarity" type="checkbox"><label class="Rare">Rare</label><br>
+                    <input class="rarity" type="checkbox"><label class="Exotic">Exotique</label><br>
+                    <input class="rarity" type="checkbox"><label class="Ascended">Élevé</label><br>
+                    <input class="rarity" type="checkbox"><label class="Legendary">Légendaire</label><br>
+                    <input class="rarity" type="checkbox"><label class="Unknown">Inconnu</label><br>
+                    Type<input class="checkAll" ctrl="type" type="checkbox"><br>
+                    <input class="type" type="checkbox"><label class="UpgradeComponent">Amélioration</label><br>
+                    <input class="type" type="checkbox"><label class="Weapon">Arme</label><br>
+                    <input class="type" type="checkbox"><label class="Armor">Armure</label><br>
+                    <input class="type" type="checkbox"><label class="Trinket">Bijou</label><br>
+                    <input class="type" type="checkbox"><label class="Consumable">Consommable</label><br>
+                    <input class="type" type="checkbox"><label class="Container">Conteneur</label><br>
+                    <input class="type" type="checkbox"><label class="Back">Dorsal</label><br>
+                    <input class="type" type="checkbox"><label class="Gizmo">Gizmo</label><br>
+                    <input class="type" type="checkbox"><label class="CraftingMaterial">Matériau</label><br>
+                    <input class="type" type="checkbox"><label class="MiniPet">Miniature</label><br>
+                    <input class="type" type="checkbox"><label class="Tool">Outil</label><br>
+                    <input class="type" type="checkbox"><label class="Gathering">Récolte</label><br>
+                    <input class="type" type="checkbox"><label class="Bag">Sac</label><br>
+                    <input class="type" type="checkbox"><label class="Trait">Trait</label><br>
+                    <input class="type" type="checkbox"><label class="Trophy">Trophée</label><br>
+                    <input class="type" type="checkbox"><label class="Unknown">Inconnu</label><br>
+                    <input class="type" type="checkbox"><label class="Empty">Slot vide</label><br>
+                    Niveau<br>
+                    <input class="levFilter" id="levIMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levIMax" onclick="this.select();" placeholder="max" type="text">
+                </div>
+                <div id="chars" class="hidden">
+                    Genre<input class="checkAll" ctrl="gender" type="checkbox"><br>
+                    <input class="gender" type="checkbox"><label class="Female"></label><br>
+                    <input class="gender" type="checkbox"><label class="Male"></label><br>
+                    Race<input class="checkAll" ctrl="race" type="checkbox"><br>
+                    <input class="race" type="checkbox"><label class="Asura"></label><br>
+                    <input class="race" type="checkbox"><label class="Charr"></label><br>
+                    <input class="race" type="checkbox"><label class="Human"></label><br>
+                    <input class="race" type="checkbox"><label class="Norn"></label><br>
+                    <input class="race" type="checkbox"><label class="Sylvari"></label><br>
+                    Profession<input class="checkAll" ctrl="prof" type="checkbox"><br>
+                    <input class="prof" type="checkbox"><label class="Elementalist"></label><br>
+                    <input class="prof" type="checkbox"><label class="Mesmer"></label><br>
+                    <input class="prof" type="checkbox"><label class="Guardian"></label><br>
+                    <input class="prof" type="checkbox"><label class="Warrior"></label><br>
+                    <input class="prof" type="checkbox"><label class="Engineer"></label><br>
+                    <input class="prof" type="checkbox"><label class="Necromancer"></label><br>
+                    <input class="prof" type="checkbox"><label class="Revenant"></label><br>
+                    <input class="prof" type="checkbox"><label class="Ranger"></label><br>
+                    <input class="prof" type="checkbox"><label class="Thief"></label><br>
+                    Niveau<br>
+                    <input class="levFilter" id="levCMin" onclick="this.select();" placeholder="min" type="text"> - <input class="levFilter" id="levCMax" onclick="this.select();" placeholder="max" type="text">
                 </div>
             </div>
-        </section>
-        <section id="wardrobeHead">Garde-robe
-            <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
-            <img alt="Recharger" src="img/recharger.png" title="Recharger" id="reloadWard" class="button">
-        </section>
-        <section id="miniaturesHead">Miniatures
-            <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
-            <img alt="Recharger" src="img/recharger.png" title="Recharger" id="reloadMinis" class="button">
-        </section>
-        <section id="dyesHead">Teintures
-            <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
-            <img alt="Recharger" src="img/recharger.png" title="Recharger" id="reloadDyes" class="button">
-        </section>
-        <section id="titlesHead">Titres
-            <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
-            <img alt="Recharger" src="img/recharger.png" title="Recharger" id="reloadTitles" class="button">
-        </section>
-        <section id="recipesHead">Recettes
-            <input class="simpleFilter" placeholder="Trouve moi où est..." type="text">
-            <img alt="Recharger" src="img/recharger.png" title="Recharger" id="reloadReci" class="button">
-        </section>
-        <section id="pvpHead">Joueur contre Joueur</section>
-        <section id="achievsHead">Succès</section>
-        <section id="dailyHead">Succès du quotidien</section>
+        </div>
     </div>
 
     <div id="content">
-        <section id="intro" class="visible">
-            <textarea id="keyList" placeholder="Insérez votre clé d'API ici. Si plusieurs, séparées par une espace, une virgule ou un retour à la ligne."></textarea><br />
-            <button id="saveKeys">    Sauver</button>
-            <button id="delKeys">Effacer    </button>
-        </section>
-        <section id="builds"></section>
-        <section id="wallet"></section>
-        <section id="bagStuff"></section>
-        <section id="wardrobe"></section>
-        <section id="miniatures"></section>
-        <section id="dyes"></section>
-        <section id="titles"></section>
-        <section id="recipes"></section>
-        <section id="pvp"></section>
-        <section id="achievs"></section>
-        <section id="daily"></section>
+        <textarea id="keyList" placeholder="Insérez votre clé d'API ici. Si plusieurs, séparées par une espace, une virgule ou un retour à la ligne."></textarea><br />
+        <button id="saveKeys">    Sauver</button>
+        <button id="delKeys">Effacer    </button>
     </div>
 </body>
 </html>

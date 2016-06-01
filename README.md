@@ -19,6 +19,4 @@ Merci à : | Thanks to:
 
   * For the game, API and most of icons.
 
-3. [Mohit Aneja](http://codepen.io/cssjockey/pen/jGzuK) (tabbed filters)
-
-4. [FatCow](https://www.iconfinder.com/iconsets/fatcow) (some icons)
+3. [FatCow](https://www.iconfinder.com/iconsets/fatcow) (some icons)

@@ -85,6 +85,7 @@ var icons = {
     ko: "img/ko.png",
     zh: "img/zh.png",
     builds: "img/specialisation.png",
+    identities: "img/identites.png",
     wallet: "img/portefeuille.png",
     sacs: "img/sacs.png",
     skins: "img/garderobe.png",
@@ -102,6 +103,9 @@ var icons = {
     cloth: "img/tissu.png",
     leather: "img/cuir.png",
     metal: "img/metal.png",
+    Fractals : "img/fractales.png",
+    WvWRank: "img/rangmcm.png",
+    PvPRank: "img/rangjcj.png",
     Female: "img/femelle.png",
     Male: "img/male.png",
     Asura: "img/asura.png",
@@ -194,24 +198,15 @@ function initEvents() {
         location.reload();
     });
     $("#menu").hover(function() {
-        $("#menuDiv").toggle();
+        $("#menuPop").toggle();
     });
     $("#getBuilds").click(getBuilds);
     $("#getWallet").click(getWallet);
+    $("#getIdents").click(getIdents);
     $("#getBags").click(getBags);
-    $("#filter").keyup(itemFilter);
-    $("#reloadBags").click(getBags);
-    $("#filterContainer").hover(function() {
-        $("#filterDiv").toggle();
-    });
-    $(".tab").click(function() {
-        var tabId = $(this).attr("toShow");
-
-        $(".tab").removeClass("current");
-        $(".tabContent").removeClass("current");
-
-        $(this).addClass("current");
-        $("#" + tabId).addClass("current");
+    $("#filterInp").keyup(itemFilter);
+    $("#filter").hover(function() {
+        $("#filterPop").toggle();
     });
     $(".checkAll").change(function() {
         $("input:checkbox." + $(this).attr("ctrl")).prop("checked", $(this).prop("checked"));
@@ -228,13 +223,9 @@ function initEvents() {
     $("#chars .levFilter").keyup(charFilter);
     $(".simpleFilter").keyup(function() {simpleFilter($(this));});
     $("#getWard").click(getWard);
-    $("#reloadWard").click(getWard);
     $("#getMinis").click(getMinis);
-    $("#reloadMinis").click(getMinis);
     $("#getDyes").click(getDyes);
-    $("#reloadDyes").click(getDyes);
     $("#getRecipes").click(getRecipes);
-    $("#reloadReci").click(getRecipes);
     $("#getPvP").click(getPvP);
     $("#getDaily").click(function() {getDaily("today");});
     $("#getDailyTom").click(function() {getDaily("tomorrow");});
@@ -242,10 +233,10 @@ function initEvents() {
 }
 
 function resetView(who) {
-    $("section").removeClass("visible");
-    $("#content section").empty();
-    $(".simpleFilter").val("");
-    $("#"+who+",#"+who+"Head").addClass("visible");
+    $("#content").empty();
+    $("input[type=text]").val("");
+    $("input:checkbox").prop("checked", true);
+    $(".simplfilter, #filterInp, #filter, #items, #chars").addClass("hidden");
 }
 
 function simpleFilter(who) {
@@ -265,10 +256,102 @@ function getBuilds() {
     resetView("builds");
 }
 // BUILDS end
+// IDENTS start
+function getIdents() {
+    resetView("bagStuff");
+    $("#filter, #chars").removeClass("hidden");
+    $.each(guids, function(i, key) {
+        $.getJSON(getURL("account", key), function(accData) {
+            $.getJSON(getURL("worlds/" + accData.world), function(worlData) {
+                var account = accData.name.replace(/\s|\./g,"");
+                var typAcc = accData.access;
+                $("#content").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accData.commander ? $("<img/>").attr({src: icons["comm"]}) : "",
+                                                                                                         accData.name,
+                                                                                                         $("<img/>").attr({src: icons[typAcc], alt: typAcc, title: typAcc })
+                                                                                                         ).attr("title", "Créé le " + formatDate(accData.created)),
+                                                                                       $("<span/>").addClass("server").text(worlData.name)," - ",
+                                                                                       $("<span/>").addClass("fractlev").append($("<img/>").attr({src: icons["Fractals"], class: "icon", alt: "Niveau de fractales", title: "Niveau de fractales"}), accData.fractal_level)," - ",
+                                                                                       $("<span/>").addClass("wvwrank").append($("<img/>").attr({src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), accData.wvw_rank)," - ",
+                                                                                       $("<span/>").addClass("pvprank").append($("<img/>").attr({src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), accData.wvw_rank), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("." + account + " .pvprank").append(pvpstats.pvp_rank)}),
+                                                                                       $("<div/>").addClass("characters flexme")
+                                                                                       )
+                                    );
+                $.getJSON(getURL("characters", key), function(charsList) {
+                    $.each(charsList, function(i, charName) {
+                        $.getJSON(getURL("characters/" + charName + "/core", key), function(charData) {
+                            $.getJSON(getURL("characters/" + charName + "/crafting", key), function(charCraftData) {
+                                var charDiv = $("<div/>").addClass("character");
+                                $("." + account + " .characters").append(charDiv);
+                                var addE = (charData.gender == "Male") ? "": "e";
+                                var discis = "";
+                                $.each(charCraftData.crafting, function(i, disci) {
+                                    if (disci) {
+                                        disciInactive = disci.active ? "" : " class=\"inactive\"";
+                                        discis += "<br><span"+ disciInactive +"><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating + "</span>";
+                                    }
+                                });
+                                charDiv.append($("<div/>").addClass("name").text(charName),
+                                               $("<div/>").addClass("title"),charData.title ? $.getJSON(getURL("titles/"+charData.title), function(title) {charDiv.children(".title").text(title.name)}).fail(function(data, err) {charDiv.children(".title").text("- Erreur API -")}) : "",
+                                               $("<div/>").addClass("spec").append($("<img/>").attr({src: icons[charData.gender], class: "icon " + charData.gender, alt: charData.gender, title: charData.gender }),
+                                               $("<img/>").attr({src: icons[charData.race], class: "icon " + charData.race, alt: charData.race, title: charData.race }),
+                                               $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }),
+                                               charData.level +
+                                               "<br>Né" + addE + " le " + formatDate(charData.created) +
+                                               "<br>" + charData.deaths + " décès" +
+                                               discis)
+                                              ).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
+                                var guildId = charData.guild;
+                                if (guildId) {
+                                    function insertGuildIntoPage(guildData) {
+                                        charDiv.children("div.name").append(" [" + guildData.tag + "]");
+                                        charDiv.append($("<img/>").addClass("charBg").attr("src", "http://guilds.gw2w2w.com/" + guildId + ".svg"));
+                                    }
+                                    if (guilds.isStale(guildId)) {
+                                        $.getJSON("https://api.guildwars2.com/v1/guild_details?guild_id=" + guildId, function(guildData) {
+                                            guilds.set(guildId, guildData);
+                                            insertGuildIntoPage(guildData);
+                                        });
+                                    } else {
+                                        insertGuildIntoPage(guilds.cache[guildId]);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+// FILTERS for IDENTS start
+function charFilter() {
+    var levCMin = ($("#levCMin").val() == "") ? 1 : parseInt($("#levCMin").val());
+    var levCMax = ($("#levCMax").val() == "") ? 80 : parseInt($("#levCMax").val());
+    var toHide = $("#chars input:checkbox:not(:checked,.checkAll)").map(function() {
+        return $(this).next("label").attr("class");
+    }).get();
+    $(".character").each(function() {
+        var charLev = parseInt($(this).attr("level"));
+        var charAttr = $(this).listAttributes();
+        if (
+            levCMin > charLev ||
+            charLev > levCMax ||
+            charAttr.some(function(x) {
+                return toHide.indexOf(x) > -1;
+            })
+            ) {
+            $(this).addClass("hidden");
+        } else {
+            $(this).removeClass("hidden");
+        }
+    });
+}
+// FILTERS for IDENTS end
+// IDENTS end
 // WALLET start
 function getWallet() {
     resetView("wallet");
-    $("#wallet").append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName"))));
+    $("#content").append($("<table/>").prop("id","currList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("currName"))));
     $.getJSON(getURL("currencies?ids=all"), function(data) {
         var result;
         data.sort(function(a,b) {return a.order > b.order;});
@@ -293,30 +376,26 @@ function getWallet() {
 }
 // WALLET end
 // BAGS start
-function getBags() {
+function getBagsLight() {
     resetView("bagStuff");
-    $("#filter").val("");
-    $("input:checkbox").prop("checked", true);
-    $(".levFilter").val("");
+    $("#filterInp, #filter, #items").removeClass("hidden");
+    $("#content").append($("<bagStuff/>").addClass("flexme"));
     $.each(guids, function(i, key) {
         $.getJSON(getURL("account", key), function(data) {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
-            var typAcc = data.access;
-            $.getJSON(getURL("worlds/" + data.world), function(wdata) {
-                $("#bagStuff").append($("<div/>").addClass(account + " account").append($("<h2/>").append(data.commander ? $("<img/>").attr({src: icons["comm"]}) : "",accName,$("<img/>").attr({src: icons[typAcc], alt: typAcc, title: typAcc })).attr("title", "Créé le " + formatDate(data.created)),$("<h5/>").addClass("server").text(wdata.name),$("<h5/>").addClass("fractlev").text("Niv. fractale : " + data.fractal_level)));
+                $("bagStuff").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accName)));
                 getContent(key, account);
-            });
         });
         if (i == guids.length){ sortStuff();};
     });
 
-    document.querySelector("#filter").focus();
+    document.querySelector("#filterInp").focus();
 }
 
 function getContent(key, account) {
     $.getJSON(getURL("characters", key), function(data) {
-        var charsDiv = $("<div/>").addClass("characters");
+        var charsDiv = $("<div/>").addClass("characters flexme");
         $("." + account).append(charsDiv);
         $.each(data, function(i, charName) {
             getCharData(charName, key, account);
@@ -330,27 +409,12 @@ function getCharData(character, key, account) {
     var charDiv = $("<div/>").addClass("character");
     $("." + account + " .characters").append(charDiv);
     $.getJSON(getURL("characters/" + character, key), function(charData) {
-        var addE = (charData.gender == "Male") ? "": "e";
-        var discis = "";
-        $.each(charData.crafting, function(i, disci) {
-            if (disci) {
-                disciInactive = disci.active ? "" : " class=\"inactive\"";
-                discis += "<br><span"+ disciInactive +"><img src=\"" + icons[disci.discipline] + "\" class=\"icon " + disci.discipline + "\" alt=\"" + disci.discipline + "\" title=\"" + disci.discipline + "\">" + disci.rating + "</span>";
-            }
-        });
         var itemsDiv = $("<div/>").addClass("stuff");
         var sharedBag = $("<div/>").addClass("sharedBag");
-        charDiv.append($("<div/>").addClass("title").text(character),
-                       $("<div/>").addClass("spec").append($("<img/>").attr({src: icons[charData.gender], class: "icon " + charData.gender, alt: charData.gender, title: charData.gender }),
-                                                           $("<img/>").attr({src: icons[charData.race], class: "icon " + charData.race, alt: charData.race, title: charData.race }),
-                                                           $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }),
-                                                           charData.level +
-                                                           "<br>Né" + addE + " le " + formatDate(charData.created) +
-                                                           "<br>" + charData.deaths + " décès" +
-                                                           discis),
+        charDiv.append($("<h4/>").text(character),
                        itemsDiv,
                        sharedBag
-                       ).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
+                       );
         getBag(charData.equipment, itemsDiv);
         $.getJSON(getURL("account/inventory", key), function(sharedBagData) {
             getBag(sharedBagData, sharedBag);
@@ -361,22 +425,6 @@ function getCharData(character, key, account) {
             charDiv.append(itemsDiv);
             getBag(bag.inventory, itemsDiv);
         });
-        var guildId = charData.guild;
-        if (guildId) {
-            function insertGuildIntoPage(guildData) {
-                charDiv.append($("<img/>").addClass("charBg").attr("src", "http://guilds.gw2w2w.com/" + guildId + ".svg"));
-                var addTag = charDiv.children("div.title");
-                addTag.append(" [" + guildData.tag + "]");
-            }
-            if (guilds.isStale(guildId)) {
-                $.getJSON("https://api.guildwars2.com/v1/guild_details?guild_id=" + guildId, function(gdata) {
-                    guilds.set(guildId, gdata);
-                    insertGuildIntoPage(gdata);
-                });
-            } else {
-                insertGuildIntoPage(guilds.cache[guildId]);
-            }
-        }
     });
 }
 
@@ -384,7 +432,7 @@ function getBankData(key, account) {
     $.getJSON(getURL("account/bank", key), function(bankData) {
         var charDiv = $("<div/>").addClass("bank");
         var itemsDiv = $("<div/>").addClass("bankTabs");
-        charDiv.append($("<span/>").addClass("title").text("Banque"),itemsDiv);
+        charDiv.append($("<span/>").text("Banque"),itemsDiv);
         while (bankData.length) {
             getBag(bankData.splice(0, 150), itemsDiv);
         }
@@ -396,7 +444,7 @@ function getMatsData(key, account) {
     $.getJSON(getURL("account/materials", key), function(matsData) {
         var charDiv = $("<div/>").addClass("mats");
         var itemsDiv = $("<div/>").addClass("matsTabs");
-        charDiv.append($("<span/>").addClass("title").text("Matériaux"),itemsDiv);
+        charDiv.append($("<span/>").text("Matériaux"),itemsDiv);
         while (matsData.length) {
             getBag(matsData.splice(0, 150), itemsDiv);
         }
@@ -524,7 +572,7 @@ function itemFilter() {
     $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked,.type:checked").length == $(".rarity:not(:hidden),.type").length ? 1 : 0);
     var levIMin = ($("#levIMin").val() == "") ? 0 : parseInt($("#levIMin").val());
     var levIMax = ($("#levIMax").val() == "") ? 80 : parseInt($("#levIMax").val());
-    var filterValue = $("#filter").val().toLowerCase();
+    var filterValue = $("#filterInp").val().toLowerCase();
     var toHide = $("#items input:checkbox:not(:checked,.checkAll)").map(function() {
         return $(this).next("label").attr("class");
     }).get();
@@ -545,27 +593,8 @@ function itemFilter() {
             $(this).removeClass("hidden");
         }
     });
-    charFilter();
-}
-
-function charFilter() {
-    var levCMin = ($("#levCMin").val() == "") ? 1 : parseInt($("#levCMin").val());
-    var levCMax = ($("#levCMax").val() == "") ? 80 : parseInt($("#levCMax").val());
-    var toHide = $("#chars input:checkbox:not(:checked,.checkAll)").map(function() {
-        return $(this).next("label").attr("class");
-    }).get();
     $(".character").each(function() {
-        var charLev = parseInt($(this).attr("level"));
-        var charAttr = $(this).listAttributes();
-        var amIEmpty = $(this).find(".item:not(.hidden)").length;
-        if (
-            amIEmpty == 0 ||
-            levCMin > charLev ||
-            charLev > levCMax ||
-            charAttr.some(function(x) {
-                return toHide.indexOf(x) > -1;
-            })
-            ) {
+        if ($(this).find(".item:not(.hidden)").length == 0) {
             $(this).addClass("hidden");
         } else {
             $(this).removeClass("hidden");
@@ -577,8 +606,9 @@ function charFilter() {
 // WARDROBE start
 function getWard() {
     resetView("wardrobe");
-    $("#wardrobe").append($("<table/>").prop("id","wardList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),$("<td/>").addClass("thead")))));
-    // $("#wardrobe").append($("<table/>").prop("id","wardList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),
+    $(".simpleFilter").removeClass("hidden");
+    $("#content").append($("<table/>").prop("id","wardList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),$("<td/>").addClass("thead")))));
+    // $("#content").append($("<table/>").prop("id","wardList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),
     //                                                                                                                           $("<td/>").addClass("thead").text("ID"),
     //                                                                                                                           $("<td/>").addClass("thead").text("Nom"),
     //                                                                                                                           $("<td/>").addClass("thead").text("Type"),
@@ -633,7 +663,8 @@ function getWard() {
 // MINIATURES start
 function getMinis() {
     resetView("miniatures");
-    $("#miniatures").append($("<table/>").prop("id","minisList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),$("<td/>").addClass("thead")))));
+    $(".simpleFilter").removeClass("hidden");
+    $("#content").append($("<table/>").prop("id","minisList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),$("<td/>").addClass("thead")))));
     var searchURL = "http://wiki.guildwars2.com/index.php?title=Special%3ASearch&go=Go&search=";
     $.getJSON(getURL("minis?ids=all"), function(data) {
         data.sort(function(a,b) {return a.order > b.order;});
@@ -663,7 +694,8 @@ function getMinis() {
 // DYES start
 function getDyes() {
     resetView("dyes");
-    $("#dyes").append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").prop("title","cloth"),$("<td/>").prop("title","leather"),$("<td/>").prop("title","metal"))));
+    $(".simpleFilter").removeClass("hidden");
+    $("#content").append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").prop("title","cloth"),$("<td/>").prop("title","leather"),$("<td/>").prop("title","metal"))));
     $(".thead td").each(function() {
         $(this).append($("<img/>").attr({src:icons[$(this).attr("title")],alt:$(this).attr("title")}));
     });
@@ -691,19 +723,19 @@ function getDyes() {
 // RECIPES start
 function getRecipes() {
     resetView("recipes");
-    $("#recipes").text("WORK IN PROGRESS...");
+    $("#content").text("WORK IN PROGRESS...");
 }
 // RECIPES end
 // PVP start
 function getPvP() {
     resetView("pvp");
-    $("#pvp").text("WORK IN PROGRESS...");
+    $("#content").text("WORK IN PROGRESS...");
 }
 // PVP end
 // DAILY start
 function getDaily(when) {
     resetView("daily");
-    $("#daily").append($("<table/>").prop("id","dailyList"));
+    $("#content").append($("<table/>").prop("id","dailyList"));
     switch(when) {
         case "today": var url = getURL("achievements/daily"); break;
         case "tomorrow": var url = getURL("achievements/daily/tomorrow");
