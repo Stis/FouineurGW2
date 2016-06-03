@@ -376,7 +376,7 @@ function getWallet() {
 }
 // WALLET end
 // BAGS start
-function getBagsLight() {
+function getBags() {
     resetView("bagStuff");
     $("#filterInp, #filter, #items").removeClass("hidden");
     $("#content").append($("<bagStuff/>").addClass("flexme"));
