@@ -265,11 +265,10 @@ function getIdents() {
             $.getJSON(getURL("worlds/" + accData.world), function(worlData) {
                 var account = accData.name.replace(/\s|\./g,"");
                 var typAcc = accData.access;
-                $("#content").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accData.commander ? $("<img/>").attr({src: icons["comm"]}) : "",
-                                                                                                         accData.name,
-                                                                                                         $("<img/>").attr({src: icons[typAcc], alt: typAcc, title: typAcc })
-                                                                                                         ).attr("title", "Créé le " + formatDate(accData.created)),
-                                                                                       $("<span/>").addClass("server").text(worlData.name)," - ",
+                $("#content").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accData.name).attr("title", "Créé le " + formatDate(accData.created)),
+                                                                                       $("<h4/>").addClass("server").text(worlData.name),
+                                                                                       accData.commander ? "<img src="+icons["comm"]+" class=\"icon\"> - " : "",
+                                                                                       $("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
                                                                                        $("<span/>").addClass("fractlev").append($("<img/>").attr({src: icons["Fractals"], class: "icon", alt: "Niveau de fractales", title: "Niveau de fractales"}), accData.fractal_level)," - ",
                                                                                        $("<span/>").addClass("wvwrank").append($("<img/>").attr({src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), accData.wvw_rank)," - ",
                                                                                        $("<span/>").addClass("pvprank").append($("<img/>").attr({src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), accData.wvw_rank), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("." + account + " .pvprank").append(pvpstats.pvp_rank)}),

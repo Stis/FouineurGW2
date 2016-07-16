@@ -165,11 +165,10 @@ tr:not(.thead) td:first-of-type img {
     border-right: 1px dotted #888;
 }
 h2 {
-    margin: 0;
+    margin-bottom: -5px;
 }
-h2 img {
-    height: 16px;
-    width: 16px;
+h4 {
+    margin: 0;
 }
 h5 {
     margin-top: 0;
