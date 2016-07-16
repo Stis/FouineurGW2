@@ -168,7 +168,7 @@ function buildVer() {
     });
 }
 
-$(window).load(function() {
+$(window).on("load", function() {
     buildVer();
     $("label").each(function() {
         if (icons[$(this).attr("class")]) {
