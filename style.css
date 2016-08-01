@@ -176,8 +176,8 @@ h5 {
 }
 .character {
     position: relative;
-    min-width: 210px;
-    width: 210px;
+    min-width: 230px;
+    width: 230px;
 }
 .charBg {
     position: absolute;
@@ -206,7 +206,11 @@ h5 {
     margin: 0 auto 10px auto;
 }
 .stuff {
+    width: 210px;
     box-shadow: 0px 20px 2px -19px #CCC;
+}
+.colo {
+    width: 60px;
 }
 .sharedBag {
     box-shadow: 0px 20px 2px -19px #888;
