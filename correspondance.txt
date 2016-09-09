@@ -37,8 +37,6 @@ img/jcj.png					http://wiki.guildwars2.com/images/thumb/2/23/PvP_Menu_Bar_icon.p
 img/ko.png					https://www.iconfinder.com/data/icons/fatcow/16/flag_south_korea.png
 img/maitrequeu.png				http://wiki.guildwars2.com/images/8/8f/Chef_tango_icon_20px.png
 img/male.png					https://iconfinder.com/data/icons/fatcow/16/male.png
-img/rangmcm.png					https://wiki.guildwars2.com/wiki/File:WvW_Ability_Point.png
-img/rangjcj.png					https://wiki.guildwars2.com/wiki/File:Rank_Point.png
 img/menu.png					https://cdn0.iconfinder.com/data/icons/flat-color-icons/504/menu-24.png
 img/metal.png					https://render.guildwars2.com/file/D1941454313ACCB234906840E1FB401D49091B96/220460.png
 img/miniatures.png				http://wiki.guildwars.com/images/e/ef/Miniature_Kuunavang.png
@@ -49,6 +47,8 @@ img/norn.png					https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.pn
 img/P4F.ico
 img/portefeuille.png				https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png
 img/quotijce.png				http://wiki.guildwars2.com/images/1/14/Daily_Achievement.png
+img/rangjcj.png					https://wiki.guildwars2.com/wiki/File:Rank_Point.png
+img/rangmcm.png					https://wiki.guildwars2.com/wiki/File:WvW_Ability_Point.png
 img/recettes.png				https://www.iconfinder.com/icons/51445/cook_book_recipe_group_icon#size=32
 img/recharger.png				https://cdn0.iconfinder.com/data/icons/fatcow/32x32/update.png
 img/reglages.png				https://cdn0.iconfinder.com/data/icons/fatcow/16/gear_in.png
@@ -61,8 +61,10 @@ img/sylvari.png					https://wiki.guildwars2.com/images/2/29/Sylvari_tango_icon_2
 img/tailleur.png				http://wiki.guildwars2.com/images/4/4d/Tailor_tango_icon_20px.png
 img/teintures.png				https://www.iconfinder.com/data/icons/fatcow/32/color_wheel.png
 img/tissu.png					https://render.guildwars2.com/file/7FBA68B71DB805E416315067DD0DDEEB204CFC65/63577.png
+img/titres.png					https://www.iconfinder.com/icons/463012/desctiption_ecommerce_label_price_tag_sale_tag_title_icon#size=512
 img/travducuir.png				http://wiki.guildwars2.com/images/e/e5/Leatherworker_tango_icon_20px.png
 img/voleur.png					https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png
 img/yes.png					https://iconfinder.com/data/icons/fatcow/16/tick.png
 img/zh.png					https://www.iconfinder.com/data/icons/fatcow/16/flag_china.png
 jquery.min.js					http://code.jquery.com/jquery-2.1.4.min.js
+img/coupsdegrace.png				wiki

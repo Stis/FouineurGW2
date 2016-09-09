@@ -90,6 +90,7 @@ var icons = {
     sacs: "img/sacs.png",
     skins: "img/garderobe.png",
     dyes: "img/teintures.png",
+    titles: "img/titres.png",
     recipes: "img/recettes.png",
     pvp: "img/jcj.png",
     daily: "img/succes.png",
@@ -224,7 +225,9 @@ function initEvents() {
     $(".simpleFilter").keyup(function() {simpleFilter($(this));});
     $("#getWard").click(getWard);
     $("#getMinis").click(getMinis);
+    $("#getFinish").click(getFinish);
     $("#getDyes").click(getDyes);
+    $("#getTitles").click(getTitles);
     $("#getRecipes").click(getRecipes);
     $("#getPvP").click(getPvP);
     $("#getDaily").click(function() {getDaily("today");});
@@ -690,6 +693,38 @@ function getMinis() {
     });
 }
 // MINIATURES end
+// FINISHERS start
+function getFinish() {
+    resetView("finish");
+    $(".simpleFilter").removeClass("hidden");
+    $("#content").append($("<table/>").prop("id","finishList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),$("<td/>").addClass("thead")))));
+    $.getJSON(getURL("finishers?ids=all"), function(data) {
+        data.sort(function(a,b) {return a.order > b.order;});
+        for(var finish in data) {
+            data[finish].unlock = data[finish].unlock ? data[finish].unlock.replace(/\"/g,'&quot;') : "";
+            $("#finishList").append($("<tr/>").attr({id: "finish" + data[finish].id}).data("name", data[finish].name.toLowerCase()).append(
+                $("<td/>").html("<img src=\""+data[finish].icon+"\" title=\""+data[finish].unlock+"\">"),
+                $("<td/>").addClass("mininame").html(data[finish].name)
+                ));
+        }
+    });
+    $.each(guids, function(i, key) {
+        $.getJSON(getURL("account", key), function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            $.getJSON(getURL("account/finishers", key), function(data) {
+                $("#finishList tr.thead td:last-of-type").after($("<td/>").text(accName));
+                $("#finishList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
+                for(var id in data) {
+                    if (typeof data[id].quantity === 'undefined') {
+                        $("#finish"+data[id].id+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
+                    }
+                }
+            });
+        });
+    });
+}
+// FINISHERS end
 // DYES start
 function getDyes() {
     resetView("dyes");
@@ -719,6 +754,35 @@ function getDyes() {
     });
 }
 // DYES end
+// TITLES start
+function getTitles() {
+    resetView("titles");
+    $(".simpleFilter").removeClass("hidden");
+    $("#content").append($("<table/>").prop("id","titleList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead")))));
+    $.getJSON(getURL("titles?ids=all"), function(data) {
+        data.sort(function(a,b) {return a.name > b.name;});
+        for(var title in data) {
+            $("#titleList").append($("<tr/>").attr({id: "title" + data[title].id}).data("name", data[title].name.toLowerCase()).append(
+                 // débloque par data[title].achivement
+                $("<td/>").addClass("titlename").html(data[title].name)
+                ));
+        }
+    });
+    $.each(guids, function(i, key) {
+        $.getJSON(getURL("account", key), function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            $.getJSON(getURL("account/titles", key), function(data) {
+                $("#titleList tr.thead td:last-of-type").after($("<td/>").text(accName));
+                $("#titleList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
+                for(var id in data) {
+                    $("#title"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
+                }
+            });
+        });
+    });
+}
+// TITLES end
 // RECIPES start
 function getRecipes() {
     resetView("recipes");
