@@ -268,7 +268,7 @@ function getIdents() {
             $.getJSON(getURL("worlds/" + accData.world), function(worlData) {
                 var account = accData.name.replace(/\s|\./g,"");
                 var typAcc = accData.access;
-                $("#content").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accData.name).attr("title", "Créé le " + formatDate(accData.created)),
+                $("#content").append($("<div/>").addClass(account).append($("<h2/>").append(accData.name).attr("title", "Créé le " + formatDate(accData.created)),
                                                                                        $("<h4/>").addClass("server").text(worlData.name),
                                                                                        accData.commander ? "<img src="+icons["comm"]+" class=\"icon\"> - " : "",
                                                                                        $("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
@@ -364,7 +364,7 @@ function getWallet() {
         data.sort(function(a,b) {return a.order > b.order;});
         $.each(data, function(i, curr) {
             curr.description = curr.description ? curr.description.replace(/\"/g,'&quot;') : "";
-            result += "<tr title=\"" + curr.description + "\"><td id=\"curr" + curr.id + "\" class=\"currName\">" + curr.name + "</td><td><img src=\"" + curr.icon + "\" class=\"icon\"></td></tr>";
+            result += "<tr title=\"" + curr.description + "\"><td id=\"curr" + curr.id + "\" class=\"currName\">" + curr.name + "</td><td><img src=\"" + curr.icon + "\"></td></tr>";
         });
         $("#currList tr:last-of-type").after(result);
     });
