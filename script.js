@@ -294,6 +294,11 @@ function getIdents() {
                                 });
                                 charDiv.append($("<div/>").addClass("name").text(charName),
                                                $("<div/>").addClass("title"),charData.title ? $.getJSON(getURL("titles/"+charData.title), function(title) {charDiv.children(".title").text(title.name)}).fail(function(data, err) {charDiv.children(".title").text("- Erreur API -")}) : "",
+                                               $("<div/>").addClass("bio"),$.getJSON(getURL("characters/" + charName + "/backstory", key), function(bios) {$.getJSON(getURL("backstory/answers?ids="+JSON.stringify(bios.backstory).replace(/\[|\]/g,"")), function(choices) {
+                                                $.each(choices, function(i, choice) {
+                                                    charDiv.children(".bio").append("<img src=\"img/bio/"+choice.id+".png\" class=\"icon\" alt=\""+choice.title+"\" title=\""+choice.title+"\">");
+                                                })
+                                                })}),
                                                $("<div/>").addClass("spec").append($("<img/>").attr({src: icons[charData.gender], class: "icon " + charData.gender, alt: charData.gender, title: charData.gender }),
                                                $("<img/>").attr({src: icons[charData.race], class: "icon " + charData.race, alt: charData.race, title: charData.race }),
                                                $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }),
