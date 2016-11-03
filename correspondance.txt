@@ -5,6 +5,7 @@ font/cronospro-semibold-webfont.woff		https://d1h9a8s8eodvjz.cloudfront.net//fon
 img/artificier.png				http://wiki.guildwars2.com/images/b/b7/Artificer_tango_icon_20px.png
 img/asura.png					https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png
 img/bijoutier.png				http://wiki.guildwars2.com/images/f/f2/Jeweler_tango_icon_20px.png
+img/bio/*					wiki
 img/charr.png					https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.png
 img/chasseur.png				http://wiki.guildwars2.com/images/f/f3/Huntsman_tango_icon_20px.png
 img/commandant.png				http://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png
@@ -27,8 +28,8 @@ img/fractales.png				https://wiki.guildwars2.com/wiki/File:Fractals_of_the_Mists
 img/garderobe.png				https://www.iconfinder.com/data/icons/fatcow/32x32/ribbon.png
 img/gardien.png					https://wiki.guildwars2.com/images/8/8c/Guardian_tango_icon_20px.png
 img/guerrier.png				https://wiki.guildwars2.com/images/4/43/Warrior_tango_icon_20px.png
-img/GW2.ico
-img/HoT.ico
+img/GW2.png
+img/HoT.png
 img/humain.png					https://wiki.guildwars2.com/images/e/e1/Human_tango_icon_20px.png
 img/identites.png				https://cdn2.iconfinder.com/data/icons/freeicons/PNG_256x256/User%20Info.png
 img/illustration.png				http://wiki.guildwars2.com/images/0/0b/Scribe_tango_icon_20px.png
@@ -44,7 +45,7 @@ img/necromant.png				https://wiki.guildwars2.com/images/4/43/Necromancer_tango_i
 img/no.png					https://iconfinder.com/data/icons/fatcow/16/cross.png
 img/nondefini.png				https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png
 img/norn.png					https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png
-img/P4F.ico
+img/P4F.png
 img/portefeuille.png				https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png
 img/quotijce.png				http://wiki.guildwars2.com/images/1/14/Daily_Achievement.png
 img/rangjcj.png					https://wiki.guildwars2.com/wiki/File:Rank_Point.png

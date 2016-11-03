@@ -132,9 +132,9 @@ var icons = {
     Scribe: "img/illustration.png",
     Tailor: "img/tailleur.png",
     Weaponsmith: "img/forgarme.png",
-    PlayForFree: "img/P4F.ico",
-    GuildWars2: "img/GW2.ico",
-    HeartOfThorns: "img/HoT.ico",
+    PlayForFree: "img/P4F.png",
+    GuildWars2: "img/GW2.png",
+    HeartOfThorns: "img/HoT.png",
     undefined: "img/nondefini.png"
 };
 var endPoint = "https://api.guildwars2.com/v2/";
@@ -155,6 +155,15 @@ var emptySlot = {
 
 function formatDate(t) {
     return new Date(t).toLocaleDateString();
+}
+
+function formatNbr(zeNbr) {
+    return new Intl.NumberFormat().format(zeNbr);
+}
+
+function formatPognon(zeNbr)
+{
+    return zeNbr = zeNbr.replace(/(\d+?)(\d{2})(\d{2})$/, '$1' + ' ' + '$2' + ' ' + '$3');
 }
 
 function getURL(path, key) {
@@ -273,8 +282,8 @@ function getIdents() {
                                                                                        accData.commander ? "<img src="+icons["comm"]+" class=\"icon\"> - " : "",
                                                                                        $("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
                                                                                        $("<span/>").addClass("fractlev").append($("<img/>").attr({src: icons["Fractals"], class: "icon", alt: "Niveau de fractales", title: "Niveau de fractales"}), accData.fractal_level)," - ",
-                                                                                       $("<span/>").addClass("wvwrank").append($("<img/>").attr({src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), accData.wvw_rank)," - ",
-                                                                                       $("<span/>").addClass("pvprank").append($("<img/>").attr({src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), accData.wvw_rank), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("." + account + " .pvprank").append(pvpstats.pvp_rank)}),
+                                                                                       $("<span/>").addClass("wvwrank").append($("<img/>").attr({src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), formatNbr(accData.wvw_rank))," - ",
+                                                                                       $("<span/>").addClass("pvprank").append($("<img/>").attr({src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("." + account + " .pvprank").append(pvpstats.pvp_rank)})),
                                                                                        $("<div/>").addClass("characters flexme")
                                                                                        )
                                     );
@@ -304,7 +313,7 @@ function getIdents() {
                                                $("<img/>").attr({src: icons[charData.profession], class: "icon " + charData.profession, alt: charData.profession, title: charData.profession }),
                                                charData.level +
                                                "<br>Né" + addE + " le " + formatDate(charData.created) +
-                                               "<br>" + charData.deaths + " décès" +
+                                               "<br>" + formatNbr(charData.deaths) + " décès" +
                                                discis)
                                               ).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
                                 var guildId = charData.guild;
@@ -375,7 +384,12 @@ function getWallet() {
                 $("tr.thead .currName").after($("<td/>").text(accName));
                 $("tr:not(.thead) .currName").after($("<td/>"));
                 $.each(data, function(i, curr) {
-                    $("#curr"+curr.id+"+ td").text(curr.value);
+                    if (curr.id == "1") {
+                        $("#curr"+curr.id+"+ td").text(formatPognon(curr.value+''));
+                    }
+                    else {
+                        $("#curr"+curr.id+"+ td").text(formatNbr(curr.value));
+                    }
                 });
             });
         });
@@ -532,7 +546,7 @@ function createBagItem(bagItem) {
         title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
      .data("name", bagItem.skin ? bagItem.sk.name.toLowerCase() : bagItem.item.name.toLowerCase());
     if (bagItem.count > 1) {
-        itemSlot.append($("<span/>").text(bagItem.count).addClass("count"));
+        itemSlot.append($("<span/>").text(formatNbr(bagItem.count)).addClass("count"));
     }
     else if (bagItem.count < 1) {
         itemSlot.addClass("r_Empty");
