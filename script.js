@@ -536,15 +536,19 @@ function createBagItem(bagItem) {
     if (bagItem.sk) {
         JSON.stringify(bagItem.sk.flags).search("OverrideRarity") > 1 ? bagItem.item.rarity = bagItem.sk.rarity : "";
     }
-    var itemSlot = $("<div/>").addClass("item").addClass("r_" + bagItem.item.rarity)
-     .attr({
-        type: bagItem.item.type,
-        level: bagItem.item.level,
-        slot: bagItem.slot ? bagItem.slot : "notstuff"})
-     .append($("<img/>").attr({
-        src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon,
-        title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
-     .data("name", bagItem.skin ? bagItem.sk.name.toLowerCase() : bagItem.item.name.toLowerCase());
+    var itemSlot = $("<div/>")
+                              .addClass("item")
+                              .addClass("r_" + bagItem.item.rarity)
+                              .addClass(bagItem.binding == "Account" ? "accBound" : "")
+                              .addClass(bagItem.binding == "Character" ? "chaBound " + bagItem.bound_to : "")
+                              .attr({
+                                type: bagItem.item.type,
+                                level: bagItem.item.level,
+                                slot: bagItem.slot ? bagItem.slot : "notstuff"})
+                              .append($("<img/>").attr({
+                                src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon,
+                                title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
+                              .data("name", (bagItem.skin ? bagItem.sk.name : bagItem.item.name).toLowerCase());
     if (bagItem.count > 1) {
         itemSlot.append($("<span/>").text(formatNbr(bagItem.count)).addClass("count"));
     }
