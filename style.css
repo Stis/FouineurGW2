@@ -233,12 +233,6 @@ h5 {
 .item img {
     height: 32px;
 }
-.chaBound {
-    border-left-color: lightblue;
-}
-.accBound {
-    border-left-color: red;
-}
 .r_Empty {
     border-color: #000;
     opacity: .2;
@@ -269,6 +263,12 @@ h5 {
 }
 .r_Unknown {
     border-color: red;
+}
+.chaBound {
+    border-left-color: lightblue;
+}
+.accBound {
+    border-left-color: lightcoral;
 }
 .Empty {
     color: black;
