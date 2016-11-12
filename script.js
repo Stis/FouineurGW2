@@ -820,6 +820,27 @@ function getPvP() {
 // PVP end
 // DAILY start
 function getDaily(when) {
+    function getLvl(json, what, which) {
+        var lvl;
+        $.each(json, function(i, dCat) {
+            $.each(dCat, function(i, ach) {
+                if (ach.id == what) {
+                    if (which == 0) {
+                        lvl = ach.level.min;
+                    }
+                    else if (which == 1) {
+                        lvl = ach.level.max;
+                    }
+                    else if (which == 2) {
+                        if (ach.required_access.length < 2) {
+                            lvl = ach.required_access[0];
+                        }
+                    }
+                }
+            });
+        });
+        return lvl
+    }
     resetView("daily");
     $("#content").append($("<table/>").prop("id","dailyList"));
     switch(when) {
@@ -829,12 +850,11 @@ function getDaily(when) {
     $.getJSON(url, function(data) {
         var ids = [];
         var levels = [];
-        $.each(data, function(i, pvx) {
-            ids = ids.concat(pvx.map(ach => ach.id));
-            // levels = levels.concat(pvx.map(ach => "\""+ach.id+"\":{\"min\":"+ach.level.min+",\"max\":"+ach.level.max+"}"));
+        $.each(data, function(i, dCat) {
+            ids = ids.concat(dCat.map(ach => ach.id));
+            // levels = levels.concat(dCat.map(ach => "\""+ach.id+"\":{\"min\":"+ach.level.min+",\"max\":"+ach.level.max+"}"));
         });
         $.getJSON(getURL("achievements?ids="+ids), function(dailyAch) {
-            dailyAch.sort(function(a,b) {return a.id > b.id;});
             var dummy=88;
             $.each(dailyAch, function(i, oneAch) {
                 oneIcon = oneAch.icon ? oneAch.icon : icons["dailypve"];
@@ -843,8 +863,8 @@ function getDaily(when) {
                 "<td title=\""+oneAch.id+"\"><img src=\""+oneIcon+"\"></td>",
                 "<td title=\""+oneAch.description+"\">"+oneAch.name+"</td>",
                 "<td>"+oneAch.requirement+"</td>",
-                "<td width=100>Min. : "+dummy+"<br>Max. : "+dummy+"</td>"
-                ));
+                "<td width=100>"+getLvl(data, oneAch.id, 0)+"<br>"+getLvl(data, oneAch.id, 1)+"</td>"
+                ).addClass(getLvl(data, oneAch.id, 2)));
             });
         });
     });

@@ -330,3 +330,9 @@ a {
 .hidden {
     display: none;
 }
+.GuildWars2 {
+    color: lightcoral;
+}
+.HeartOfThorns {
+    color: lightgreen;
+}
