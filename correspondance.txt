@@ -2,6 +2,7 @@ font/cronospro-italic-webfont.woff		https://d1h9a8s8eodvjz.cloudfront.net//fonts
 font/cronospro-regular-webfont.woff		https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-regular-webfont.woff
 font/cronospro-semibolditalic-webfont.woff	https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-semibolditalic-webfont.woff
 font/cronospro-semibold-webfont.woff		https://d1h9a8s8eodvjz.cloudfront.net//fonts/cronos/v1/cronospro-semibold-webfont.woff
+img/anniversaire.png				https://wiki.guildwars.com/images/archive/6/68/20080808143402%21Birthday_Present.png
 img/artificier.png				http://wiki.guildwars2.com/images/b/b7/Artificer_tango_icon_20px.png
 img/asura.png					https://wiki.guildwars2.com/images/1/1f/Asura_tango_icon_20px.png
 img/bijoutier.png				http://wiki.guildwars2.com/images/f/f2/Jeweler_tango_icon_20px.png
@@ -10,9 +11,11 @@ img/charr.png					https://wiki.guildwars2.com/images/f/fa/Charr_tango_icon_20px.
 img/chasseur.png				http://wiki.guildwars2.com/images/f/f3/Huntsman_tango_icon_20px.png
 img/commandant.png				http://wiki.guildwars2.com/images/5/54/Commander_tag_%28blue%29.png
 img/contacts.png				https://cdn3.iconfinder.com/data/icons/fatcow/16/book_addresses.png
+img/coupsdegrace.png				wiki
 img/courriers.png				https://cdn2.iconfinder.com/data/icons/fatcow/16x16/email_air.png
 img/cuir.png					https://render.guildwars2.com/file/BB34A319132236042659CE7B31DF6FA890FF6501/65954.png
 img/de.png					https://www.iconfinder.com/data/icons/fatcow/16x16/flag_germany.png
+img/deces.png					https://cdn4.iconfinder.com/data/icons/desktop-halloween/48/Tomb.png
 img/elementaliste.png				https://wiki.guildwars2.com/images/a/aa/Elementalist_tango_icon_20px.png
 img/en.png					https://www.iconfinder.com/data/icons/fatcow/16/flag_great_britain.png
 img/enconstruction.png				http://wiki.guildwars2.com/images/1/1d/Deleted_Item.png
@@ -67,5 +70,4 @@ img/travducuir.png				http://wiki.guildwars2.com/images/e/e5/Leatherworker_tango
 img/voleur.png					https://wiki.guildwars2.com/images/7/7a/Thief_tango_icon_20px.png
 img/yes.png					https://iconfinder.com/data/icons/fatcow/16/tick.png
 img/zh.png					https://www.iconfinder.com/data/icons/fatcow/16/flag_china.png
-jquery.min.js					http://code.jquery.com/jquery-2.1.4.min.js
-img/coupsdegrace.png				wiki
+jquery-3.1.1.min.js				http://code.jquery.com/jquery-3.1.1.min.js
