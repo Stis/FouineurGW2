@@ -279,15 +279,15 @@ function getIdents() {
             $.getJSON(getURL("worlds/" + accData.world), function(worlData) {
                 var account = accData.name.replace(/\s|\./g,"");
                 var typAcc = accData.access;
-                $("#content").append($("<div/>").addClass(account).append($("<h2/>").append(accData.name).attr("title", "Créé le " + formatDate(accData.created)),
-                                                                                       $("<h4/>").addClass("server").text(worlData.name),
-                                                                                       accData.commander ? "<img src="+icons["comm"]+" class=\"icon\"> - " : "",
-                                                                                       $("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
-                                                                                       $("<span/>").addClass("fractlev").append($("<img/>").attr({src: icons["Fractals"], class: "icon", alt: "Niveau de fractales", title: "Niveau de fractales"}), accData.fractal_level)," - ",
-                                                                                       $("<span/>").addClass("wvwrank").append($("<img/>").attr({src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), formatNbr(accData.wvw_rank))," - ",
-                                                                                       $("<span/>").addClass("pvprank").append($("<img/>").attr({src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("." + account + " .pvprank").append(pvpstats.pvp_rank)})),
-                                                                                       $("<div/>").addClass("characters flexme")
-                                                                                       )
+                $("#content").append($("<div/>").addClass(account).append(accData.commander ? "<img src="+icons["comm"]+" class=\"icon\">" : "",
+                                                                          $("<h2/>").append(accData.name).attr("title", "Créé le " + formatDate(accData.created)),
+                                                                          $("<h4/>").addClass("server").text(worlData.name),
+                                                                          $("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
+                                                                          $("<span/>").addClass("fractlev").append($("<img/>").attr({src: icons["Fractals"], class: "icon", alt: "Niveau de fractales", title: "Niveau de fractales"}), accData.fractal_level)," - ",
+                                                                          $("<span/>").addClass("wvwrank").append($("<img/>").attr({src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), formatNbr(accData.wvw_rank))," - ",
+                                                                          $("<span/>").addClass("pvprank").append($("<img/>").attr({src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("." + account + " .pvprank").append(pvpstats.pvp_rank)})),
+                                                                          $("<div/>").addClass("characters flexme")
+                                                                          )
                                     );
                 $.getJSON(getURL("characters", key), function(charsList) {
                     $.each(charsList, function(i, charName) {
@@ -378,7 +378,7 @@ function getWallet() {
         data.sort(function(a,b) {return a.order > b.order;});
         $.each(data, function(i, curr) {
             curr.description = curr.description ? curr.description.replace(/\"/g,'&quot;') : "";
-            result += "<tr title=\"" + curr.description + "\"><td id=\"curr" + curr.id + "\" class=\"currName\">" + curr.name + "</td><td><img src=\"" + curr.icon + "\"></td></tr>";
+            result += "<tr title=\"" + curr.description + "\"><td id=\"curr" + curr.id + "\" class=\"currName\">" + curr.name + "</td><td class=\"ico\"><img src=\"" + curr.icon + "\"></td></tr>";
         });
         $("#currList tr:last-of-type").after(result);
     });
@@ -386,7 +386,7 @@ function getWallet() {
         $.getJSON(getURL("account", key), function(data) {
             var accName = data.name;
             $.getJSON(getURL("account/wallet", key), function(data) {
-                $("tr.thead .currName").after($("<td/>").text(accName));
+                $("tr.thead .currName").after($("<td/>").addClass("accName").text(accName));
                 $("tr:not(.thead) .currName").after($("<td/>"));
                 $.each(data, function(i, curr) {
                     if (curr.id == "1") {
@@ -656,7 +656,7 @@ function getWard() {
                 for(var skin in data) {
                     data[skin].description = data[skin].description ? data[skin].description.replace(/\"/g,'&quot;') : "";
                     $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append(
-                        $("<td/>").html("<img src=\""+data[skin].icon+"\" title=\""+data[skin].description+"\">"),
+                        $("<td/>").addClass("ico").html("<img src=\""+data[skin].icon+"\" title=\""+data[skin].description+"\">"),
                         $("<td/>").addClass("skinname "+data[skin].rarity).html("<a href=\""+searchURL+data[skin].name+" skin\">"+data[skin].name+"</a>")
                         ));
                     // $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append(
@@ -679,7 +679,7 @@ function getWard() {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
             $.getJSON(getURL("account/skins", key), function(data) {
-                $("#wardList tr.thead td:last-of-type").after($("<td/>").text(accName));
+                $("#wardList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
                 $("#wardList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
                 for(var id in data) {
                     $("#skin"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
@@ -701,7 +701,7 @@ function getMinis() {
         for(var mini in data) {
             data[mini].unlock = data[mini].unlock ? data[mini].unlock.replace(/\"/g,'&quot;') : "";
             $("#minisList").append($("<tr/>").attr({id: "mini" + data[mini].id}).data("name", data[mini].name.toLowerCase()).append(
-                $("<td/>").html("<img src=\""+data[mini].icon+"\" title=\""+data[mini].unlock+"\">"),
+                $("<td/>").addClass("ico").html("<img src=\""+data[mini].icon+"\" title=\""+data[mini].unlock+"\">"),
                 $("<td/>").addClass("mininame").html("<a href=\""+searchURL+data[mini].item_id+"\">"+data[mini].name+"</a>")
                 ));
         }
@@ -711,7 +711,7 @@ function getMinis() {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
             $.getJSON(getURL("account/minis", key), function(data) {
-                $("#minisList tr.thead td:last-of-type").after($("<td/>").text(accName));
+                $("#minisList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
                 $("#minisList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
                 for(var id in data) {
                     $("#mini"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
@@ -731,7 +731,7 @@ function getFinish() {
         for(var finish in data) {
             data[finish].unlock = data[finish].unlock ? data[finish].unlock.replace(/\"/g,'&quot;') : "";
             $("#finishList").append($("<tr/>").attr({id: "finish" + data[finish].id}).data("name", data[finish].name.toLowerCase()).append(
-                $("<td/>").html("<img src=\""+data[finish].icon+"\" title=\""+data[finish].unlock+"\">"),
+                $("<td/>").addClass("ico").html("<img src=\""+data[finish].icon+"\" title=\""+data[finish].unlock+"\">"),
                 $("<td/>").addClass("mininame").html(data[finish].name)
                 ));
         }
@@ -741,7 +741,7 @@ function getFinish() {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
             $.getJSON(getURL("account/finishers", key), function(data) {
-                $("#finishList tr.thead td:last-of-type").after($("<td/>").text(accName));
+                $("#finishList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
                 $("#finishList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
                 for(var id in data) {
                     if (typeof data[id].quantity === 'undefined') {
@@ -757,7 +757,7 @@ function getFinish() {
 function getDyes() {
     resetView("dyes");
     $(".simpleFilter").removeClass("hidden");
-    $("#content").append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").prop("title","cloth"),$("<td/>").prop("title","leather"),$("<td/>").prop("title","metal"))));
+    $("#content").append($("<table/>").prop("id","dyeList").append($("<tr/>").addClass("thead").append($("<td/>").addClass("ico").prop("title","cloth"),$("<td/>").addClass("ico").prop("title","leather"),$("<td/>").addClass("ico").prop("title","metal"))));
     $(".thead td").each(function() {
         $(this).append($("<img/>").attr({src:icons[$(this).attr("title")],alt:$(this).attr("title")}));
     });
@@ -772,7 +772,7 @@ function getDyes() {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
             $.getJSON(getURL("account/dyes", key), function(data) {
-                $("tr.thead td[title=metal]").after($("<td/>").text(accName));
+                $("tr.thead td[title=metal]").after($("<td/>").addClass("accName").text(accName));
                 $("#dyeList tr:not(.thead) .dyename").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
                 for(var id in data) {
                     $("#dye"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});
@@ -801,7 +801,7 @@ function getTitles() {
             var accName = data.name;
             var account = data.name.replace(/\s|\./g,"");
             $.getJSON(getURL("account/titles", key), function(data) {
-                $("#titleList tr.thead td:last-of-type").after($("<td/>").text(accName));
+                $("#titleList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
                 $("#titleList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account).append($("<img/>").attr({src: icons["no"],alt: "0"}).addClass("yesno")));
                 for(var id in data) {
                     $("#title"+data[id]+" td."+account+" img").attr({src: icons["yes"],alt: "1"});

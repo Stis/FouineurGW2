@@ -161,10 +161,14 @@ tr:not(.thead) td:first-of-type img {
     height: 32px;
     margin: -1px 0 -6px 0;
 }
+#currList td:not([class]) {
+    text-align:right;
+}
 .account {
     border-right: 1px dotted #888;
 }
 h2 {
+    display: inline;
     margin-bottom: -5px;
 }
 h4 {
