@@ -819,8 +819,56 @@ function getRecipes() {
 // RECIPES end
 // PVP start
 function getPvP() {
+    function getVic(json, what) {
+        var vic;
+        $.each(json, function(i, prof) {
+            if (prof.id == what) {
+                vic = prof.current;
+            }
+        });
+        return vic
+    }
     resetView("pvp");
-    $("#content").text("WORK IN PROGRESS...");
+    $("#content").append(
+        $("<table/>").prop("id","pvpList").append(
+            $("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"))),
+            $("<tr/>").addClass("id267 élémentaliste").append($("<td/>").text("Élémentaliste")),
+            $("<tr/>").addClass("id270 envoûteur").append($("<td/>").text("Envoûteur")),
+            $("<tr/>").addClass("id269 gardien").append($("<td/>").text("Gardien")),
+            $("<tr/>").addClass("id274 guerrier").append($("<td/>").text("Guerrier")),
+            $("<tr/>").addClass("id268 ingénieur").append($("<td/>").text("Ingénieur")),
+            $("<tr/>").addClass("id271 nécromant").append($("<td/>").text("Nécromant")),
+            $("<tr/>").addClass("id2181 revenant").append($("<td/>").text("Revenant")),
+            $("<tr/>").addClass("id272 rôdeur").append($("<td/>").text("Rôdeur")),
+            $("<tr/>").addClass("id273 voleur").append($("<td/>").text("Voleur"))
+        )
+    );
+    $.each(guids, function(i, key) {
+        $.getJSON(getURL("account", key), function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            $.getJSON(getURL("account/achievements", key), function(data) {
+                $("#pvpList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
+                $("#pvpList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account));
+                [267,270,269,274,268,271,2181,272,273].forEach(function(ach) { $(".id"+ach+" td."+account).text(getVic(data, ach)); });
+            });
+        });
+    });
+    $.getJSON(getURL("achievements/daily"), function(data) {
+        var ids = [];
+        ids = ids.concat(data.pvp.map(ach => ach.id));
+        var done;
+        $.getJSON(getURL("achievements?ids="+ids), function(dailyAch) {
+            $.each(dailyAch, function(i, oneAch) {
+                var color = (done ? "#673737": "#373767");
+                var profs = oneAch.name.toLowerCase().split(" ");
+                if (["élémentaliste","envoûteur","gardien","guerrier","ingénieur","nécromant","revenant","rôdeur","voleur"].indexOf(profs[0]) > -1) {
+                    $("."+profs[0]+",."+profs[2]).css("background-color",color);
+                    done=1;
+                }
+            });
+        });
+    });
 }
 // PVP end
 // DAILY start
