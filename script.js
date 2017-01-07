@@ -413,10 +413,11 @@ function getBags() {
                 $("bagStuff").append($("<div/>").addClass(account + " account").append($("<h2/>").append(accName)));
                 getContent(key, account);
         });
-        if (i == guids.length){ sortStuff();};
     });
 
     document.querySelector("#filterInp").focus();
+
+    $("bagStuff").click(sortStuff);
 }
 
 function getContent(key, account) {
@@ -536,7 +537,7 @@ function updateBag(bag, target) {
 
 function createBagItem(bagItem) {
     if (!bagItem) {
-        var bagItem = {slot: "emptyslot", item: $.extend(true, {}, emptySlot)};
+        var bagItem = {item: $.extend(true, {}, emptySlot)};
     }
     if (bagItem.sk) {
         JSON.stringify(bagItem.sk.flags).search("OverrideRarity") > 1 ? bagItem.item.rarity = bagItem.sk.rarity : "";
@@ -549,7 +550,7 @@ function createBagItem(bagItem) {
                               .attr({
                                 type: bagItem.item.type,
                                 level: bagItem.item.level,
-                                slot: bagItem.slot ? bagItem.slot : "notstuff"})
+                                slot: bagItem.slot ? bagItem.slot : null})
                               .append($("<img/>").attr({
                                 src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon,
                                 title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
@@ -564,6 +565,7 @@ function createBagItem(bagItem) {
 }
 
 function sortStuff() {
+    $("bagStuff").off();
     return $(".stuff").each(function() {
         $(this).append(
             $("<div/>").append(
@@ -817,33 +819,6 @@ function getRecipes() {
     $("#content").text("WORK IN PROGRESS...");
 }
 // RECIPES end
-    function checkWin() {
-        var tdCount = $('#pvpList tr:eq(0) td').length,
-            trCount = $('#pvpList tr').length;
-
-        $.each(["rgb(103, 55, 55)","rgb(55, 55, 103)"], function(i, color) {
-            for (var i = 1; i < tdCount; i++) {
-                var $td = $('#pvpList tr:eq(1) td:eq(' + i + ')'),
-                    lowest = 9e99;
-
-                for (var j = 2; j < trCount; j++) {
-                    $td = $td.add('#pvpList tr:eq(' + j + ') td:eq(' + i + ')').filter(function() { return $(this).parent().css("background-color") == color; });
-                }
-
-                $td.each(function(i, el){
-                    var $el = $(el);
-                    if (i > -1) {
-                        var valRed = parseInt($el.text(), 10);
-                        if (valRed < lowest) {
-                            lowest = valRed;
-                            $td.removeClass('toPlay');
-                            $el.addClass('toPlay');
-                        }
-                    }
-                });
-            }
-        });
-    }
 // PVP start
 function getPvP() {
     function getVic(json, what) {
@@ -906,6 +881,33 @@ function getPvP() {
         $("#pvpList").click(checkWin);
 
 }
+    function checkWin() {
+        var tdCount = $('#pvpList tr:eq(0) td').length,
+            trCount = $('#pvpList tr').length;
+
+        $.each(["rgb(103, 55, 55)","rgb(55, 55, 103)"], function(i, color) {
+            for (var i = 1; i < tdCount; i++) {
+                var $td = $('#pvpList tr:eq(1) td:eq(' + i + ')'),
+                    lowest = 9e99;
+
+                for (var j = 2; j < trCount; j++) {
+                    $td = $td.add('#pvpList tr:eq(' + j + ') td:eq(' + i + ')').filter(function() { return $(this).parent().css("background-color") == color; });
+                }
+
+                $td.each(function(i, el){
+                    var $el = $(el);
+                    if (i > -1) {
+                        var valRed = parseInt($el.text(), 10);
+                        if (valRed < lowest) {
+                            lowest = valRed;
+                            $td.removeClass('toPlay');
+                            $el.addClass('toPlay');
+                        }
+                    }
+                });
+            }
+        });
+    }
 // PVP end
 // DAILY start
 function getDaily(when) {
