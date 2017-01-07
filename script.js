@@ -817,6 +817,33 @@ function getRecipes() {
     $("#content").text("WORK IN PROGRESS...");
 }
 // RECIPES end
+    function checkWin() {
+        var tdCount = $('#pvpList tr:eq(0) td').length,
+            trCount = $('#pvpList tr').length;
+
+        $.each(["rgb(103, 55, 55)","rgb(55, 55, 103)"], function(i, color) {
+            for (var i = 1; i < tdCount; i++) {
+                var $td = $('#pvpList tr:eq(1) td:eq(' + i + ')'),
+                    lowest = 9e99;
+
+                for (var j = 2; j < trCount; j++) {
+                    $td = $td.add('#pvpList tr:eq(' + j + ') td:eq(' + i + ')').filter(function() { return $(this).parent().css("background-color") == color; });
+                }
+
+                $td.each(function(i, el){
+                    var $el = $(el);
+                    if (i > -1) {
+                        var valRed = parseInt($el.text(), 10);
+                        if (valRed < lowest) {
+                            lowest = valRed;
+                            $td.removeClass('toPlay');
+                            $el.addClass('toPlay');
+                        }
+                    }
+                });
+            }
+        });
+    }
 // PVP start
 function getPvP() {
     function getVic(json, what) {
@@ -843,17 +870,11 @@ function getPvP() {
             $("<tr/>").addClass("id273 voleur").append($("<td/>").text("Voleur"))
         )
     );
-    $.each(guids, function(i, key) {
-        $.getJSON(getURL("account", key), function(data) {
-            var accName = data.name;
-            var account = data.name.replace(/\s|\./g,"");
-            $.getJSON(getURL("account/achievements", key), function(data) {
-                $("#pvpList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
-                $("#pvpList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account));
-                [267,270,269,274,268,271,2181,272,273].forEach(function(ach) { $(".id"+ach+" td."+account).text(getVic(data, ach)); });
-            });
-        });
-    });
+    // $.getJSON(getURL("professions?ids=all"), function(data) {
+    //     var profList = [];
+    //         profList = profList.concat(data.map(prof => prof.name)).sort(function(a,b){return a.localeCompare(b);});
+    //     console.log(profList);
+    // });
     $.getJSON(getURL("achievements/daily"), function(data) {
         var ids = [];
         ids = ids.concat(data.pvp.map(ach => ach.id));
@@ -869,6 +890,21 @@ function getPvP() {
             });
         });
     });
+    $.each(guids, function(i, key) {
+        $.getJSON(getURL("account", key), function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            $.getJSON(getURL("account/achievements", key), function(data) {
+                $("#pvpList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
+                $("#pvpList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account));
+                [267,270,269,274,268,271,2181,272,273].forEach(function(ach) { $(".id"+ach+" td."+account).text(getVic(data, ach)); });
+            });
+        });
+    });
+
+
+        $("#pvpList").click(checkWin);
+
 }
 // PVP end
 // DAILY start
