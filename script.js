@@ -139,7 +139,6 @@ var icons = {
     Deaths: "img/deces.png",
     undefined: "img/nondefini.png"
 };
-var endPoint = "https://api.guildwars2.com/v2/";
 var unkItem = {
     icon: "img/enconstruction.png",
     name: "Objet non identifié",
@@ -168,8 +167,9 @@ function formatPognon(zeNbr)
     return zeNbr = zeNbr.replace(/(\d+?)(\d{2})(\d{2})$/, '$1' + ' ' + '$2' + ' ' + '$3');
 }
 
-function getURL(path, key) {
-    var url = endPoint + path;
+function getURL(endPoint, key) {
+    var startURL = "https://api.guildwars2.com/v2/";
+    var url = startURL + endPoint;
     key ? url += "?access_token=" + key : "";
     return url;
 }
@@ -560,6 +560,9 @@ function createBagItem(bagItem) {
     }
     else if (bagItem.count < 1) {
         itemSlot.addClass("r_Empty");
+    }
+    else if (bagItem.charges >1) {
+        itemSlot.append($("<span/>").text(formatNbr(bagItem.charges)).addClass("count charge"));
     }
     return itemSlot;
 }
