@@ -72,7 +72,10 @@ var Cache = {
 var guids;
 var items = Object.create(Cache).init({ key: "itemCache" });
 var skins = Object.create(Cache).init({ key: "skinCache" });
+var stats = Object.create(Cache).init({ key: "statCache" });
 var unknownItems = Object.create(Cache).init({ key: "unknownItemCache", ttl: 24 * 60 * 60 * 1000 });
+var unknownSkins = Object.create(Cache).init({ key: "unknownSkinCache", ttl: 24 * 60 * 60 * 1000 });
+var unknownStats = Object.create(Cache).init({ key: "unknownStatCache", ttl: 24 * 60 * 60 * 1000 });
 var dyes = Object.create(Cache).init({ key: "dyeCache" }); // finalement, il semble
 var wallet = Object.create(Cache).init({ key: "walletCache" }); // que j'ai oublié
 var sharedBag = Object.create(Cache).init({ key: "sharedBag" }); // de me servir de ça
@@ -176,7 +179,7 @@ function getURL(endPoint, key) {
 
 function buildVer() {
     $.getJSON(getURL("build"), function(data){
-        $("#build").html(data.id);
+        $("#build").text(data.id);
     });
 }
 
@@ -188,10 +191,6 @@ $(window).on("load", function() {
         };
     });
     guids = JSON.parse(localStorage.getItem("guids") || "[]");
-    initEvents();
-});
-
-function initEvents() {
     if ($("#intro:not(.hidden)")) {
         if (guids) {
             $.each(guids, function(i, key) {
@@ -244,7 +243,7 @@ function initEvents() {
     $("#getDaily").click(function() {getDaily("today");});
     $("#getDailyTom").click(function() {getDaily("tomorrow");});
     $("#build").click(buildVer);
-}
+});
 
 function resetView(who) {
     $("#content").empty();
@@ -305,7 +304,7 @@ function getIdents() {
                                 charDiv.append($("<div/>").addClass("name").text(charName),
                                                $("<div/>").addClass("title"),
                                                    charData.title ? $.getJSON(getURL("titles/"+charData.title), function(title) {charDiv.children(".title").text(title.name)})
-                                                                     .fail(function(data, err) {charDiv.children(".title").text("- Erreur API -")}) : "",
+                                                                     .fail(function() {charDiv.children(".title").text("<i>- non trouvé -</i>")}) : "",
                                                $("<div/>").addClass("bio"),
                                                    $.getJSON(getURL("characters/" + charName + "/backstory", key), function(bios) {
                                                      $.getJSON(getURL("backstory/answers?ids="+JSON.stringify(bios.backstory).replace(/\[|\]|\"/g,"")), function(choices) {
@@ -328,7 +327,7 @@ function getIdents() {
                                         charDiv.append($("<img/>").addClass("charBg").attr("src", "http://guilds.gw2w2w.com/" + guildId + ".svg"));
                                     }
                                     if (guilds.isStale(guildId)) {
-                                        $.getJSON("https://api.guildwars2.com/v1/guild_details?guild_id=" + guildId, function(guildData) {
+                                        $.getJSON("https://api.guildwars2.com/v2/guild/" + guildId, function(guildData) {
                                             guilds.set(guildId, guildData);
                                             insertGuildIntoPage(guildData);
                                         });
@@ -415,7 +414,7 @@ function getBags() {
         });
     });
 
-    document.querySelector("#filterInp").focus();
+    $("#filterInp").focus();
 
     $("bagStuff").click(sortStuff);
 }
@@ -482,19 +481,30 @@ function getMatsData(key, account) {
 function getBag(bag, target) {
     var itemIDs = [];
     var skinIDs = [];
+    var statIDs = [];
     for (var bagItem of bag) {
         if (bagItem) {
             if (!items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
                 itemIDs.push(bagItem.id);
             }
-            if (bagItem.skin && !skins.cache[bagItem.skin] && unknownItems.isStale(bagItem.skin)) {
+            if (bagItem.skin && !skins.cache[bagItem.skin] && unknownSkins.isStale(bagItem.skin)) {
                 skinIDs.push(bagItem.skin);
+            }
+            if (bagItem.upgrades && !items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
+                itemIDs.push(bagItem.upgrades);
+            }
+            if (bagItem.infusions && !items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
+                itemIDs.push(bagItem.infusions);
+            }
+            if (bagItem.stats && !stats.cache[bagItem.stats.id] && unknownStats.isStale(bagItem.stats.id)) {
+                statIDs.push(bagItem.stats.id);
             }
         }
     };
     Promise.resolve()
     .then(loadItems.bind(this, skinIDs, "skins"))
     .then(loadItems.bind(this, itemIDs, "items"))
+    // .then(loadItems.bind(this, statIDs, "itemstats"))
     .catch(function(err) {
         console.error("Erreur : ", err);
     })
@@ -512,7 +522,16 @@ function loadItems(ids, type) {
     }).fail(function(jqXHR) {
         if (jqXHR.status === 404) {
             ids.forEach(function(id) {
-                unknownItems.set(id, {});
+                switch(type) {
+                    case "skins":
+                        unknownSkins.set(id, {});
+                        break;
+                    case "itemstats":
+                        unknownStats.set(id, {});
+                        break;
+                    default:
+                        unknownItems.set(id, {});
+                }
             })
         }
     });
@@ -550,10 +569,8 @@ function createBagItem(bagItem) {
                               .attr({
                                 type: bagItem.item.type,
                                 level: bagItem.item.level,
-                                slot: bagItem.slot ? bagItem.slot : null})
-                              .append($("<img/>").attr({
-                                src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon,
-                                title: bagItem.skin ? bagItem.sk.name : bagItem.item.name}))
+                                slot: bagItem.slot})
+                              .html($("<img/>").attr({src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon}))
                               .data("name", (bagItem.skin ? bagItem.sk.name : bagItem.item.name).toLowerCase());
     if (bagItem.count > 1) {
         itemSlot.append($("<span/>").text(formatNbr(bagItem.count)).addClass("count"));
@@ -561,10 +578,31 @@ function createBagItem(bagItem) {
     else if (bagItem.count < 1) {
         itemSlot.addClass("r_Empty");
     }
-    else if (bagItem.charges >1) {
+    else if (bagItem.charges > 1) {
         itemSlot.append($("<span/>").text(formatNbr(bagItem.charges)).addClass("count charge"));
     }
+    if (itemSlot.attr("type") != "Empty") {
+        itemSlot.hover(function() {
+            $("#toolTip").toggle();
+        });
+        itemSlot.mouseenter(function() {
+            showToolTip(bagItem, itemSlot);
+        });
+    }
     return itemSlot;
+}
+
+function showToolTip(bagItem, itemSlot) {
+    $("#toolTip").empty().append(
+        $("<div/>").addClass(bagItem.item.rarity).text(bagItem.skin ? bagItem.sk.name : bagItem.item.name).append(" ("+bagItem.item.level+")"),
+        $("<div/>").addClass("inactive").text(bagItem.skin ? bagItem.item.name : ""),
+        bagItem.bound_to ? $("<div/>").text("Lié à : "+bagItem.bound_to) : ""
+    );
+    var isPos = itemSlot.offset();
+    $("#toolTip").css({
+        "top": (isPos.top - $("#toolTip").height() - 6) + "px",
+        "left": isPos.left + "px"
+    });
 }
 
 function sortStuff() {
@@ -737,7 +775,7 @@ function getFinish() {
             data[finish].unlock = data[finish].unlock ? data[finish].unlock.replace(/\"/g,'&quot;') : "";
             $("#finishList").append($("<tr/>").attr({id: "finish" + data[finish].id}).data("name", data[finish].name.toLowerCase()).append(
                 $("<td/>").addClass("ico").html("<img src=\""+data[finish].icon+"\" title=\""+data[finish].unlock+"\">"),
-                $("<td/>").addClass("mininame").html(data[finish].name)
+                $("<td/>").addClass("mininame").text(data[finish].name)
                 ));
         }
     });
@@ -793,11 +831,11 @@ function getTitles() {
     $(".simpleFilter").removeClass("hidden");
     $("#content").append($("<table/>").prop("id","titleList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead")))));
     $.getJSON(getURL("titles?ids=all"), function(data) {
-        data.sort(function(a,b) {return a.name > b.name;});
+        data.sort(function(a,b){return a.name.localeCompare(b.name);})
         for(var title in data) {
             $("#titleList").append($("<tr/>").attr({id: "title" + data[title].id}).data("name", data[title].name.toLowerCase()).append(
                  // débloque par data[title].achivement
-                $("<td/>").addClass("titlename").html(data[title].name)
+                $("<td/>").addClass("titlename").text(data[title].name)
                 ));
         }
     });

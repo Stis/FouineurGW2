@@ -30,6 +30,16 @@ body {
     background-color: #555;
     color: #CACACA;
 }
+#toolTip {
+    z-index: 11;
+    display: none;
+    position: absolute;
+    background-color: #444;
+    border-radius: 8px;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, .24), 0 1.5px 6px rgba(0, 0, 0, .12);
+    padding: 3px;
+    text-align: left;
+}
 #header {
     position: absolute;
     left: 0;
