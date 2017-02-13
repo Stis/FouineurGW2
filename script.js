@@ -666,7 +666,7 @@ function itemFilter() {
             $(this).removeClass("hidden");
         }
     });
-    $(".character").each(function() {
+    $(".character, .bank, .mats").each(function() {
         if ($(this).find(".item:not(.hidden)").length == 0) {
             $(this).addClass("hidden");
         } else {
