@@ -540,11 +540,16 @@ function loadItems(ids, type) {
 function updateBag(bag, target) {
     for (var bagItem of bag) {
         if (bagItem) {
-            bagItem.item = items.cache[bagItem.id];
-            bagItem.sk = skins.cache[bagItem.skin];
-            if (!bagItem.item) {
-                bagItem.item = $.extend(true, {}, unkItem);
-                bagItem.item.name += " [" + bagItem.id + "]";
+            $.extend(true, bagItem, items.cache[bagItem.id]);
+            if (bagItem.skin) {
+                bagItem.default_skin = bagItem.name;
+                bagItem.name = skins.cache[bagItem.skin].name;
+                bagItem.icon = skins.cache[bagItem.skin].icon;
+                JSON.stringify(skins.cache[bagItem.skin].flags).search("OverrideRarity") > 1 ? bagItem.rarity = skins.cache[bagItem.skin].rarity : "";
+            }
+            if (!bagItem.name) {
+                bagItem = $.extend(true, {}, unkItem);
+                bagItem.name += " [" + bagItem.id + "]";
             }
             target.append(createBagItem(bagItem));
         }
@@ -556,22 +561,19 @@ function updateBag(bag, target) {
 
 function createBagItem(bagItem) {
     if (!bagItem) {
-        var bagItem = {item: $.extend(true, {}, emptySlot)};
-    }
-    if (bagItem.sk) {
-        JSON.stringify(bagItem.sk.flags).search("OverrideRarity") > 1 ? bagItem.item.rarity = bagItem.sk.rarity : "";
+        var bagItem = $.extend({}, emptySlot);
     }
     var itemSlot = $("<div/>")
                               .addClass("item")
-                              .addClass("r_" + bagItem.item.rarity)
+                              .addClass("r_" + bagItem.rarity)
                               .addClass(bagItem.binding == "Account" ? "accBound" : "")
                               .addClass(bagItem.binding == "Character" ? "chaBound " + bagItem.bound_to : "")
                               .attr({
-                                type: bagItem.item.type,
-                                level: bagItem.item.level,
+                                type: bagItem.type,
+                                level: bagItem.level,
                                 slot: bagItem.slot})
-                              .html($("<img/>").attr({src: bagItem.skin ? bagItem.sk.icon : bagItem.item.icon}))
-                              .data("name", (bagItem.skin ? bagItem.sk.name : bagItem.item.name).toLowerCase());
+                              .html($("<img/>").attr({src: bagItem.icon}))
+                              .data("name", (bagItem.name).toLowerCase());
     if (bagItem.count > 1) {
         itemSlot.append($("<span/>").text(formatNbr(bagItem.count)).addClass("count"));
     }
@@ -594,9 +596,10 @@ function createBagItem(bagItem) {
 
 function showToolTip(bagItem, itemSlot) {
     $("#toolTip").empty().append(
-        $("<div/>").addClass(bagItem.item.rarity).text(bagItem.skin ? bagItem.sk.name : bagItem.item.name).append(" ("+bagItem.item.level+")"),
-        $("<div/>").addClass("inactive").text(bagItem.skin ? bagItem.item.name : ""),
-        bagItem.bound_to ? $("<div/>").text("Lié à : "+bagItem.bound_to) : ""
+        $("<div/>").addClass(bagItem.rarity).text(bagItem.name).append(bagItem.level != 0 ? " ("+bagItem.level+")": ""),
+        $("<div/>").addClass("inactive").text(bagItem.skin ? bagItem.default_skin : ""),
+        bagItem.bound_to ? $("<div/>").text("Lié à : "+bagItem.bound_to) : "",
+        bagItem.binding == "Account" ? $("<div/>").text("Lié au compte") : ""
     );
     var isPos = itemSlot.offset();
     $("#toolTip").css({
