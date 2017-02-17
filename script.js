@@ -1,35 +1,3 @@
-/*!
- * listAttributes jQuery Plugin v1.1.0
- *
- * Copyright 2010, Michael Riddle
- * Licensed under the MIT
- * http://jquery.org/license
- *
- * Date: Sun Mar 28 05:49:39 2010 -0900
- *
- *https://jquery-list-attributes.googlecode.com/files/jquery.listAttributes.js
- */
-if (jQuery) {
-    jQuery(document).ready(function() {
-        jQuery.fn.listAttributes = function(prefix) {
-            var list = [];
-            $(this).each(function() {
-                //console.info(this);
-                var attributes = [];
-                for (var key in this.attributes) {
-                    if (!isNaN(key)) {
-                        if (!prefix || this.attributes[key].name.substr(0, prefix.length) == prefix) {
-                            attributes.push(this.attributes[key].value);
-                        }
-                    }
-                }
-                list.push(attributes);
-            });
-            return (list.length > 1 ? list : list[0]);
-        };
-    });
-}
-
 var Cache = {
     saveDelay: 1000,
     timeoutId: undefined,
@@ -69,17 +37,14 @@ var Cache = {
     },
     constructor: Cache
 };
-var guids;
-var items = Object.create(Cache).init({ key: "itemCache" });
-var skins = Object.create(Cache).init({ key: "skinCache" });
-var stats = Object.create(Cache).init({ key: "statCache" });
-var unknownItems = Object.create(Cache).init({ key: "unknownItemCache", ttl: 24 * 60 * 60 * 1000 });
-var unknownSkins = Object.create(Cache).init({ key: "unknownSkinCache", ttl: 24 * 60 * 60 * 1000 });
-var unknownStats = Object.create(Cache).init({ key: "unknownStatCache", ttl: 24 * 60 * 60 * 1000 });
-var dyes = Object.create(Cache).init({ key: "dyeCache" }); // finalement, il semble
-var wallet = Object.create(Cache).init({ key: "walletCache" }); // que j'ai oublié
-var sharedBag = Object.create(Cache).init({ key: "sharedBag" }); // de me servir de ça
-var guilds = Object.create(Cache).init({ key: "guildCache", ttl: 24 * 60 * 60 * 1000 });
+var guids        = JSON.parse(localStorage.getItem("guids") || "[]");
+var guilds       = Object.create(Cache).init({ key: "guildCache", ttl: 24 * 60 * 60 * 1000 });
+var items        = Object.create(Cache).init({ key: "itemCache" });
+var itemsUnk     = Object.create(Cache).init({ key: "itemUnkCache", ttl: 24 * 60 * 60 * 1000 });
+var itemstats    = Object.create(Cache).init({ key: "itemstatCache" });
+var itemstatsUnk = Object.create(Cache).init({ key: "itemstatUnkCache", ttl: 24 * 60 * 60 * 1000 });
+var skins        = Object.create(Cache).init({ key: "skinCache" });
+var skinsUnk     = Object.create(Cache).init({ key: "skinUnkCache", ttl: 24 * 60 * 60 * 1000 });
 var icons = {
     de: "img/de.png",
     en: "img/en.png",
@@ -142,19 +107,19 @@ var icons = {
     Deaths: "img/deces.png",
     undefined: "img/nondefini.png"
 };
-var unkItem = {
-    icon: "img/enconstruction.png",
-    name: "Objet non identifié",
-    rarity: "Unknown",
-    level: "0",
-    type: "Unknown"
-};
 var emptySlot = {
     icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII=",
     name: "Slot vide",
     rarity: "Empty",
     level: "0",
     type: "Empty"
+};
+var unkItem = {
+    icon: "img/enconstruction.png",
+    name: "Objet non identifié",
+    rarity: "Unknown",
+    level: "0",
+    type: "Unknown"
 };
 
 function formatDate(t) {
@@ -190,7 +155,6 @@ $(window).on("load", function() {
             $(this).prepend($("<img/>").attr({src: icons[$(this).attr("class")], alt: $(this).attr("class"), title: $(this).attr("class") }));
         };
     });
-    guids = JSON.parse(localStorage.getItem("guids") || "[]");
     if ($("#intro:not(.hidden)")) {
         if (guids) {
             $.each(guids, function(i, key) {
@@ -200,7 +164,7 @@ $(window).on("load", function() {
         }
     }
     $("#saveKeys").click(function() {
-        guids = $("#keyList").val().replace("#","").split(/\n| |,/);
+        guids = $("#keyList").val().split(/\n| |,/);
         localStorage.setItem("guids", JSON.stringify(guids));
         location.reload(true);
     });
@@ -292,7 +256,7 @@ function getIdents() {
                     $.each(charsList, function(i, charName) {
                         $.getJSON(getURL("characters/" + charName + "/core", key), function(charData) {
                             $.getJSON(getURL("characters/" + charName + "/crafting", key), function(charCraftData) {
-                                var charDiv = $("<div/>").addClass("character");
+                                var charDiv = $("<div/>").addClass("character" + " " + charData.race + " " + charData.profession + " " + charData.gender).attr({level: charData.level});
                                 $("." + account + " .characters").append(charDiv);
                                 var discis = "";
                                 $.each(charCraftData.crafting, function(i, disci) {
@@ -319,7 +283,7 @@ function getIdents() {
                                                    "<br>", $("<img/>").attr({src: icons["Birthday"], class: "icon "}), formatDate(charData.created),
                                                    "<br>", $("<img/>").attr({src: icons["Deaths"], class: "icon "}), formatNbr(charData.deaths),
                                                    discis)
-                                              ).attr({race: charData.race,prof: charData.profession,gender: charData.gender,level: charData.level});
+                                              );
                                 var guildId = charData.guild;
                                 if (guildId) {
                                     function insertGuildIntoPage(guildData) {
@@ -352,7 +316,7 @@ function charFilter() {
     }).get();
     $(".character").each(function() {
         var charLev = parseInt($(this).attr("level"));
-        var charAttr = $(this).listAttributes();
+        var charAttr = $(this).attr("class").split(" ").slice(1);
         if (
             levCMin > charLev ||
             charLev > levCMax ||
@@ -484,19 +448,19 @@ function getBag(bag, target) {
     var statIDs = [];
     for (var bagItem of bag) {
         if (bagItem) {
-            if (!items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
+            if (!items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
                 itemIDs.push(bagItem.id);
             }
-            if (bagItem.skin && !skins.cache[bagItem.skin] && unknownSkins.isStale(bagItem.skin)) {
+            if (bagItem.skin && !skins.cache[bagItem.skin] && skinsUnk.isStale(bagItem.skin)) {
                 skinIDs.push(bagItem.skin);
             }
-            if (bagItem.upgrades && !items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
+            if (bagItem.upgrades && !items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
                 itemIDs.push(bagItem.upgrades);
             }
-            if (bagItem.infusions && !items.cache[bagItem.id] && unknownItems.isStale(bagItem.id)) {
+            if (bagItem.infusions && !items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
                 itemIDs.push(bagItem.infusions);
             }
-            if (bagItem.stats && !stats.cache[bagItem.stats.id] && unknownStats.isStale(bagItem.stats.id)) {
+            if (bagItem.stats && !itemstats.cache[bagItem.stats.id] && itemstatsUnk.isStale(bagItem.stats.id)) {
                 statIDs.push(bagItem.stats.id);
             }
         }
@@ -504,7 +468,7 @@ function getBag(bag, target) {
     Promise.resolve()
     .then(loadItems.bind(this, skinIDs, "skins"))
     .then(loadItems.bind(this, itemIDs, "items"))
-    // .then(loadItems.bind(this, statIDs, "itemstats"))
+    .then(loadItems.bind(this, statIDs, "itemstats"))
     .catch(function(err) {
         console.error("Erreur : ", err);
     })
@@ -522,16 +486,7 @@ function loadItems(ids, type) {
     }).fail(function(jqXHR) {
         if (jqXHR.status === 404) {
             ids.forEach(function(id) {
-                switch(type) {
-                    case "skins":
-                        unknownSkins.set(id, {});
-                        break;
-                    case "itemstats":
-                        unknownStats.set(id, {});
-                        break;
-                    default:
-                        unknownItems.set(id, {});
-                }
+                eval(type+"Unk").set(id, {});
             })
         }
     });
@@ -564,12 +519,10 @@ function createBagItem(bagItem) {
         var bagItem = $.extend({}, emptySlot);
     }
     var itemSlot = $("<div/>")
-                              .addClass("item")
-                              .addClass("r_" + bagItem.rarity)
+                              .addClass("item" + " r_" + bagItem.rarity + " " + bagItem.type)
                               .addClass(bagItem.binding == "Account" ? "accBound" : "")
                               .addClass(bagItem.binding == "Character" ? "chaBound " + bagItem.bound_to : "")
                               .attr({
-                                type: bagItem.type,
                                 level: bagItem.level,
                                 slot: bagItem.slot})
                               .html($("<img/>").attr({src: bagItem.icon}))
@@ -655,7 +608,7 @@ function itemFilter() {
     $(".item").each(function() {
         var itemLev = parseInt($(this).attr("level"));
         var name = $(this).data("name");
-        var itemAttr = [$(this).attr("class").split(" ")[1].slice(2),$(this).attr("type")];
+        var itemAttr = $(this).attr("class").slice(7).split(" ");
         if (
             levIMin > itemLev ||
             itemLev > levIMax ||
