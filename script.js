@@ -1,3 +1,4 @@
+
 var Cache = {
     saveDelay: 1000,
     timeoutId: undefined,
