@@ -1,4 +1,3 @@
-
 var Cache = {
     saveDelay: 1000,
     timeoutId: undefined,
@@ -139,7 +138,7 @@ function formatPognon(zeNbr)
 function getURL(endPoint, key) {
     var startURL = "https://api.guildwars2.com/v2/";
     var url = startURL + endPoint;
-    key ? url += "?access_token=" + key : "";
+    key ? url += "?access_token=" + key : null;
     return url;
 }
 
@@ -243,7 +242,7 @@ function getIdents() {
             $.getJSON(getURL("worlds/" + accData.world), function(worlData) {
                 var account = accData.name.replace(/\s|\./g,"");
                 var typAcc = accData.access;
-                $("#content").append($("<div/>").addClass(account).append(accData.commander ? "<img src="+icons["comm"]+" class=\"icon\">" : "",
+                $("#content").append($("<div/>").addClass(account).append(accData.commander ? "<img src="+icons["comm"]+" class=\"icon\">" : null,
                                                                           $("<h2/>").append(accData.name).attr("title", "Créé le " + formatDate(accData.created)),
                                                                           $("<h4/>").addClass("server").text(worlData.name),
                                                                           $("<img/>").attr({src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
@@ -269,7 +268,7 @@ function getIdents() {
                                 charDiv.append($("<div/>").addClass("name").text(charName),
                                                $("<div/>").addClass("title"),
                                                    charData.title ? $.getJSON(getURL("titles/"+charData.title), function(title) {charDiv.children(".title").text(title.name)})
-                                                                     .fail(function() {charDiv.children(".title").text("<i>- non trouvé -</i>")}) : "",
+                                                                     .fail(function() {charDiv.children(".title").text("<i>- non trouvé -</i>")}) : null,
                                                $("<div/>").addClass("bio"),
                                                    $.getJSON(getURL("characters/" + charName + "/backstory", key), function(bios) {
                                                      $.getJSON(getURL("backstory/answers?ids="+JSON.stringify(bios.backstory).replace(/\[|\]|\"/g,"")), function(choices) {
@@ -341,7 +340,7 @@ function getWallet() {
         var result;
         data.sort(function(a,b) {return a.order > b.order;});
         $.each(data, function(i, curr) {
-            curr.description = curr.description ? curr.description.replace(/\"/g,'&quot;') : "";
+            curr.description = curr.description ? curr.description.replace(/\"/g,'&quot;') : null;
             result += "<tr title=\"" + curr.description + "\"><td id=\"curr" + curr.id + "\" class=\"currName\">" + curr.name + "</td><td class=\"ico\"><img src=\"" + curr.icon + "\"></td></tr>";
         });
         $("#currList tr:last-of-type").after(result);
@@ -501,7 +500,7 @@ function updateBag(bag, target) {
                 bagItem.default_skin = bagItem.name;
                 bagItem.name = skins.cache[bagItem.skin].name;
                 bagItem.icon = skins.cache[bagItem.skin].icon;
-                JSON.stringify(skins.cache[bagItem.skin].flags).search("OverrideRarity") > 1 ? bagItem.rarity = skins.cache[bagItem.skin].rarity : "";
+                JSON.stringify(skins.cache[bagItem.skin].flags).search("OverrideRarity") > 1 ? bagItem.rarity = skins.cache[bagItem.skin].rarity : null;
             }
             if (!bagItem.name) {
                 bagItem = $.extend(true, {}, unkItem);
@@ -519,10 +518,9 @@ function createBagItem(bagItem) {
     if (!bagItem) {
         var bagItem = $.extend({}, emptySlot);
     }
-    var itemSlot = $("<div/>")
-                              .addClass("item" + " r_" + bagItem.rarity + " " + bagItem.type)
-                              .addClass(bagItem.binding == "Account" ? "accBound" : "")
-                              .addClass(bagItem.binding == "Character" ? "chaBound " + bagItem.bound_to : "")
+    var itemSlot = $("<div/>").addClass("item" + " r_" + bagItem.rarity + " " + bagItem.type)
+                              .addClass(bagItem.binding == "Account" ? "accBound" : null)
+                              .addClass(bagItem.binding == "Character" ? "chaBound " + bagItem.bound_to : null)
                               .attr({
                                 level: bagItem.level,
                                 slot: bagItem.slot})
@@ -550,16 +548,26 @@ function createBagItem(bagItem) {
 
 function showToolTip(bagItem, itemSlot) {
     $("#toolTip").empty().append(
-        $("<div/>").addClass(bagItem.rarity).text(bagItem.name).append(bagItem.level != 0 ? " ("+bagItem.level+")": ""),
-        $("<div/>").addClass("inactive").text(bagItem.skin ? bagItem.default_skin : ""),
-        bagItem.bound_to ? $("<div/>").text("Lié à : "+bagItem.bound_to) : "",
-        bagItem.binding == "Account" ? $("<div/>").text("Lié au compte") : ""
+        $("<div/>").addClass(bagItem.rarity).text(bagItem.name).append(bagItem.level != 0 ? " ("+bagItem.level+")": null),
+        $("<div/>").addClass("inactive").text(bagItem.skin ? bagItem.default_skin : null),
+        bagItem.bound_to ? $("<div/>").text("Lié à : "+bagItem.bound_to) : null,
+        bagItem.binding == "Account" ? $("<div/>").text("Lié au compte") : null,
+        $.map([].concat(bagItem.upgrades,bagItem.infusions).filter(Number), function(upIt) {
+            return createToolTipItem(items.cache[upIt]);
+        })
     );
     var isPos = itemSlot.offset();
     $("#toolTip").css({
         "top": (isPos.top - $("#toolTip").height() - 6) + "px",
         "left": isPos.left + "px"
     });
+}
+
+function createToolTipItem(bagItem) {
+    var itemSlot = $("<div/>").addClass("item tt" + " r_" + bagItem.rarity)
+                      .html($("<img/>").attr({src: bagItem.icon}));
+    bagItem.name.indexOf("+") > -1 ? itemSlot.append($("<span/>").text(bagItem.name.match(/(\+.*?)( |$)/)[1]).addClass("count")) : null;
+    return itemSlot;
 }
 
 function sortStuff() {
@@ -606,7 +614,7 @@ function itemFilter() {
     var toHide = $("#items input:checkbox:not(:checked,.checkAll)").map(function() {
         return $(this).next("label").attr("class");
     }).get();
-    $(".item").each(function() {
+    $(".item:not(.tt)").each(function() {
         var itemLev = parseInt($(this).attr("level"));
         var name = $(this).data("name");
         var itemAttr = $(this).attr("class").slice(7).split(" ");
@@ -661,7 +669,7 @@ function getWard() {
         while (count > -1) {
             $.getJSON(getURL("skins?page="+count+"&page_size=200"), function(data) {
                 for(var skin in data) {
-                    data[skin].description = data[skin].description ? data[skin].description.replace(/\"/g,'&quot;') : "";
+                    data[skin].description = data[skin].description ? data[skin].description.replace(/\"/g,'&quot;') : null;
                     $("#wardList").append($("<tr/>").attr({id: "skin" + data[skin].id}).data("name", data[skin].name.toLowerCase()).append(
                         $("<td/>").addClass("ico").html("<img src=\""+data[skin].icon+"\" title=\""+data[skin].description+"\">"),
                         $("<td/>").addClass("skinname "+data[skin].rarity).html("<a href=\""+searchURL+data[skin].name+" skin\">"+data[skin].name+"</a>")
@@ -706,7 +714,7 @@ function getMinis() {
     $.getJSON(getURL("minis?ids=all"), function(data) {
         data.sort(function(a,b) {return a.order > b.order;});
         for(var mini in data) {
-            data[mini].unlock = data[mini].unlock ? data[mini].unlock.replace(/\"/g,'&quot;') : "";
+            data[mini].unlock = data[mini].unlock ? data[mini].unlock.replace(/\"/g,'&quot;') : null;
             $("#minisList").append($("<tr/>").attr({id: "mini" + data[mini].id}).data("name", data[mini].name.toLowerCase()).append(
                 $("<td/>").addClass("ico").html("<img src=\""+data[mini].icon+"\" title=\""+data[mini].unlock+"\">"),
                 $("<td/>").addClass("mininame").html("<a href=\""+searchURL+data[mini].item_id+"\">"+data[mini].name+"</a>")
@@ -736,7 +744,7 @@ function getFinish() {
     $.getJSON(getURL("finishers?ids=all"), function(data) {
         data.sort(function(a,b) {return a.order > b.order;});
         for(var finish in data) {
-            data[finish].unlock = data[finish].unlock ? data[finish].unlock.replace(/\"/g,'&quot;') : "";
+            data[finish].unlock = data[finish].unlock ? data[finish].unlock.replace(/\"/g,'&quot;') : null;
             $("#finishList").append($("<tr/>").attr({id: "finish" + data[finish].id}).data("name", data[finish].name.toLowerCase()).append(
                 $("<td/>").addClass("ico").html("<img src=\""+data[finish].icon+"\" title=\""+data[finish].unlock+"\">"),
                 $("<td/>").addClass("mininame").text(data[finish].name)
@@ -954,7 +962,7 @@ function getDaily(when) {
             var dummy=88;
             $.each(dailyAch, function(i, oneAch) {
                 oneIcon = oneAch.icon ? oneAch.icon : icons["dailypve"];
-                oneAch.description = oneAch.description ? oneAch.description.replace(/\"/g,'&quot;') : "";
+                oneAch.description = oneAch.description ? oneAch.description.replace(/\"/g,'&quot;') : null;
                 $("#dailyList").append($("<tr/>").append(
                 "<td title=\""+oneAch.id+"\"><img src=\""+oneIcon+"\"></td>",
                 "<td title=\""+oneAch.description+"\">"+oneAch.name+"</td>",
