@@ -535,35 +535,48 @@ function createBagItem(bagItem) {
     else if (bagItem.charges > 1) {
         itemSlot.append($("<span/>").text(formatNbr(bagItem.charges)).addClass("count charge"));
     }
-    if (itemSlot.attr("type") != "Empty") {
+    if (!itemSlot.hasClass("Empty")) {
         itemSlot.hover(function() {
             $("#toolTip").toggle();
         });
         itemSlot.mouseenter(function() {
-            showToolTip(bagItem, itemSlot);
+            createTooltip(bagItem, itemSlot);
         });
     }
     return itemSlot;
 }
 
-function showToolTip(bagItem, itemSlot) {
+function createTooltip(bagItem, itemSlot) {
     $("#toolTip").empty().append(
         $("<div/>").addClass(bagItem.rarity).text(bagItem.name).append(bagItem.level != 0 ? " ("+bagItem.level+")": null),
         $("<div/>").addClass("inactive").text(bagItem.skin ? bagItem.default_skin : null),
         bagItem.bound_to ? $("<div/>").text("Lié à : "+bagItem.bound_to) : null,
         bagItem.binding == "Account" ? $("<div/>").text("Lié au compte") : null,
         $.map([].concat(bagItem.upgrades,bagItem.infusions).filter(Number), function(upIt) {
-            return createToolTipItem(items.cache[upIt]);
+            return createTooltipItem(items.cache[upIt]);
         })
     );
-    var isPos = itemSlot.offset();
-    $("#toolTip").css({
-        "top": (isPos.top - $("#toolTip").height() - 6) + "px",
-        "left": isPos.left + "px"
+    positionTooltip(itemSlot);
+}
+
+function positionTooltip(itemSlot) {
+    var ttWidth = $("#toolTip").width();
+    var docWidth = $(document).width();
+
+    if ((yPos = itemSlot.offset().top - $("#toolTip").height() - 6) < 0) {
+        yPos = itemSlot.offset().top + 32
+    }
+    if ((xPos = itemSlot.offset().left) + ttWidth > docWidth) {
+        xPos = docWidth - ttWidth - 30
+    }
+
+    $('#toolTip').css({
+      'top': yPos,
+      'left': xPos
     });
 }
 
-function createToolTipItem(bagItem) {
+function createTooltipItem(bagItem) {
     var itemSlot = $("<div/>").addClass("item tt" + " r_" + bagItem.rarity)
                       .html($("<img/>").attr({src: bagItem.icon}));
     bagItem.name.indexOf("+") > -1 ? itemSlot.append($("<span/>").text(bagItem.name.match(/(\+.*?)( |$)/)[1]).addClass("count")) : null;
