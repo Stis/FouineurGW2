@@ -161,13 +161,11 @@ $(window).on("load", function() {
             $(this).prepend($("<img/>", {src: icons[$(this).attr("class")], alt: $(this).attr("class"), title: $(this).attr("class")}));
         };
     });
-    if ($("#intro:not(.hidden)").length) {
-        if (guids) {
-            $.each(guids, function() {
-                $("#keyList").append(this+"\n");
-            });
-            $("#keyList").html($("#keyList").val().replace(/\n$/, ""));
-        }
+    if (guids) {
+        $.each(guids, function() {
+            $("#keyList").append(this+"\n");
+        });
+        $("#keyList").html($("#keyList").val().replace(/\n$/, ""));
     }
     $("#title").click(function() {location.reload();});
     $("#saveKeys").click(function() {
