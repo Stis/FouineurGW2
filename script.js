@@ -105,6 +105,7 @@ var icons = {
     PlayForFree: "img/P4F.png",
     GuildWars2: "img/GW2.png",
     HeartOfThorns: "img/HoT.png",
+    PathOfFire: "img/PoF.png",
     Birthday: "img/anniversaire.png",
     Deaths: "img/deces.png",
     undefined: "img/nondefini.png"
@@ -138,8 +139,7 @@ function formatPognon(zeNbr)
 }
 
 function getURL(endPoint, key) {
-    var startURL = "https://api.guildwars2.com/v2/";
-    var url = startURL+endPoint;
+    var url = "https://api.guildwars2.com/v2/"+endPoint;
     key ? url += "?access_token="+key : "";
     return url;
 }
@@ -147,41 +147,39 @@ function getURL(endPoint, key) {
 function buildVer() {
     $.getJSON(getURL("build"), function(data){
         $("#build").text(data.id);
-    });
+    }).fail(noAPI);
+}
+
+function noAPI() {
+    alert("L\'API semble inaccessible\n\nAPI seems unattainable");
 }
 
 $(window).on("load", function() {
     buildVer();
     $("label").each(function() {
         if (icons[$(this).attr("class")]) {
-            $(this).prepend($("<img/>", {src: icons[$(this).attr("class")], alt: $(this).attr("class"), title: $(this).attr("class") }));
+            $(this).prepend($("<img/>", {src: icons[$(this).attr("class")], alt: $(this).attr("class"), title: $(this).attr("class")}));
         };
     });
-    if ($("#intro:not(.hidden)")) {
+    if ($("#intro:not(.hidden)").length) {
         if (guids) {
-            $.each(guids, function(i, key) {
-                $("#keyList").append(key+"\n");
+            $.each(guids, function() {
+                $("#keyList").append(this+"\n");
             });
             $("#keyList").html($("#keyList").val().replace(/\n$/, ""));
         }
     }
     $("#title").click(function() {location.reload();});
     $("#saveKeys").click(function() {
-        guids = $("#keyList").val().split(/\n| |,/);
-        localStorage.setItem("guids", JSON.stringify(guids));
-        location.reload(true);
+        localStorage.setItem("guids", JSON.stringify($("#keyList").val().split(/\n| |,/)));
     });
     $("#delKeys").click(function() {
         localStorage.removeItem("guids");
-        location.reload();
+        $("#keyList").empty();
     });
     $("#menu").hover(function() {
         $("#menuPop").toggle();
     });
-    $("#getBuilds").click(getBuilds);
-    $("#getWallet").click(getWallet);
-    $("#getIdents").click(getIdents);
-    $("#getBags").click(getBags);
     $("#filterInp").keyup(itemFilter);
     $("#filter").hover(function() {
         $("#filterPop").toggle();
@@ -200,15 +198,7 @@ $(window).on("load", function() {
     $("#items .levFilter").keyup(itemFilter);
     $("#chars .levFilter").keyup(charFilter);
     $(".simpleFilter").keyup(function() {simpleFilter($(this));});
-    $("#getWard").click(getWard);
-    $("#getMinis").click(getMinis);
-    $("#getFinish").click(getFinish);
-    $("#getDyes").click(getDyes);
-    $("#getTitles").click(getTitles);
-    $("#getRecipes").click(getRecipes);
-    $("#getPvP").click(getPvP);
-    $("#getDaily").click(function() {getDaily("today");});
-    $("#getDailyTom").click(function() {getDaily("tomorrow");});
+    $("[id^=get]").click(function() {eval(this.id+"(\""+this.className+"\")");});
     $("#build").click(buildVer);
 });
 
@@ -246,10 +236,16 @@ function getIdents() {
             $.getJSON(getURL("worlds/"+accData.world), function(worlData) {
                 var account = accData.name.replace(/\s|\./g,"");
                 var typAcc = accData.access;
+                var accessIcons = $("<span/>");
+                if (typAcc.indexOf("PathOfFire")+1) {accessIcons.html($("<img/>", {src: icons["PathOfFire"], class: "icon", alt: "Path Of Fire", title: "Path Of Fire"}));}
+                if (typAcc.indexOf("HeartOfThorns")+1) {accessIcons.prepend($("<img/>", {src: icons["HeartOfThorns"], class: "icon", alt: "Heart Of Thorns", title: "Heart Of Thorns"}));}
+                if (typAcc == "GuildWars2,PlayForFree") {accessIcons.html($("<img/>", {src: icons["GuildWars2"], class: "icon", alt: "Guild Wars 2", title: "Guild Wars 2"}));}
+                if (typAcc == "GuildWars2") {accessIcons.html($("<img/>", {src: icons["GuildWars2"], class: "icon", alt: "Guild Wars 2", title: "Guild Wars 2"}));}
+                if (typAcc == "PlayForFree") {accessIcons.html($("<img/>", {src: icons["PlayForFree"], class: "icon", alt: "GW2 Play for Free", title: "GW2 Play for Free"}));}
                 $("#content").append($("<div/>", {class: account}).append(accData.commander ? $("<img/>", {class: "icon", src: icons["comm"], alt: "Commandant", title: "Commandant"}) : "",
                                                                           $("<h2/>", {text: accData.name, title: "Créé le "+formatDate(accData.created)}),
                                                                           $("<h4/>", {class: "server", text: worlData.name}),
-                                                                          $("<img/>", {src: icons[typAcc], class: "icon", alt: typAcc, title: typAcc })," - ",
+                                                                          accessIcons," - ",
                                                                           $("<span/>", {class: "fractlev"}).append($("<img/>", {src: icons["Fractals"], class: "icon", alt: "Niveau de fractales", title: "Niveau de fractales"}), accData.fractal_level)," - ",
                                                                           $("<span/>", {class: "wvwrank"}).append($("<img/>", {src: icons["WvWRank"], class: "icon", alt: "Rang McM", title: "Rang McM"}), formatNbr(accData.wvw_rank))," - ",
                                                                           $("<span/>", {class: "pvprank"}).append($("<img/>", {src: icons["PvPRank"], class: "icon", alt: "Rang JcJ", title: "Rang JcJ"}), $.getJSON(getURL("pvp/stats", key), function(pvpstats) {$("."+account+" .pvprank").append(pvpstats.pvp_rank)})),
@@ -842,6 +838,66 @@ function getRecipes() {
     $("#content").text("WORK IN PROGRESS...");
 }
 // RECIPES end
+// ACHIEVS start
+function getAchievs() {
+    resetView("achievs");
+    $(".simpleFilter").removeClass("hidden");
+    $("#content").append($("<table/>").prop("id","achievList").append($("<thead/>").append($("<tr/>").addClass("thead").append($("<td/>").addClass("thead"),$("<td/>").addClass("thead"),$("<td/>").addClass("thead"),$("<td/>").addClass("thead")))));
+    jQuery.ajaxSetup({async:false});
+    $.getJSON(getURL("achievements?page=1000&page_size=200"), function() {}).fail(function(data, err) {
+        var searchURL = "http://wiki.guildwars2.com/index.php?title=Special%3ASearch&go=Go&search=";
+        var count = data.responseText.slice(data.responseText.lastIndexOf("- ")+2, data.responseText.lastIndexOf("."));
+        while (count > -1) {
+            $.getJSON(getURL("achievements?page="+count+"&page_size=200"), function(data) {
+                for(var achiev in data) {
+                    data[achiev].description = data[achiev].description ? data[achiev].description.replace(/\"/g,'&quot;') : "";
+                    $("#achievList").append($("<tr/>").attr({id: "achiev"+data[achiev].id}).data("name", data[achiev].name.toLowerCase()).append(
+                        data[achiev].icon ? $("<td/>").addClass("ico").html("<img src=\""+data[achiev].icon+"\" title=\""+data[achiev].description+"\">") : $("<td/>").addClass("ico"),
+                        $("<td/>").addClass("group"),
+                        $("<td/>").addClass("category"),
+                        $("<td/>").addClass("achievname").html("<a href=\""+searchURL+data[achiev].name+" achiev\">"+data[achiev].name+"</a>")
+                        ));
+                }
+            });
+            count--;
+        }
+    });
+    $.getJSON(getURL("achievements/categories?ids=all"), function(data) {
+        for (var catList in data) {
+            for (var achID in data[catList].achievements) {
+                $("#achiev"+data[catList].achievements[achID]+" .category").text(data[catList].name);
+                $("#achiev"+data[catList].achievements[achID]).addClass("cat"+data[catList].id);
+            }
+        }
+    });
+    $.getJSON(getURL("achievements/groups?ids=all"), function(data) {
+        for (var groupList in data) {
+            for (var catID in data[groupList].categories) {
+                $(".cat"+data[groupList].categories[catID]+" .group").text(data[groupList].name);
+            }
+        }
+    });
+    $.each(guids, function(i, key) {
+        $.getJSON(getURL("account", key), function(data) {
+            var accName = data.name;
+            var account = data.name.replace(/\s|\./g,"");
+            $.getJSON(getURL("account/achievements", key), function(data) {
+                $("#achievList tr.thead td:last-of-type").after($("<td/>").addClass("accName").text(accName));
+                $("#achievList tr:not(.thead)  td:last-of-type").after($("<td/>").addClass(account));
+                for(var ach in data) {
+                    if (data[ach].done == true) {
+                        $("#achiev"+data[ach].id+" td."+account).text("Fini");
+                    }
+                    else {
+                        $("#achiev"+data[ach].id+" td."+account).text(Math.trunc(data[ach].current/data[ach].max*100)+" %");
+                    }
+                }
+            });
+        });
+    });
+    jQuery.ajaxSetup({async:true});
+}
+// ACHIEVS end
 // PVP start
 function getPvP() {
     function getVic(json, what) {
@@ -873,21 +929,21 @@ function getPvP() {
     //         profList = profList.concat(data.map(prof => prof.name)).sort(function(a,b){return a.localeCompare(b);});
     //     console.log(profList);
     // });
-    $.getJSON(getURL("achievements/daily"), function(data) {
-        var ids = [];
-        ids = ids.concat(data.pvp.map(ach => ach.id));
-        var done;
-        $.getJSON(getURL("achievements?ids="+ids), function(dailyAch) {
-            $.each(dailyAch, function(i, oneAch) {
-                var color = (done ? "#673737": "#373767");
-                var profs = oneAch.name.toLowerCase().split(" ");
-                if (["élémentaliste","envoûteur","gardien","guerrier","ingénieur","nécromant","revenant","rôdeur","voleur"].indexOf(profs[0]) > -1) {
-                    $("."+profs[0]+",."+profs[2]).css("background-color",color);
-                    done=1;
-                }
-            });
-        });
-    });
+    // $.getJSON(getURL("achievements/daily"), function(data) {
+    //     var ids = [];
+    //     ids = ids.concat(data.pvp.map(ach => ach.id));
+    //     var done;
+    //     $.getJSON(getURL("achievements?ids="+ids), function(dailyAch) {
+    //         $.each(dailyAch, function(i, oneAch) {
+    //             var color = (done ? "#673737": "#373767");
+    //             var profs = oneAch.name.toLowerCase().split(" ");
+    //             if (["élémentaliste","envoûteur","gardien","guerrier","ingénieur","nécromant","revenant","rôdeur","voleur"].indexOf(profs[0]) > -1) {
+    //                 $("."+profs[0]+",."+profs[2]).css("background-color",color);
+    //                 done=1;
+    //             }
+    //         });
+    //     });
+    // });
     $.each(guids, function(i, key) {
         $.getJSON(getURL("account", key), function(data) {
             var accName = data.name;
@@ -914,7 +970,8 @@ function getPvP() {
                     lowest = 9e99;
 
                 for (var j = 2; j < trCount; j++) {
-                    $td = $td.add('#pvpList tr:eq('+j+') td:eq('+i+')').filter(function() { return $(this).parent().css("background-color") == color; });
+                    // $td = $td.add('#pvpList tr:eq('+j+') td:eq('+i+')').filter(function() { return $(this).parent().css("background-color") == color; });
+                    $td = $td.add('#pvpList tr:eq('+j+') td:eq('+i+')');
                 }
 
                 $td.each(function(i, el){

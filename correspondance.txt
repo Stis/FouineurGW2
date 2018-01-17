@@ -49,6 +49,7 @@ img/no.png					https://iconfinder.com/data/icons/fatcow/16/cross.png
 img/nondefini.png				https://wiki.guildwars2.com/images/8/86/Any_tango_icon_20px.png
 img/norn.png					https://wiki.guildwars2.com/images/3/3d/Norn_tango_icon_20px.png
 img/P4F.png
+img/PoF.png
 img/portefeuille.png				https://www.iconfinder.com/data/icons/fatcow/32x32/total_plan_cost.png
 img/quotijce.png				http://wiki.guildwars2.com/images/1/14/Daily_Achievement.png
 img/rangjcj.png					https://wiki.guildwars2.com/wiki/File:Rank_Point.png
