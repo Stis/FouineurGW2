@@ -853,7 +853,7 @@ function getAchievs() {
                         $("<td/>").addClass("ico").html("<img src=\""+data[achiev].icon+"\" title=\""+data[achiev].description+"\">"),
                         $("<td/>").addClass("group"),
                         $("<td/>").addClass("category"),
-                        $("<td/>").addClass("achievname").html("<a href=\""+searchURL+data[achiev].name+" achiev\">"+data[achiev].name+"</a>")
+                        $("<td/>").addClass("achievname").html("<span class=\"excel\"></span><a href=\""+searchURL+data[achiev].name+" achiev\">"+data[achiev].name+"</a>")
                         ));
                 }
             });
@@ -863,7 +863,8 @@ function getAchievs() {
     $.getJSON(getURL("achievements/categories?ids=all"), function(data) {
         for (var catList in data) {
             for (var achID in data[catList].achievements) {
-                $("#achiev"+data[catList].achievements[achID]+" .category").text(data[catList].order.toString().padStart(3, "0")+" - "+data[catList].name);
+                $("#achiev"+data[catList].achievements[achID]+" .category").text(data[catList].name);
+                $("#achiev"+data[catList].achievements[achID]+" .excel").append(data[catList].order.toString().padStart(3, "0"));
                 $("#achiev"+data[catList].achievements[achID]).addClass("cat"+data[catList].id);
             }
         }
@@ -871,7 +872,8 @@ function getAchievs() {
     $.getJSON(getURL("achievements/groups?ids=all"), function(data) {
         for (var groupList in data) {
             for (var catID in data[groupList].categories) {
-                $(".cat"+data[groupList].categories[catID]+" .group").attr({title: data[groupList].description}).text(data[groupList].order.toString().padStart(2, "0")+" - "+data[groupList].name);
+                $(".cat"+data[groupList].categories[catID]+" .group").attr({title: data[groupList].description}).text(data[groupList].name);
+                $(".cat"+data[groupList].categories[catID]+" .excel").prepend(data[groupList].order.toString().padStart(2, "0"));
             }
         }
     });
