@@ -234,11 +234,9 @@ function getIdents() {
             $.getJSON(getURL("worlds/"+accData.world), function(worlData) {
                 var account = accData.name.replace(/\s|\./g,"");
                 var typAcc = accData.access;
-                var accessIcons = $("<span/>");
-                if (typAcc.indexOf("PathOfFire")+1) {accessIcons.html($("<img/>", {src: icons["PathOfFire"], class: "icon", alt: "Path Of Fire", title: "Path Of Fire"}));}
-                if (typAcc.indexOf("HeartOfThorns")+1) {accessIcons.prepend($("<img/>", {src: icons["HeartOfThorns"], class: "icon", alt: "Heart Of Thorns", title: "Heart Of Thorns"}));}
-                if (typAcc == "GuildWars2,PlayForFree") {accessIcons.html($("<img/>", {src: icons["GuildWars2"], class: "icon", alt: "Guild Wars 2", title: "Guild Wars 2"}));}
-                if (typAcc == "GuildWars2") {accessIcons.html($("<img/>", {src: icons["GuildWars2"], class: "icon", alt: "Guild Wars 2", title: "Guild Wars 2"}));}
+                var accessIcons = $("<span/>").append($("<img/>", {src: icons["GuildWars2"], class: "icon", alt: "Guild Wars 2", title: "Guild Wars 2"}));
+                if (typAcc.indexOf("HeartOfThorns")+1) {accessIcons.append($("<img/>", {src: icons["HeartOfThorns"], class: "icon", alt: "Heart Of Thorns", title: "Heart Of Thorns"}));}
+                if (typAcc.indexOf("PathOfFire")+1) {accessIcons.append($("<img/>", {src: icons["PathOfFire"], class: "icon", alt: "Path Of Fire", title: "Path Of Fire"}));}
                 if (typAcc == "PlayForFree") {accessIcons.html($("<img/>", {src: icons["PlayForFree"], class: "icon", alt: "GW2 Play for Free", title: "GW2 Play for Free"}));}
                 $("#content").append($("<div/>", {class: account}).append(accData.commander ? $("<img/>", {class: "icon", src: icons["comm"], alt: "Commandant", title: "Commandant"}) : "",
                                                                           $("<h2/>", {text: accData.name, title: "Créé le "+formatDate(accData.created)}),
@@ -267,11 +265,12 @@ function getIdents() {
                                                          charDiv.children(".bio").append($("<img/>", {src: "img/bio/"+choice.id+".png", class: "icon", alt: choice.title, title: choice.title}));
                                                        })})}),
                                                $("<div/>", {class: "spec"}).append(
-                                                   $("<img/>", {src: icons[charData.gender], class: "icon "+charData.gender, alt: charData.gender, title: charData.gender }),
+                                                   $("<img/>", {src: icons["Birthday"], class: "icon "}), formatDate(charData.created),
+                                                   "<br>",
                                                    $("<img/>", {src: icons[charData.race], class: "icon "+charData.race, alt: charData.race, title: charData.race }),
+                                                   $("<img/>", {src: icons[charData.gender], class: "icon "+charData.gender, alt: charData.gender, title: charData.gender }),
                                                    $("<img/>", {src: icons[charData.profession], class: "icon "+charData.profession, alt: charData.profession, title: charData.profession }),
                                                    charData.level,
-                                                   "<br>", $("<img/>", {src: icons["Birthday"], class: "icon "}), formatDate(charData.created),
                                                    "<br>", $("<img/>", {src: icons["Deaths"], class: "icon "}), formatNbr(charData.deaths),
                                                    $.map(charCraftData.crafting, function(disci) {
                                                        return $("<div/>", {class: disci.active ? "" : "inactive"}).append($("<img/>", {src: icons[disci.discipline], class: "icon "+disci.discipline, alt: disci.discipline, title: disci.discipline}), disci.rating);
@@ -849,8 +848,9 @@ function getAchievs() {
             $.getJSON(getURL("achievements?page="+count+"&page_size=200"), function(data) {
                 for(var achiev in data) {
                     data[achiev].description = data[achiev].description ? data[achiev].description.replace(/\"/g,'&quot;') : "";
+                    data[achiev].icon ? "" : data[achiev].icon=icons["undefined"];
                     $("#achievList").append($("<tr/>").attr({id: "achiev"+data[achiev].id}).data("name", data[achiev].name.toLowerCase()).append(
-                        data[achiev].icon ? $("<td/>").addClass("ico").html("<img src=\""+data[achiev].icon+"\" title=\""+data[achiev].description+"\">") : $("<td/>").addClass("ico"),
+                        $("<td/>").addClass("ico").html("<img src=\""+data[achiev].icon+"\" title=\""+data[achiev].description+"\">"),
                         $("<td/>").addClass("group"),
                         $("<td/>").addClass("category"),
                         $("<td/>").addClass("achievname").html("<a href=\""+searchURL+data[achiev].name+" achiev\">"+data[achiev].name+"</a>")
@@ -863,7 +863,7 @@ function getAchievs() {
     $.getJSON(getURL("achievements/categories?ids=all"), function(data) {
         for (var catList in data) {
             for (var achID in data[catList].achievements) {
-                $("#achiev"+data[catList].achievements[achID]+" .category").text(data[catList].name);
+                $("#achiev"+data[catList].achievements[achID]+" .category").text(data[catList].order.toString().padStart(3, "0")+" - "+data[catList].name);
                 $("#achiev"+data[catList].achievements[achID]).addClass("cat"+data[catList].id);
             }
         }
@@ -871,7 +871,7 @@ function getAchievs() {
     $.getJSON(getURL("achievements/groups?ids=all"), function(data) {
         for (var groupList in data) {
             for (var catID in data[groupList].categories) {
-                $(".cat"+data[groupList].categories[catID]+" .group").text(data[groupList].name);
+                $(".cat"+data[groupList].categories[catID]+" .group").attr({title: data[groupList].description}).text(data[groupList].order.toString().padStart(2, "0")+" - "+data[groupList].name);
             }
         }
     });
