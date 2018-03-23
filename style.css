@@ -161,17 +161,17 @@ table {
     margin-left: auto;
     margin-right: auto;
 }
-.thead {
+thead {
     font-weight: bold;
 }
 tr:nth-child(even) {
     background-color: #505050;
 }
-.thead img {
+thead img {
     height: 24px;
     margin: -1px 0 -6px 0;
 }
-tr:not(.thead) td:first-of-type img {
+tbody td:first-of-type img {
     height: 32px;
     margin: -1px 0 -6px 0;
 }
