@@ -210,7 +210,7 @@ function resetView(who) {
 
 function simpleFilter(who) {
     var filterValue = who.val().toLowerCase();
-    $("tr:not(.thead)").each(function() {
+    $("tbody tr").each(function() {
         var name = $(this).data("name");
         if (name.indexOf(filterValue) < 0) {
             $(this).addClass("hidden");
