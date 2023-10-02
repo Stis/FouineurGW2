@@ -1,374 +1,397 @@
 @font-face {
-    font-family: CronosPro;
-    font-style: normal;
-    font-weight: normal;
-    src: url(font/cronospro-regular-webfont.woff) format("woff");
+  font-family: CronosPro;
+  font-style: normal;
+  font-weight: normal;
+  src: url(font/cronospro-regular-webfont.woff) format("woff");
 }
 @font-face {
-    font-family: CronosPro;
-    font-style: italic;
-    font-weight: normal;
-    src: url(font/cronospro-italic-webfont.woff) format("woff");
+  font-family: CronosPro;
+  font-style: italic;
+  font-weight: normal;
+  src: url(font/cronospro-italic-webfont.woff) format("woff");
 }
 @font-face {
-    font-family: CronosPro;
-    font-style: normal;
-    font-weight: bold;
-    src: url(font/cronospro-semibold-webfont.woff) format("woff");
+  font-family: CronosPro;
+  font-style: normal;
+  font-weight: bold;
+  src: url(font/cronospro-semibold-webfont.woff) format("woff");
 }
 @font-face {
-    font-family: CronosPro;
-    font-style: italic;
-    font-weight: bold;
-    src: url(font/cronospro-semibolditalic-webfont.woff) format("woff");
+  font-family: CronosPro;
+  font-style: italic;
+  font-weight: bold;
+  src: url(font/cronospro-semibolditalic-webfont.woff) format("woff");
 }
 * {
-    font-family: CronosPro, Sans-Serif;
-    text-align: center;
+  font-family: CronosPro, Sans-Serif;
+  text-align: center;
 }
 body {
-    background-color: #555;
-    color: #cacaca;
+  background-color: #555;
+  color: #cacaca;
 }
 #toolTip {
-    position: absolute;
-    z-index: 11;
-    display: none;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, .3);
-    border-radius: 8px;
-    padding: 3px;
-    background-color: #444;
-    white-space: nowrap;
+  position: absolute;
+  z-index: 11;
+  display: none;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .3);
+  border-radius: 8px;
+  padding: 3px;
+  background-color: #444;
+  max-width: 230px;
 }
 #header {
-    position: absolute;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 28px;
-    padding-top: 4px;
-    background-color: #333;
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 28px;
+  padding-top: 4px;
+  background-color: #333;
 }
 #menu {
-    float: left;
-    cursor: pointer;
+  float: left;
+  cursor: pointer;
 }
 #menuButton,
 #filterButton {
-    height: 24px !important;
-    margin: 0 !important;
+  height: 24px !important;
+  margin: 0 !important;
 }
 #menu img,
-#currList img {
-    height: 20px;
-    margin-bottom: -5px;
+#walletList img {
+  height: 20px;
+  margin-bottom: -5px;
 }
 #menuPop {
-    position: absolute;
-    top: 32px;
-    display: none;
-    box-shadow: 5px 5px 5px rgba(255, 255, 255, .3);
-    border-radius: 0 0 8px 8px;
-    background-color: #333;
-    text-align: left;
+  position: absolute;
+  top: 32px;
+  display: none;
+  box-shadow: 5px 5px 5px rgba(255, 255, 255, .3);
+  border-radius: 0 0 8px 8px;
+  background-color: #333;
+  text-align: left;
 }
 input[type="text"] {
-    border: none;
-    padding: 2px 4px;
-    background-color: #ccc;
+  border: none;
+  padding: 2px 4px;
+  background-color: #ccc;
 }
 #filterInp,
 .simpleFilter {
-    position: absolute;
-    right: 26px;
-    height: 20px;
-    border-radius: 8px;
+  position: absolute;
+  right: 26px;
+  height: 20px;
+  border-radius: 8px;
 }
 #filter {
-    float: right;
+  float: right;
 }
 #filterButton {
-    cursor: pointer;
+  cursor: pointer;
 }
 #filterPop {
-    position: absolute;
-    top: 32px;
-    right: 0;
-    display: none;
-    border-radius: 0 0 8px 8px;
-    box-shadow: -5px 5px 5px rgba(255, 255, 255, .3);
-    background-color: #333;
+  position: absolute;
+  top: 32px;
+  right: 0;
+  display: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: -5px 5px 5px rgba(255, 255, 255, .3);
+  background-color: #333;
 }
 #items,
 #chars {
-    padding: 10px;
+  padding: 10px;
 }
 input[type="checkbox"] {
-    position: absolute;
-    right: 0;
+  position: absolute;
+  right: 0;
 }
 label {
-    float: left;
-    background-repeat: no-repeat;
-    text-align: left;
+  float: left;
+  background-repeat: no-repeat;
+  text-align: left;
 }
 label img {
-    height: 16px;
-    margin-bottom: -2px;
+  height: 16px;
+  margin-bottom: -2px;
 }
 .type + label {
-    color: #bbb;
+  color: #bbb;
 }
 :not(.rarity) + label {
-    width: 60%;
+  width: 60%;
 }
 .levFilter {
-    width: 30px;
-    border-radius: 8px;
+  width: 30px;
+  border-radius: 8px;
 }
 #content {
-    position: absolute;
-    left: 0;
-    top: 30px;
-    right: 0;
-    bottom: 0;
-    overflow: auto;
+  position: absolute;
+  left: 0;
+  top: 30px;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
 }
 #keyList {
-    height: 95px;
-    width: 724px;
-    margin-top: 5px;
-    border: none;
-    border-radius: 8px;
-    background: #ccc;
+  height: 95px;
+  width: 724px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 8px;
+  background: #ccc;
 }
 #saveKeys,
 #delKeys {
-    cursor: pointer;
-    border: none;
-    border-radius: 8px 0 0 8px;
-    padding: 1px 1px 1px 11px;
-    margin: 4px -2px 0 -2px;
-    background-color: #ccc;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  padding: 1px 1px 1px 11px;
+  margin: 4px -2px 0 -2px;
+  background-color: #ccc;
 }
 #delKeys {
-    border-radius: 0 8px 8px 0;
-    padding: 1px 11px 1px 1px;
+  border-radius: 0 8px 8px 0;
+  padding: 1px 11px 1px 1px;
 }
 table {
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
 }
 thead {
-    font-weight: bold;
+  font-weight: bold;
 }
 tr:nth-child(even) {
-    background-color: #505050;
+  background-color: #505050;
 }
 thead img {
-    height: 24px;
-    margin: -1px 0 -6px 0;
+  height: 24px;
+  margin: -1px 0 -6px 0;
 }
 tbody td:first-of-type img {
-    height: 32px;
-    margin: -1px 0 -6px 0;
+  height: 32px;
+  margin: -1px 0 -6px 0;
 }
-#currList td:not([class]) {
-    text-align:right;
+#walletList tbody td:not(:first-child) {
+  text-align:right;
+}
+#walletList tbody td.currname {
+  text-align:left;
 }
 .account {
-    border-right: 1px dotted #888;
+  border-right: 1px dotted #888;
 }
 h2 {
-    display: inline;
-    margin-bottom: -5px;
+  display: inline;
+  margin-bottom: -5px;
 }
 h4 {
-    margin: 0;
+  margin: 0;
 }
 h5 {
-    margin-top: 0;
-    margin-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.acc {
+  height: 275px;
+}
+.characters {
+  margin-top: 20px;
 }
 .character {
-    position: relative;
-    min-width: 230px;
-    width: 230px;
+  position: relative;
+  min-width: 230px;
+  width: 230px;
 }
 .charBg {
-    position: absolute;
-    z-index: -1;
-    left: 0;
-    top: -40px;
-    width: 100%;
-    height: auto;
-    opacity: 0.2;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: -40px;
+  width: 100%;
+  height: auto;
+  opacity: 0.2;
 }
 .inactive {
-    opacity: 0.4;
+  opacity: 0.4;
 }
 .spec {
-    min-height: 125px;
+  min-height: 125px;
 }
 .icon {
-    height: 16px;
-    margin: 0 4px -3px 0;
+  height: 16px;
+  margin: 0 4px -3px 0;
 }
 .stuff,
 .sharedBag,
 .bag,
 .bankTabs,
 .matsTabs {
-    margin: 0 auto 10px auto;
+  margin: 0 auto 10px auto;
 }
 .stuff {
-    width: 210px;
-    box-shadow: 0px 20px 2px -19px #ccc;
+  width: 210px;
+  box-shadow: 0px 20px 2px -19px #ccc;
 }
 .colo {
-    width: 60px;
+  width: 60px;
 }
 .sharedBag {
-    box-shadow: 0px 20px 2px -19px #888;
+  box-shadow: 0px 20px 2px -19px #888;
 }
 .bankTabs,
 .matsTabs {
-    width: 360px;
+  width: 360px;
 }
 .item {
-    width: 32px;
-    height: 32px;
-    display: inline-block;
-    border: 2px solid #fff;
-    border-radius: 3px;
-    border-width: 2px 0 0 2px;
-    overflow: hidden;
-    margin: 0 1px;
-    padding: 0;
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  border-width: 2px 0 0 2px;
+  overflow: hidden;
+  margin: 0 1px;
+  padding: 0;
 }
 .item img {
-    height: 32px;
+  height: 32px;
 }
 #toolTip .item,
 #toolTip .item img {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 .r_Empty {
-    border-color: #000;
-    opacity: .2;
+  border-color: #000;
+  opacity: .2;
 }
 .r_Junk {
-    border-color: #aaa;
+  border-color: #aaa;
 }
 .r_Basic {
-    border-color: #fff;
+  border-color: #fff;
 }
 .r_Fine {
-    border-color: #62a4da;
+  border-color: #62a4da;
 }
 .r_Masterwork {
-    border-color: #1a9306;
+  border-color: #1a9306;
 }
 .r_Rare {
-    border-color: #fcd00b;
+  border-color: #fcd00b;
 }
 .r_Exotic {
-    border-color: #ffa405;
+  border-color: #ffa405;
 }
 .r_Ascended {
-    border-color: #fb3e8d;
+  border-color: #fb3e8d;
 }
 .r_Legendary {
-    border-color: #4c139d;
+  border-color: #4c139d;
 }
 .r_Unknown {
-    border-color: red;
+  border-color: red;
 }
 .chaBound {
-    border-bottom-color: lightblue;
-    border-width: 2px 0 1px 2px;
-    margin-bottom: -1px;
+  border-bottom-color: lightblue;
+  border-width: 2px 0 1px 2px;
+  margin-bottom: -1px;
 }
 .accBound {
-    border-bottom-color: lightcoral;
-    border-width: 2px 0 1px 2px;
-    margin-bottom: -1px;
+  border-bottom-color: lightcoral;
+  border-width: 2px 0 1px 2px;
+  margin-bottom: -1px;
+}
+.Armory {
+  border-bottom-color: #4c139d;
+  border-width: 2px 0 1px 2px;
+  margin-bottom: -1px;
 }
 .Empty {
-    color: black;
+  color: black;
 }
 .Junk {
-    color: #aaa;
+  color: #aaa;
 }
 .Basic {
-    color: #fff;
+  color: #fff;
 }
 .Fine {
-    color: #62a4da;
+  color: #62a4da;
 }
 .Masterwork {
-    color: #1a9306;
+  color: #1a9306;
 }
 .Rare {
-    color: #fcd00b;
+  color: #fcd00b;
 }
 .Exotic {
-    color: #ffa405;
+  color: #ffa405;
 }
 .Ascended {
-    color: #fb3e8d;
+  color: #fb3e8d;
 }
 .Legendary {
-    color: #4c139d;
+  color: #4c139d;
 }
 .Unknown {
-    color: red;
+  color: red;
 }
 .count {
-    width: 32px;
-    display: inline-block;
-    margin-left: -34px;
-    padding: 1px;
-    color: #fff;
-    font-size: 85%;
-    text-align: right;
-    text-shadow: 1px 1px black;
+  width: 32px;
+  display: inline-block;
+  margin-left: -34px;
+  padding: 1px;
+  color: #fff;
+  font-size: 85%;
+  text-align: right;
+  text-shadow: 1px 1px black;
 }
 .charge {
-    color: yellow;
+  color: yellow;
 }
 .item:hover .count {
-    background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 a {
-    color:inherit;
-    text-decoration: none;
+  color:inherit;
+  text-decoration: none;
 }
 #dailyList img {
-    height: 48px;
-    margin: 0 0 -5px 0;
+  height: 48px;
+  margin: 0 0 -5px 0;
 }
 .yesno {
-    margin-bottom: -3px;
+  margin-bottom: -3px;
 }
 .flexme {
-    display: flex;
+  display: flex;
 }
 .hidden {
-    display: none;
+  display: none;
 }
 .GuildWars2 {
-    color: lightcoral;
+  color: lightcoral;
 }
 .HeartOfThorns {
-    color: lightgreen;
+  color: lightgreen;
+}
+.PathOfFire {
+  color: plum;
+}
+.EndOfDragons {
+  color: cyan;
+}
+.SecretsOfTheObscure {
+  color: lightgoldenrodyellow;
 }
 .toPlay {
-    color: green;
+  color: green;
 }
 .excel {
-    display: none;
+  display: none;
 }
