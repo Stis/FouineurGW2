@@ -113,6 +113,12 @@ $(window).on("load", function() {
     localStorage.removeItem("guids");
     $("#keyList").empty();
   });
+  $("#keyList").each(function () {
+    this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden;");
+  }).on("input", function () {
+    this.style.height = 0;
+    this.style.height = (this.scrollHeight) + "px";
+  });
   $("#menu").hover(function() {
     $("#menuPop").toggle();
   });
@@ -216,7 +222,7 @@ function getAchievement() {
             $("thead td:last-of-type").after($("<td/>", {text: accName}));
             $("tbody td:last-of-type").after($("<td/>", {class: account}));
             for(var ach in data) {
-              if (data[ach].done == true) {
+              if (data[ach].done === true) {
                 $("#achiev"+data[ach].id+" td."+account).text("Fini");
               } else {
                 $("#achiev"+data[ach].id+" td."+account).text(Math.trunc(data[ach].current/data[ach].max*100)+"%");
@@ -253,8 +259,8 @@ function getCat() {
   $("#content").append($("<table/>", {id: "catList"}).append($("<thead/>").append($("<tr/>").append($("<td/>"))), $("<tbody/>")));
   $.getJSON(getURL("home/cats?ids=all"), function(catsD) {
     for(i in catsD) {
-      $("#catList tbody").append($("<tr/>", {id: "cat"+catsD[i].id}).data("name", catsD[i].hint.toLowerCase()).append(
-        $("<td/>", {class: "catname", text: catsD[i].hint})
+      $("#catList tbody").append($("<tr/>", {id: "cat"+catsD[i].id}).data("name", catsD[i].hint.toLowerCase().replace(/_/g, ' ')).append(
+        $("<td/>", {class: "catname", text: catsD[i].hint.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())})
       ));
     }
   });
@@ -686,8 +692,8 @@ function getNode() {
   $("#content").append($("<table/>", {id: "nodeList"}).append($("<thead/>").append($("<tr/>").append($("<td/>"))), $("<tbody/>")));
   $.getJSON(getURL("home/nodes?ids=all"), function(nodesD) {
     for(i in nodesD) {
-      $("#nodeList tbody").append($("<tr/>", {id: "node"+nodesD[i].id}).data("name", nodesD[i].id.toLowerCase()).append(
-        $("<td/>", {class: "nodename", text: nodesD[i].id})
+      $("#nodeList tbody").append($("<tr/>", {id: "node"+nodesD[i].id}).data("name", nodesD[i].id.toLowerCase().replace(/_/g, ' ')).append(
+        $("<td/>", {class: "nodename", text: nodesD[i].id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())})
       ));
     }
   });
@@ -970,7 +976,7 @@ function createTooltip(bagItem, itemSlot) {
     //else if (bagItem.binding == "Account") { var binding = "Lié au compte"; }
     //else if (bagItem.location == "EquippedFromLegendaryArmory") { var binding = "Armurerie légendaire"; }
     $("#toolTip").empty().append(
-        $("<div/>", {class: bagItem.rarity, text: bagItem.name+(bagItem.level != 0 ? " ("+bagItem.level+")": "")}),
+        $("<div/>", {class: bagItem.rarity, text: bagItem.name+(bagItem.level !== 0 ? " ("+bagItem.level+")": "")}),
         $("<div/>", {text: bagItem.description}),
         $("<div/>", {class: "inactive", text: bagItem.skin ? bagItem.default_skin : ""}),
         bagItem.bound_to ? $("<div/>", {text: "Lié à : "+bagItem.bound_to}) : "",
@@ -1038,22 +1044,24 @@ function sortStuff() {
                     $(this).find("[slot=Amulet]").length ? $(this).find("[slot=Amulet]") : createBagItem(null),
                     $(this).find("[slot=Ring1]").length ? $(this).find("[slot=Ring1]") : createBagItem(null),
                     $(this).find("[slot=Ring2]").length ? $(this).find("[slot=Ring2]") : createBagItem(null))),
-            $("<div/>").append(
+            $("<div/>", {id: "tools"}).append(
                 $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : createBagItem(null),
                     $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
                 $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : createBagItem(null),
                     $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
                 $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : createBagItem(null)),
-            $("<div/>").append(
+            $("<div/>", {id: "fishing"}).append(
                 $(this).find("[slot=FishingRod]").length ? $(this).find("[slot=FishingRod]") : createBagItem(null),
                     $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
                 $(this).find("[slot=FishingBait]").length ? $(this).find("[slot=FishingBait]") : createBagItem(null),
                     $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
                 $(this).find("[slot=FishingLure]").length ? $(this).find("[slot=FishingLure]") : createBagItem(null)),
-            $("<div/>").append(
+            $("<div/>", {id: "jadebot"}).append(
                 $(this).find("[slot=PowerCore]").length ? $(this).find("[slot=PowerCore]") : createBagItem(null),
                     $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=SensoryArray]").length ? $(this).find("[slot=SensoryArray]") : createBagItem(null))
+                $(this).find("[slot=SensoryArray]").length ? $(this).find("[slot=SensoryArray]") : createBagItem(null),
+                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+                $(this).find("[slot=ServiceChip]").length ? $(this).find("[slot=ServiceChip]") : createBagItem(null))
         );
     });
 }
@@ -1084,14 +1092,14 @@ function itemFilter() {
         }
     });
     $(".character, .bank, .mats").each(function() {
-        if ($(this).find(".item:not(.hidden)").length == 0) {
+        if ($(this).find(".item:not(.hidden)").length === 0) {
             $(this).addClass("hidden");
         } else {
             $(this).removeClass("hidden");
         }
     });
     $(".account").each(function() {
-        if ($(this).find(".item:not(.hidden)").length == 0) {
+        if ($(this).find(".item:not(.hidden)").length === 0) {
             $(this).addClass("hidden");
         } else {
             $(this).removeClass("hidden");

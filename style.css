@@ -2,44 +2,51 @@
   font-family: CronosPro;
   font-style: normal;
   font-weight: normal;
-  src: url(font/cronospro-regular-webfont.woff) format("woff");
+  src: url("font/cronospro-regular-webfont.woff") format("woff");
 }
+
 @font-face {
   font-family: CronosPro;
   font-style: italic;
   font-weight: normal;
-  src: url(font/cronospro-italic-webfont.woff) format("woff");
+  src: url("font/cronospro-italic-webfont.woff") format("woff");
 }
+
 @font-face {
   font-family: CronosPro;
   font-style: normal;
   font-weight: bold;
-  src: url(font/cronospro-semibold-webfont.woff) format("woff");
+  src: url("font/cronospro-semibold-webfont.woff") format("woff");
 }
+
 @font-face {
   font-family: CronosPro;
   font-style: italic;
   font-weight: bold;
-  src: url(font/cronospro-semibolditalic-webfont.woff) format("woff");
+  src: url("font/cronospro-semibolditalic-webfont.woff") format("woff");
 }
+
 * {
-  font-family: CronosPro, Sans-Serif;
+  font-family: CronosPro, sans-serif;
   text-align: center;
 }
+
 body {
   background-color: #555;
   color: #cacaca;
 }
+
 #toolTip {
   position: absolute;
   z-index: 11;
   display: none;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, .3);
+  box-shadow: inset 0 0 5px rgb(0 0 0 / 0.3);
   border-radius: 8px;
   padding: 3px;
   background-color: #444;
   max-width: 230px;
 }
+
 #header {
   position: absolute;
   z-index: 10;
@@ -50,34 +57,40 @@ body {
   padding-top: 4px;
   background-color: #333;
 }
+
 #menu {
   float: left;
   cursor: pointer;
 }
+
 #menuButton,
 #filterButton {
   height: 24px !important;
   margin: 0 !important;
 }
+
 #menu img,
 #walletList img {
   height: 20px;
   margin-bottom: -5px;
 }
+
 #menuPop {
   position: absolute;
   top: 32px;
   display: none;
-  box-shadow: 5px 5px 5px rgba(255, 255, 255, .3);
+  box-shadow: 5px 5px 5px rgb(255 255 255 / 0.3);
   border-radius: 0 0 8px 8px;
   background-color: #333;
   text-align: left;
 }
+
 input[type="text"] {
   border: none;
   padding: 2px 4px;
   background-color: #ccc;
 }
+
 #filterInp,
 .simpleFilter {
   position: absolute;
@@ -85,48 +98,59 @@ input[type="text"] {
   height: 20px;
   border-radius: 8px;
 }
+
 #filter {
   float: right;
 }
+
 #filterButton {
   cursor: pointer;
 }
+
 #filterPop {
   position: absolute;
   top: 32px;
   right: 0;
   display: none;
   border-radius: 0 0 8px 8px;
-  box-shadow: -5px 5px 5px rgba(255, 255, 255, .3);
+  box-shadow: -5px 5px 5px rgb(255 255 255 / 0.3);
   background-color: #333;
 }
+
 #items,
 #chars {
   padding: 10px;
 }
+
 input[type="checkbox"] {
   position: absolute;
   right: 0;
 }
+
 label {
   float: left;
   background-repeat: no-repeat;
   text-align: left;
 }
+
 label img {
   height: 16px;
   margin-bottom: -2px;
 }
+
 .type + label {
   color: #bbb;
 }
+
 :not(.rarity) + label {
   width: 60%;
 }
+
 .levFilter {
   width: 30px;
   border-radius: 8px;
 }
+
 #content {
   position: absolute;
   left: 0;
@@ -135,77 +159,95 @@ label img {
   bottom: 0;
   overflow: auto;
 }
+
 #keyList {
   height: 95px;
-  width: 724px;
+  width: 707px;
   margin-top: 5px;
   border: none;
   border-radius: 8px;
   background: #ccc;
 }
+
 #saveKeys,
 #delKeys {
   cursor: pointer;
   border: none;
   border-radius: 8px 0 0 8px;
   padding: 1px 1px 1px 11px;
-  margin: 4px -2px 0 -2px;
+  margin: 4px -2px 0;
   background-color: #ccc;
 }
+
 #delKeys {
   border-radius: 0 8px 8px 0;
   padding: 1px 11px 1px 1px;
 }
+
 table {
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
 }
+
 thead {
   font-weight: bold;
 }
+
 tr:nth-child(even) {
   background-color: #505050;
 }
+
 thead img {
   height: 24px;
   margin: -1px 0 -6px 0;
 }
+
 tbody td:first-of-type img {
   height: 32px;
   margin: -1px 0 -6px 0;
 }
+
 #walletList tbody td:not(:first-child) {
   text-align:right;
 }
+
 #walletList tbody td.currname {
   text-align:left;
 }
+
 .account {
   border-right: 1px dotted #888;
 }
+
 h2 {
   display: inline;
   margin-bottom: -5px;
 }
+
 h4 {
   margin: 0;
 }
+
 h5 {
   margin-top: 0;
   margin-bottom: 10px;
 }
+
 .acc {
   height: 275px;
 }
+
 .characters {
   margin-top: 20px;
 }
+
 .character {
   position: relative;
   min-width: 230px;
   width: 230px;
 }
+
 .charBg {
   position: absolute;
   z-index: -1;
@@ -215,16 +257,20 @@ h5 {
   height: auto;
   opacity: 0.2;
 }
+
 .inactive {
   opacity: 0.4;
 }
+
 .spec {
   min-height: 125px;
 }
+
 .icon {
   height: 16px;
   margin: 0 4px -3px 0;
 }
+
 .stuff,
 .sharedBag,
 .bag,
@@ -232,20 +278,25 @@ h5 {
 .matsTabs {
   margin: 0 auto 10px auto;
 }
+
 .stuff {
   width: 210px;
   box-shadow: 0px 20px 2px -19px #ccc;
 }
+
 .colo {
   width: 60px;
 }
+
 .sharedBag {
   box-shadow: 0px 20px 2px -19px #888;
 }
+
 .bankTabs,
 .matsTabs {
   width: 360px;
 }
+
 .item {
   width: 32px;
   height: 32px;
@@ -257,90 +308,116 @@ h5 {
   margin: 0 1px;
   padding: 0;
 }
+
 .item img {
   height: 32px;
 }
+
 #toolTip .item,
 #toolTip .item img {
   width: 24px;
   height: 24px;
 }
+
 .r_Empty {
   border-color: #000;
   opacity: .2;
 }
+
 .r_Junk {
   border-color: #aaa;
 }
+
 .r_Basic {
   border-color: #fff;
 }
+
 .r_Fine {
   border-color: #62a4da;
 }
+
 .r_Masterwork {
   border-color: #1a9306;
 }
+
 .r_Rare {
   border-color: #fcd00b;
 }
+
 .r_Exotic {
   border-color: #ffa405;
 }
+
 .r_Ascended {
   border-color: #fb3e8d;
 }
+
 .r_Legendary {
   border-color: #4c139d;
 }
+
 .r_Unknown {
   border-color: red;
 }
+
 .chaBound {
   border-bottom-color: lightblue;
   border-width: 2px 0 1px 2px;
   margin-bottom: -1px;
 }
+
 .accBound {
   border-bottom-color: lightcoral;
   border-width: 2px 0 1px 2px;
   margin-bottom: -1px;
 }
+
 .Armory {
   border-bottom-color: #4c139d;
   border-width: 2px 0 1px 2px;
   margin-bottom: -1px;
 }
+
 .Empty {
   color: black;
 }
+
 .Junk {
   color: #aaa;
 }
+
 .Basic {
   color: #fff;
 }
+
 .Fine {
   color: #62a4da;
 }
+
 .Masterwork {
   color: #1a9306;
 }
+
 .Rare {
   color: #fcd00b;
 }
+
 .Exotic {
   color: #ffa405;
 }
+
 .Ascended {
   color: #fb3e8d;
 }
+
 .Legendary {
   color: #4c139d;
 }
+
 .Unknown {
   color: red;
 }
+
 .count {
   width: 32px;
   display: inline-block;
@@ -351,47 +428,61 @@ h5 {
   text-align: right;
   text-shadow: 1px 1px black;
 }
+
 .charge {
   color: yellow;
 }
+
 .item:hover .count {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgb(0 0 0 / 0.7);
 }
+
 a {
   color:inherit;
   text-decoration: none;
 }
+
 #dailyList img {
   height: 48px;
   margin: 0 0 -5px 0;
 }
+
 .yesno {
   margin-bottom: -3px;
 }
+
 .flexme {
   display: flex;
 }
+
 .hidden {
   display: none;
 }
+
 .GuildWars2 {
   color: lightcoral;
 }
+
 .HeartOfThorns {
   color: lightgreen;
 }
+
 .PathOfFire {
   color: plum;
 }
+
 .EndOfDragons {
   color: cyan;
 }
+
 .SecretsOfTheObscure {
   color: lightgoldenrodyellow;
 }
+
 .toPlay {
   color: green;
 }
+
 .excel {
   display: none;
 }
