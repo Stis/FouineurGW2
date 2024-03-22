@@ -153,10 +153,7 @@ label img {
 
 #content {
   position: absolute;
-  left: 0;
-  top: 30px;
-  right: 0;
-  bottom: 0;
+  inset: 30px 0 0;
   overflow: auto;
 }
 
@@ -205,7 +202,7 @@ thead img {
 
 tbody td:first-of-type img {
   height: 32px;
-  margin: -1px 0 -6px 0;
+  margin: -1px 0 -6px;
 }
 
 #walletList tbody td:not(:first-child) {
@@ -435,7 +432,7 @@ a {
 
 #dailyList img {
   height: 48px;
-  margin: 0 0 -5px 0;
+  margin: 0 0 -5px;
 }
 
 .yesno {

@@ -177,8 +177,8 @@ function getAchievement() {
     }
     $.when.apply($,achParts).done(function() {
       var data = [];
-      $.each(arguments, function(i, element){
-        $.each(element[0], function(i, val){
+      $.each(arguments, function(i, element) {
+        $.each(element[0], function(i, val) {
           data.push(val);
         });
       });
@@ -243,7 +243,7 @@ function getAchievement() {
       //$.when.apply($,accParts).done(function() {
       //  var accNames = [];
       //  var accounts = [];
-      //  $.each(arguments, function(i, acc){
+      //  $.each(arguments, function(i, acc) {
       //    accNames.push(acc[0].name);
       //    accounts.push(acc[0].name.replace(/\s|\./g,""));
       //  });
@@ -360,13 +360,13 @@ function getCharacter() {
 }
 
 function charFilter() {
-  var levCMin = ($("#levCMin").val() == "") ? 1 : parseInt($("#levCMin").val());
-  var levCMax = ($("#levCMax").val() == "") ? 80 : parseInt($("#levCMax").val());
+  var levCMin = ($("#levCMin").val() == "") ? 1 : parseInt($("#levCMin").val(), 10);
+  var levCMax = ($("#levCMax").val() == "") ? 80 : parseInt($("#levCMax").val(), 10);
   var toHide = $("#chars input:checkbox:not(:checked, .checkAll)").map(function() {
     return $(this).next("label").attr("class");
   }).get();
   $(".character").each(function() {
-    var charLev = parseInt($(this).attr("level"));
+    var charLev = parseInt($(this).attr("level"), 10);
     var charAttr = $(this).attr("class").split(" ").slice(1);
     if (levCMin > charLev || charLev > levCMax || charAttr.some(function(x) {return toHide.indexOf(x) > -1;})) {
       $(this).addClass("hidden");
@@ -508,8 +508,8 @@ function getJournal() {
     }
     $.when.apply($,questParts).done(function() {
       var data = [];
-      $.each(arguments, function(i, element){
-        $.each(element[0], function(i, val){
+      $.each(arguments, function(i, element) {
+        $.each(element[0], function(i, val) {
           data.push(val);
         });
       });
@@ -1070,14 +1070,14 @@ function sortStuff() {
 
 function itemFilter() {
     $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked, .type:checked, .binding:checked").length == $(".rarity:not(:hidden), .type, .binding").length ? 1 : 0);
-    var levIMin = ($("#levIMin").val() == "") ? 0 : parseInt($("#levIMin").val());
-    var levIMax = ($("#levIMax").val() == "") ? 80 : parseInt($("#levIMax").val());
+    var levIMin = ($("#levIMin").val() == "") ? 0 : parseInt($("#levIMin").val(), 10);
+    var levIMax = ($("#levIMax").val() == "") ? 80 : parseInt($("#levIMax").val(), 10);
     var filterValue = $("#filterInp").val().toLowerCase();
     var toHide = $("#items input:checkbox:not(:checked, .checkAll)").map(function() {
         return $(this).next("label").attr("class");
     }).get();
     $(".item:not(.tt)").each(function() {
-        var itemLev = parseInt($(this).attr("level"));
+        var itemLev = parseInt($(this).attr("level"), 10);
         var name = $(this).data("name");
         var itemAttr = $(this).attr("class").slice(7).split(" ");
         if (
