@@ -457,7 +457,7 @@ function getFinisher() {
         $("thead tr td:last-of-type").after($("<td/>", {text: accName}));
         $("tbody tr td:last-of-type").after($("<td/>", {class: account}).append($("<img/>", {src: icony("no"), alt: "0", class: "yesno"})));
         for(i in aFinishersD) {
-          if (aFinishersD[i].permanent = true) {
+          if (aFinishersD[i].permanent === true) {
             $("#finish"+aFinishersD[i].id+" td."+account+" img").attr({src: icony("yes"), alt: "1"});
           }
         }
@@ -991,11 +991,13 @@ function createTooltip(bagItem, itemSlot) {
 function positionTooltip(itemSlot) {
     var ttWidth = $("#toolTip").width();
     var docWidth = $(document).width();
+    var yPos = itemSlot.offset().top - $("#toolTip").height() - 6;
+    var xPos = itemSlot.offset().left;
 
-    if ((yPos = itemSlot.offset().top - $("#toolTip").height() - 6) < 0) {
-        yPos = itemSlot.offset().top + 32
+    if (yPos < 0) {
+        yPos = itemSlot.offset().top + 34
     }
-    if ((xPos = itemSlot.offset().left) + ttWidth > docWidth) {
+    if (xPos + ttWidth > docWidth) {
         xPos = docWidth - ttWidth - 30
     }
 
