@@ -292,6 +292,7 @@ function getCharacter() {
         if (typAcc.indexOf("PathOfFire")+1) {accessIcons.append($("<img/>", {src: icony("PathOfFire"), class: "icon", alt: "Path Of Fire", title: "Path Of Fire"}));}
         if (typAcc.indexOf("EndOfDragons")+1) {accessIcons.append($("<img/>", {src: icony("EndOfDragons"), class: "icon", alt: "End Of Dragons", title: "End Of Dragons"}));}
         if (typAcc.indexOf("SecretsOfTheObscure")+1) {accessIcons.append($("<img/>", {src: icony("SecretsOfTheObscure"), class: "icon", alt: "Secrets Of The Obscure", title: "Secrets Of The Obscure"}));}
+        if (typAcc.indexOf("JanthirWilds")+1) {accessIcons.append($("<img/>", {src: icony("JanthirWilds"), class: "icon", alt: "Janthir Wilds", title: "Janthir Wilds"}));}
         if (typAcc == "PlayForFree") {accessIcons.html($("<img/>", {src: icony("PlayForFree"), class: "icon", alt: "GW2 Play for Free", title: "GW2 Play for Free"}));}
         $("#content").append(
           $("<div/>", {class: account+" acc"}).append(
@@ -525,9 +526,9 @@ function getJournal() {
     }).then(function() {
       $.getJSON(getURL("stories?ids=all"), function(data) {
         for (var storyList in data) {
-            data[storyList].races ? $(".story"+data[storyList].id+" .race").append($("<label/>").addClass(data[storyList].races[0])) : "";
-            $(".story"+data[storyList].id+" .story").attr({title: data[storyList].description}).text(data[storyList].name);
-            $(".story"+data[storyList].id+" .excel").append(data[storyList].order.toString().padStart(3, "0"));
+          data[storyList].races ? $(".story"+data[storyList].id+" .race").append($("<label/>").addClass(data[storyList].races[0])) : "";
+          $(".story"+data[storyList].id+" .story").attr({title: data[storyList].description}).text(data[storyList].name);
+          $(".story"+data[storyList].id+" .excel").append(data[storyList].order.toString().padStart(3, "0"));
         }
       });
     }).then(function() {
@@ -636,8 +637,8 @@ function getMistsChampion() {
       heroesD[i].description = heroesD[i].description ? heroesD[i].description.replace(/\"/g,'&quot;') : "";
       for (j in heroesD[i].skins) {
         $("#champList tbody").append($("<tr/>", {id: "hero"+heroesD[i].skins[j].id}).data("name", heroesD[i].skins[j].name.toLowerCase()).append(
-        $("<td/>", {html: $("<img/>", {src: heroesD[i].skins[j].icon, title: heroesD[i].description})}),
-        $("<td/>", {class: "heroname", text: heroesD[i].skins[j].name})
+          $("<td/>", {html: $("<img/>", {src: heroesD[i].skins[j].icon, title: heroesD[i].description})}),
+          $("<td/>", {class: "heroname", text: heroesD[i].skins[j].name})
         ));
       }
     }
@@ -679,7 +680,7 @@ function getMount() {
         $("thead tr td:last-of-type").after($("<td/>", {text: accName}));
         $("tbody tr td:last-of-type").after($("<td/>", {class: account}).append($("<img/>", {src: icony("no"), alt: "0", class: "yesno"})));
         for(i in aMountsD) {
-          $("#mailCarrier"+aMountsD[i]+" td."+account+" img").attr({src: icony("yes"), alt: "1"});
+          $("#mount"+aMountsD[i]+" td."+account+" img").attr({src: icony("yes"), alt: "1"});
         }
       });
     });
@@ -797,316 +798,294 @@ function checkWin() {
 }
 
 function getStuff() {
-    resetView("Stuff");
-    $("#filterInp, #filter, #items").removeClass("hidden");
-    $("#content").append($("<allStuff/>", {class: "flexme"}));
-    $.each(guids, function(i, key) {
-        $.getJSON(getURL("account", key), function(data) {
-            var accName = data.name;
-            var account = data.name.replace(/\s|\./g,"");
-                $("allStuff").append($("<div/>", {class: account+" account"}).append($("<h2/>", {text: accName})));
-                getContent(key, account);
-        });
-    });
-
-    $("#filterInp").focus();
-
-    $("allStuff").click(sortStuff);
-}
-
-function getContent(key, account) {
-    $.getJSON(getURL("characters", key), function(charsListD) {
+  resetView("Stuff");
+  $("#filterInp, #filter, #items").removeClass("hidden");
+  $("#content").append($("<allStuff/>", {class: "flexme"}));
+  $.each(guids, function(i, key) {
+    $.getJSON(getURL("account", key), function(data) {
+      var accName = data.name;
+      var account = data.name.replace(/\s|\./g,"");
+      $("allStuff").append($("<div/>", {class: account+" account"}).append($("<h2/>", {text: accName})));
+      // Récupérons le contenu du compte (ex getContent())
+      $.getJSON(getURL("characters", key), function(charsListD) {
         var charsDiv = $("<div/>", {class: "characters flexme"});
         $("."+account).append(charsDiv);
         $.each(charsListD, function(i, charName) {
-            getCharData(charName, key, account);
+          // Recupérons les données de chaque perso (ex getCharData())
+          var charDiv = $("<div/>", {class: "character"});
+          var stuffDiv = $("<div/>", {class: "stuff"});
+          var sharedBag = $("<div/>", {class: "sharedBag"});
+          $("."+account+" .characters").append(charDiv.append($("<h4/>", {text: charName}),stuffDiv,sharedBag));
+          $.getJSON(getURL("characters/"+charName, key), function(charData) {
+            getBag(charData.equipment, stuffDiv);
+            $.each(charData.bags, function(i, bag) {
+              if (!bag) { return; }
+              var oneBag = $("<span/>", {class: "bag"});
+              charDiv.append(oneBag);
+              getBag(bag.inventory, oneBag);
+            });
+          });
+          $.getJSON(getURL("account/inventory", key), function(sharedBagData) {
+            getBag(sharedBagData, sharedBag);
+          });
         });
-        getBankData(key, account);
-        getMatsData(key, account);
-    });
-}
-
-function getCharData(character, key, account) {
-    var charDiv = $("<div/>", {class: "character"});
-    var stuffDiv = $("<div/>", {class: "stuff"});
-    var sharedBag = $("<div/>", {class: "sharedBag"});
-    $("."+account+" .characters").append(charDiv.append($("<h4/>", {text: character}),stuffDiv,sharedBag));
-    $.getJSON(getURL("characters/"+character, key), function(charData) {
-        getBag(charData.equipment, stuffDiv);
-        $.each(charData.bags, function(i, bag) {
-            if (!bag) { return; }
-            var oneBag = $("<span/>", {class: "bag"});
-            charDiv.append(oneBag);
-            getBag(bag.inventory, oneBag);
-        });
-    });
-    $.getJSON(getURL("account/inventory", key), function(sharedBagData) {
-        getBag(sharedBagData, sharedBag);
-    });
-}
-
-function getBankData(key, account) {
-    $.getJSON(getURL("account/bank", key), function(bankData) {
-        var charDiv = $("<div/>", {class: "bank"});
-        var bankDiv = $("<div/>", {class: "bankTabs"});
-        charDiv.append($("<span/>", {text: "Banque"}), bankDiv);
-        while (bankData.length) {
+        // Récupérons le contenu de la banque (ex GetBankData())
+        $.getJSON(getURL("account/bank", key), function(bankData) {
+          var charDiv = $("<div/>", {class: "bank"});
+          var bankDiv = $("<div/>", {class: "bankTabs"});
+          charDiv.append($("<span/>", {text: "Banque"}), bankDiv);
+          while (bankData.length) {
             getBag(bankData.splice(0, 150), bankDiv);
-        }
-        $("."+account).append(charDiv);
-    });
-}
-
-function getMatsData(key, account) {
-    $.getJSON(getURL("account/materials", key), function(matsData) {
-        var charDiv = $("<div/>", {class: "mats"});
-        var matsDiv = $("<div/>", {class: "matsTabs"});
-        charDiv.append($("<span/>", {text: "Matériaux"}), matsDiv);
-        while (matsData.length) {
+          }
+          $("."+account).append(charDiv);
+        });
+        // Récupérons le contenu du stock de matériaux (ex GetMatsData())
+        $.getJSON(getURL("account/materials", key), function(matsData) {
+          var charDiv = $("<div/>", {class: "mats"});
+          var matsDiv = $("<div/>", {class: "matsTabs"});
+          charDiv.append($("<span/>", {text: "Matériaux"}), matsDiv);
+          while (matsData.length) {
             getBag(matsData.splice(0, 150), matsDiv);
-        }
-        $("."+account).append(charDiv);
+          }
+          $("."+account).append(charDiv);
+        });
+      });
     });
+  });
+
+  $("#filterInp").focus();
+
+  $("allStuff").click(sortStuff);
 }
 
 function getBag(bag, target) {
-    var itemIDs = [];
-    var skinIDs = [];
-    var statIDs = [];
-    for (var bagItem of bag) {
+  var itemIDs = [];
+  var skinIDs = [];
+  var statIDs = [];
+  for (var bagItem of bag) {
+    if (bagItem) {
+      if (!items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
+        itemIDs.push(bagItem.id);
+      }
+      if (bagItem.skin && !skins.cache[bagItem.skin] && skinsUnk.isStale(bagItem.skin)) {
+        skinIDs.push(bagItem.skin);
+      }
+      if (bagItem.upgrades && !items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
+        itemIDs.push(bagItem.upgrades);
+      }
+      if (bagItem.infusions && !items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
+        itemIDs.push(bagItem.infusions);
+      }
+      if (bagItem.stats && !itemstats.cache[bagItem.stats.id] && itemstatsUnk.isStale(bagItem.stats.id)) {
+        statIDs.push(bagItem.stats.id);
+      }
+    }
+  };
+  Promise.resolve()
+  .then(loadItems.bind(this, skinIDs, "skins"))
+  .then(loadItems.bind(this, itemIDs, "items"))
+  .then(loadItems.bind(this, statIDs, "itemstats"))
+  .then(// (ex updateBag.bind(this, bag, target))
+    function() {
+      for (var bagItem of bag) {
         if (bagItem) {
-            if (!items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
-                itemIDs.push(bagItem.id);
-            }
-            if (bagItem.skin && !skins.cache[bagItem.skin] && skinsUnk.isStale(bagItem.skin)) {
-                skinIDs.push(bagItem.skin);
-            }
-            if (bagItem.upgrades && !items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
-                itemIDs.push(bagItem.upgrades);
-            }
-            if (bagItem.infusions && !items.cache[bagItem.id] && itemsUnk.isStale(bagItem.id)) {
-                itemIDs.push(bagItem.infusions);
-            }
-            if (bagItem.stats && !itemstats.cache[bagItem.stats.id] && itemstatsUnk.isStale(bagItem.stats.id)) {
-                statIDs.push(bagItem.stats.id);
-            }
+          $.extend(true, bagItem, items.cache[bagItem.id]);
+          if (bagItem.skin) {
+            bagItem.default_skin = bagItem.name;
+            bagItem.name = skins.cache[bagItem.skin].name;
+            bagItem.icon = skins.cache[bagItem.skin].icon;
+            skins.cache[bagItem.skin].flags.indexOf("OverrideRarity") > 0 ? bagItem.rarity = skins.cache[bagItem.skin].rarity : "";
+          }
+          if (!bagItem.name) {
+            bagItem = $.extend(true, bagItem, unkItem);
+            bagItem.name += " ["+bagItem.id+"]";
+          }
+          target.append(createBagItem(bagItem));
+        } else {
+          target.append(createBagItem(null));
         }
-    };
-    Promise.resolve()
-    .then(loadItems.bind(this, skinIDs, "skins"))
-    .then(loadItems.bind(this, itemIDs, "items"))
-    .then(loadItems.bind(this, statIDs, "itemstats"))
-    .catch(function(err) {
-        console.error("Erreur : ", err);
+      }
     })
-    .then(updateBag.bind(this, bag, target));
+  .catch(function(err) {
+    console.error("Erreur : ", err);
+  });
 }
 
 function loadItems(ids, type) {
-    if (!ids.length) {
-        return;
-    }
-    return $.getJSON(getURL(type+"?ids="+ids.join(",")), function(data) {
-        $.each(data, function(i, itemData) {
-            eval(type).set(itemData.id, itemData);
-        });
-    }).fail(function(jqXHR) {
-        if (jqXHR.status === 404) {
-            ids.forEach(function(id) {
-                eval(type+"Unk").set(id, {});
-            })
-        }
+  if (!ids.length) {
+    return;
+  }
+  return $.getJSON(getURL(type+"?ids="+ids.join(",")), function(data) {
+    $.each(data, function(i, itemData) {
+      eval(type).set(itemData.id, itemData);
     });
-}
-
-function updateBag(bag, target) {
-    for (var bagItem of bag) {
-        if (bagItem) {
-            $.extend(true, bagItem, items.cache[bagItem.id]);
-            if (bagItem.skin) {
-                bagItem.default_skin = bagItem.name;
-                bagItem.name = skins.cache[bagItem.skin].name;
-                bagItem.icon = skins.cache[bagItem.skin].icon;
-                skins.cache[bagItem.skin].flags.indexOf("OverrideRarity") > 0 ? bagItem.rarity = skins.cache[bagItem.skin].rarity : "";
-            }
-            if (!bagItem.name) {
-                bagItem = $.extend(true, bagItem, unkItem);
-                bagItem.name += " ["+bagItem.id+"]";
-            }
-            target.append(createBagItem(bagItem));
-        } else {
-            target.append(createBagItem(null));
-        }
-    };
+  }).fail(function(jqXHR) {
+    if (jqXHR.status === 404) {
+      ids.forEach(function(id) {
+        eval(type+"Unk").set(id, {});
+      })
+    }
+  });
 }
 
 function createBagItem(bagItem) {
-    if (!bagItem) {
-        var bagItem = $.extend({}, emptySlot);
-    }
-    var itemSlot = $("<div/>", {class: "item r_"+bagItem.rarity+" "+bagItem.type+
-                                       (!bagItem.binding ? " unBound" : "")+
-                                       (bagItem.binding == "Account" ? " accBound" : "")+
-                                       (bagItem.binding == "Character" ? " chaBound "+bagItem.bound_to : ""),
-                                       //+(bagItem.location == "EquippedFromLegendaryArmory" ? " Armory" : ""),
-                                level: bagItem.level,
-                                slot: bagItem.slot,
-                                html: $("<img/>", {src: bagItem.icon})
-                    }).data("name", (bagItem.name).toLowerCase());
-    if (bagItem.count > 1) {
-        itemSlot.append($("<span/>", {class: "count", text: formatNbr(bagItem.count)}));
-    } else if (bagItem.count < 1) {
-        itemSlot.addClass("r_Empty");
-    } else if (bagItem.charges > 1) {
-        itemSlot.append($("<span/>", {class: "count charge", text: formatNbr(bagItem.charges)}));
-    }
-    if (!itemSlot.hasClass("Empty")) {
-        itemSlot.hover(function() {
-            $("#toolTip").toggle();
-        });
-        itemSlot.mouseenter(function() {
-            createTooltip(bagItem, itemSlot);
-        });
-    }
-    return itemSlot;
-}
-
-function createTooltip(bagItem, itemSlot) {
-    //if (bagItem.bound_to) { var binding = "Lié à : "+bagItem.bound_to; }
-    //else if (bagItem.binding == "Account") { var binding = "Lié au compte"; }
-    //else if (bagItem.location == "EquippedFromLegendaryArmory") { var binding = "Armurerie légendaire"; }
-    $("#toolTip").empty().append(
+  if (!bagItem) {
+    var bagItem = $.extend({}, emptySlot);
+  }
+  var itemSlot = $("<div/>", {class: "item r_"+bagItem.rarity+" "+bagItem.type+
+                 (!bagItem.binding ? " unBound" : "")+
+                 (bagItem.binding == "Account" ? " accBound" : "")+
+                 (bagItem.binding == "Character" ? " chaBound "+bagItem.bound_to : ""),
+                 //+(bagItem.location == "EquippedFromLegendaryArmory" ? " Armory" : ""),
+                 level: bagItem.level,
+                 slot: bagItem.slot,
+                 html: bagItem.chat_link ? $("<a/>", {href: "https://wiki.guildwars2.com/wiki/?search="+bagItem.chat_link.replace("&","%26")}).append($("<img/>", {src: bagItem.icon})) : $("<img/>", {src: bagItem.icon})
+                 }).data("name", (bagItem.name).toLowerCase());
+  if (bagItem.count < 1) {
+    itemSlot.addClass("r_Empty");
+  } else if (bagItem.count > 1) {
+    itemSlot.append($("<span/>", {class: "count", text: formatNbr(bagItem.count)}));
+  } else if (bagItem.charges > 1) {
+    itemSlot.append($("<span/>", {class: "count charge", text: formatNbr(bagItem.charges)}));
+  }
+  if (!itemSlot.hasClass("Empty")) {
+    itemSlot.hover(function() {
+      $("#toolTip").toggle();
+    });
+    itemSlot.mouseenter(function() {
+      //if (bagItem.bound_to) { var binding = "Lié à : "+bagItem.bound_to; }
+      //else if (bagItem.binding == "Account") { var binding = "Lié au compte"; }
+      //else if (bagItem.location == "EquippedFromLegendaryArmory") { var binding = "Armurerie légendaire"; }
+      $("#toolTip").empty().append(
         $("<div/>", {class: bagItem.rarity, text: bagItem.name+(bagItem.level !== 0 ? " ("+bagItem.level+")": "")}),
         $("<div/>", {text: bagItem.description}),
         $("<div/>", {class: "inactive", text: bagItem.skin ? bagItem.default_skin : ""}),
+        //binding ? $("<div/>", {text: binding}) : "",
         bagItem.bound_to ? $("<div/>", {text: "Lié à : "+bagItem.bound_to}) : "",
         bagItem.binding == "Account" ? $("<div/>", {text: "Lié au compte"}) : "",
         $.map([].concat(bagItem.upgrades, bagItem.infusions).filter(Number), function(upIt) {
-            return createTooltipItem(items.cache[upIt]);
+          var ttItem = items.cache[upIt];
+          var ttSlot = $("<div/>", {class: "item tt r_"+ttItem.rarity+
+           (ttItem.flags.indexOf("AccountBound") > -1 ? " accBound" : "")+
+           (ttItem.flags.indexOf("SoulBindOnAcquire") > -1 ? " chaBound" : ""),
+           html: $("<img/>", {src: ttItem.icon})});
+          ttItem.name.indexOf("+") > -1 ? ttSlot.append($("<span/>", {class: "count", text: ttItem.name.match(/(\+.*?)( |$)/)[1]})) : "";
+          return ttSlot;
         })
-    );
-    positionTooltip(itemSlot);
-}
+        );
+    // On positionne le tooltip pour rester dans la zone visible
+      var ttWidth = $("#toolTip").width();
+      var docWidth = $(document).width();
+      var yPos = itemSlot.offset().top - $("#toolTip").height() - 6;
+      var xPos = itemSlot.offset().left;
 
-function positionTooltip(itemSlot) {
-    var ttWidth = $("#toolTip").width();
-    var docWidth = $(document).width();
-    var yPos = itemSlot.offset().top - $("#toolTip").height() - 6;
-    var xPos = itemSlot.offset().left;
-
-    if (yPos < 0) {
+      if (yPos < 0) {
         yPos = itemSlot.offset().top + 34
-    }
-    if (xPos + ttWidth > docWidth) {
+      }
+      if (xPos + ttWidth > docWidth) {
         xPos = docWidth - ttWidth - 30
-    }
+      }
 
-    $('#toolTip').css({
-      'top': yPos,
-      'left': xPos
+      $('#toolTip').css({
+        'top': yPos,
+        'left': xPos
+      });
     });
-}
-
-function createTooltipItem(bagItem) {
-    var itemSlot = $("<div/>", {class: "item tt r_"+bagItem.rarity+
-                                       (bagItem.flags.indexOf("AccountBound") > -1 ? " accBound" : "")+
-                                       (bagItem.flags.indexOf("SoulBindOnAcquire") > -1 ? " chaBound" : ""),
-                                 html: $("<img/>", {src: bagItem.icon})});
-    bagItem.name.indexOf("+") > -1 ? itemSlot.append($("<span/>", {class: "count", text: bagItem.name.match(/(\+.*?)( |$)/)[1]})) : "";
-    return itemSlot;
+  }
+  return itemSlot;
 }
 
 function sortStuff() {
-    $("allStuff").off();
-    return $(".stuff").each(function() {
-        $(this).append(
-            $("<div/>", {class: "flexme"}).append(
-                $("<div/>", {class: "colo"}).append(
-                    $(this).find("[slot=Helm]").length ? $(this).find("[slot=Helm]") : createBagItem(null),
-                    $(this).find("[slot=Shoulders]").length ? $(this).find("[slot=Shoulders]") : createBagItem(null),
-                    $(this).find("[slot=Coat]").length ? $(this).find("[slot=Coat]") : createBagItem(null),
-                    $(this).find("[slot=Gloves]").length ? $(this).find("[slot=Gloves]") : createBagItem(null),
-                    $(this).find("[slot=Leggings]").length ? $(this).find("[slot=Leggings]") : createBagItem(null),
-                    $(this).find("[slot=Boots]").length ? $(this).find("[slot=Boots]") : createBagItem(null)),
-                $("<div/>", {class: "colo"}).append(
-                    $(this).find("[slot=WeaponA1]").length ? $(this).find("[slot=WeaponA1]") : createBagItem(null),
-                    $(this).find("[slot=WeaponA2]").length ? $(this).find("[slot=WeaponA2]") : createBagItem(null),
-                    $(this).find("[slot=WeaponB1]").length ? $(this).find("[slot=WeaponB1]") : createBagItem(null),
-                    $(this).find("[slot=WeaponB2]").length ? $(this).find("[slot=WeaponB2]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none"}).data("name", ""),
-                    $(this).find("[slot=Relic]").length ? $(this).find("[slot=Relic]") : createBagItem(null)),
-                $("<div/>", {class: "colo"}).append(
-                    $(this).find("[slot=HelmAquatic]").length ? $(this).find("[slot=HelmAquatic]") : createBagItem(null),
-                    $(this).find("[slot=WeaponAquaticA]").length ? $(this).find("[slot=WeaponAquaticA]") : createBagItem(null),
-                    $(this).find("[slot=WeaponAquaticB]").length ? $(this).find("[slot=WeaponAquaticB]") : createBagItem(null)),
-                $("<div/>", {class: "colo"}).append(
-                    $(this).find("[slot=Backpack]").length ? $(this).find("[slot=Backpack]") : createBagItem(null),
-                    $(this).find("[slot=Accessory1]").length ? $(this).find("[slot=Accessory1]") : createBagItem(null),
-                    $(this).find("[slot=Accessory2]").length ? $(this).find("[slot=Accessory2]") : createBagItem(null),
-                    $(this).find("[slot=Amulet]").length ? $(this).find("[slot=Amulet]") : createBagItem(null),
-                    $(this).find("[slot=Ring1]").length ? $(this).find("[slot=Ring1]") : createBagItem(null),
-                    $(this).find("[slot=Ring2]").length ? $(this).find("[slot=Ring2]") : createBagItem(null))),
-            $("<div/>", {id: "tools"}).append(
-                $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : createBagItem(null)),
-            $("<div/>", {id: "fishing"}).append(
-                $(this).find("[slot=FishingRod]").length ? $(this).find("[slot=FishingRod]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=FishingBait]").length ? $(this).find("[slot=FishingBait]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=FishingLure]").length ? $(this).find("[slot=FishingLure]") : createBagItem(null)),
-            $("<div/>", {id: "jadebot"}).append(
-                $(this).find("[slot=PowerCore]").length ? $(this).find("[slot=PowerCore]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=SensoryArray]").length ? $(this).find("[slot=SensoryArray]") : createBagItem(null),
-                    $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
-                $(this).find("[slot=ServiceChip]").length ? $(this).find("[slot=ServiceChip]") : createBagItem(null))
-        );
-    });
+  $("allStuff").off();
+  return $(".stuff").each(function() {
+    $(this).append(
+      $("<div/>", {class: "flexme"}).append(
+        $("<div/>", {class: "colo"}).append(
+          $(this).find("[slot=Helm]").length ? $(this).find("[slot=Helm]") : createBagItem(null),
+          $(this).find("[slot=Shoulders]").length ? $(this).find("[slot=Shoulders]") : createBagItem(null),
+          $(this).find("[slot=Coat]").length ? $(this).find("[slot=Coat]") : createBagItem(null),
+          $(this).find("[slot=Gloves]").length ? $(this).find("[slot=Gloves]") : createBagItem(null),
+          $(this).find("[slot=Leggings]").length ? $(this).find("[slot=Leggings]") : createBagItem(null),
+          $(this).find("[slot=Boots]").length ? $(this).find("[slot=Boots]") : createBagItem(null)),
+        $("<div/>", {class: "colo"}).append(
+          $(this).find("[slot=WeaponA1]").length ? $(this).find("[slot=WeaponA1]") : createBagItem(null),
+          $(this).find("[slot=WeaponA2]").length ? $(this).find("[slot=WeaponA2]") : createBagItem(null),
+          $(this).find("[slot=WeaponB1]").length ? $(this).find("[slot=WeaponB1]") : createBagItem(null),
+          $(this).find("[slot=WeaponB2]").length ? $(this).find("[slot=WeaponB2]") : createBagItem(null),
+          $("<div/>", {class: "item", style: "border: none"}).data("name", ""),
+          $(this).find("[slot=Relic]").length ? $(this).find("[slot=Relic]") : createBagItem(null)),
+        $("<div/>", {class: "colo"}).append(
+          $(this).find("[slot=HelmAquatic]").length ? $(this).find("[slot=HelmAquatic]") : createBagItem(null),
+          $(this).find("[slot=WeaponAquaticA]").length ? $(this).find("[slot=WeaponAquaticA]") : createBagItem(null),
+          $(this).find("[slot=WeaponAquaticB]").length ? $(this).find("[slot=WeaponAquaticB]") : createBagItem(null)),
+        $("<div/>", {class: "colo"}).append(
+          $(this).find("[slot=Backpack]").length ? $(this).find("[slot=Backpack]") : createBagItem(null),
+          $(this).find("[slot=Accessory1]").length ? $(this).find("[slot=Accessory1]") : createBagItem(null),
+          $(this).find("[slot=Accessory2]").length ? $(this).find("[slot=Accessory2]") : createBagItem(null),
+          $(this).find("[slot=Amulet]").length ? $(this).find("[slot=Amulet]") : createBagItem(null),
+          $(this).find("[slot=Ring1]").length ? $(this).find("[slot=Ring1]") : createBagItem(null),
+          $(this).find("[slot=Ring2]").length ? $(this).find("[slot=Ring2]") : createBagItem(null))),
+      $("<div/>", {id: "tools"}).append(
+        $(this).find("[slot=Sickle]").length ? $(this).find("[slot=Sickle]") : createBagItem(null),
+        $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+        $(this).find("[slot=Axe]").length ? $(this).find("[slot=Axe]") : createBagItem(null),
+        $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+        $(this).find("[slot=Pick]").length ? $(this).find("[slot=Pick]") : createBagItem(null)),
+      $("<div/>", {id: "fishing"}).append(
+        $(this).find("[slot=FishingRod]").length ? $(this).find("[slot=FishingRod]") : createBagItem(null),
+        $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+        $(this).find("[slot=FishingBait]").length ? $(this).find("[slot=FishingBait]") : createBagItem(null),
+        $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+        $(this).find("[slot=FishingLure]").length ? $(this).find("[slot=FishingLure]") : createBagItem(null)),
+      $("<div/>", {id: "jadebot"}).append(
+        $(this).find("[slot=PowerCore]").length ? $(this).find("[slot=PowerCore]") : createBagItem(null),
+        $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+        $(this).find("[slot=SensoryArray]").length ? $(this).find("[slot=SensoryArray]") : createBagItem(null),
+        $("<div/>", {class: "item", style: "border: none; width: 8px"}).data("name", ""),
+        $(this).find("[slot=ServiceChip]").length ? $(this).find("[slot=ServiceChip]") : createBagItem(null))
+      );
+});
 }
 
 function itemFilter() {
-    $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked, .type:checked, .binding:checked").length == $(".rarity:not(:hidden), .type, .binding").length ? 1 : 0);
-    var levIMin = ($("#levIMin").val() == "") ? 0 : parseInt($("#levIMin").val(), 10);
-    var levIMax = ($("#levIMax").val() == "") ? 80 : parseInt($("#levIMax").val(), 10);
-    var filterValue = $("#filterInp").val().toLowerCase();
-    var toHide = $("#items input:checkbox:not(:checked, .checkAll)").map(function() {
-        return $(this).next("label").attr("class");
-    }).get();
-    $(".item:not(.tt)").each(function() {
-        var itemLev = parseInt($(this).attr("level"), 10);
-        var name = $(this).data("name");
-        var itemAttr = $(this).attr("class").slice(7).split(" ");
-        if (
-            levIMin > itemLev ||
-            itemLev > levIMax ||
-            name.indexOf(filterValue) < 0 ||
-            itemAttr.some(function(x) {
-                return toHide.indexOf(x) > -1;
-            })
-            ) {
-            $(this).addClass("hidden");
-        } else {
-            $(this).removeClass("hidden");
-        }
-    });
-    $(".character, .bank, .mats").each(function() {
-        if ($(this).find(".item:not(.hidden)").length === 0) {
-            $(this).addClass("hidden");
-        } else {
-            $(this).removeClass("hidden");
-        }
-    });
-    $(".account").each(function() {
-        if ($(this).find(".item:not(.hidden)").length === 0) {
-            $(this).addClass("hidden");
-        } else {
-            $(this).removeClass("hidden");
-        }
-    });
+  $(".rarity + .Empty").prev().prop("checked", $(".rarity:not(:hidden):checked, .type:checked, .binding:checked").length == $(".rarity:not(:hidden), .type, .binding").length ? 1 : 0);
+  var levIMin = ($("#levIMin").val() == "") ? 0 : parseInt($("#levIMin").val(), 10);
+  var levIMax = ($("#levIMax").val() == "") ? 80 : parseInt($("#levIMax").val(), 10);
+  var filterValue = $("#filterInp").val().toLowerCase();
+  var toHide = $("#items input:checkbox:not(:checked, .checkAll)").map(function() {
+    return $(this).next("label").attr("class");
+  }).get();
+  $(".item:not(.tt)").each(function() {
+    var itemLev = parseInt($(this).attr("level"), 10);
+    var name = $(this).data("name");
+    var itemAttr = $(this).attr("class").slice(7).split(" ");
+    if (
+      levIMin > itemLev ||
+      itemLev > levIMax ||
+      name.indexOf(filterValue) < 0 ||
+      itemAttr.some(function(x) {
+        return toHide.indexOf(x) > -1;
+      })
+      ) {
+      $(this).addClass("hidden");
+    } else {
+    $(this).removeClass("hidden");
+    }
+});
+  $(".character, .bank, .mats").each(function() {
+    if ($(this).find(".item:not(.hidden)").length === 0) {
+      $(this).addClass("hidden");
+    } else {
+      $(this).removeClass("hidden");
+    }
+  });
+  $(".account").each(function() {
+    if ($(this).find(".item:not(.hidden)").length === 0) {
+      $(this).addClass("hidden");
+    } else {
+      $(this).removeClass("hidden");
+    }
+  });
 }
 
 function getTitle() {
